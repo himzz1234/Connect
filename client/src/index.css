@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply overflow-hidden;
+  }
+
+  body {
+    @apply scrollbar scrollbar-w-0;
+  }
+}
