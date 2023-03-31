@@ -11,8 +11,25 @@ function MessagePopup() {
             <MdOpenInNew className='text-xl' color='#1da1f2' />
         </div>
         
-        <div className='flex-1'>
-
+        <div className='flex-1 py-5 px-3 space-y-4 overflow-auto scrollbar scrollbar-w-0'>
+          <div className='space-y-2 w-48'>
+            <div className='bg-[#2b80ff] p-2 rounded-md'>
+              <p className='text-[14px]'>This is a message</p>
+            </div>
+            <p className='text-xs'>1 hour ago</p>
+          </div>
+          <div className='space-y-2 w-48'>
+            <div className='bg-[#2b80ff] p-2 rounded-md'>
+              <p className='text-[14px]'>This is a message</p>
+            </div>
+            <p className='text-xs'>1 hour ago</p>
+          </div>
+          <div className='space-y-2 w-48'>
+            <div className='bg-[#2b80ff] p-2 rounded-md'>
+              <p className='text-[14px]'>This is a message</p>
+            </div>
+            <p className='text-xs'>1 hour ago</p>
+          </div>
         </div>
 
         <div className='bg-[#28343e] p-2 flex items-center rounded-md m-3'>

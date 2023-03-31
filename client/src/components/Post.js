@@ -6,7 +6,6 @@ import { FaTrash } from 'react-icons/fa'
 import { format } from 'timeago.js'
 import 'animate.css';
 import { AuthContext } from "../context/AuthContext";
-import Dropdown from "./Dropdown";
 
 function Post({ post }) {
   const [user, setUser] = useState({})
@@ -41,7 +40,11 @@ function Post({ post }) {
 
   const deleteAPost = async (id) => {
     try {
-      await axios.delete(`http://localhost:8800/api/post/${post._id}`, { userId: currentUser._id })
+      await axios.delete(`http://localhost:8800/api/post/${id}`, {
+        data: {
+          userId: currentUser?._id
+        }
+      })
       window.location.reload()
     } catch(err) {
       console.log(err)

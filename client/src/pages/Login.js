@@ -10,6 +10,32 @@ function Login() {
   const email = useRef()
   const password = useRef()
   const navigate = useNavigate()
+
+  const notify = (message, type) => {
+    if(type === 'error'){
+      toast.error(message, {
+        position: "bottom-center",
+        autoClose: 1000,
+        hideProgressBar: true,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: false,
+        progress: undefined,
+        theme: "dark",
+      })
+    } else {
+      toast.success(message, {
+        position: "bottom-center",
+        autoClose: 1000,
+        hideProgressBar: true,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: false,
+        progress: undefined,
+        theme: "dark",
+      })
+    }
+  }
   
   const {user, isFetching, error, dispatch} = useContext(AuthContext)
   const handleClick = async (e) => {
@@ -19,10 +45,12 @@ function Login() {
     try{
       const res = await axios.post("http://localhost:8800/api/auth/login", { email: email.current.value, password: password.current.value })
       localStorage.setItem('userToken', res.data.token)
-        
+
       dispatch({ type: "LOGIN_SUCCESS", payload: res.data.user})
+      notify(res.data.message, 'success')
     } catch(err){
       dispatch({ type: "LOGIN_FAILURE", payload: err })
+      notify(err.response.data.message, 'error')
     }
   }
   
@@ -61,8 +89,6 @@ function Login() {
               <button disabled={isFetching} className='w-full py-2 rounded-md flex items-center justify-center'>{isFetching ? <ReactLoading type="spin" color="white" height={20} width={20} /> : "Create A New Account"}</button>
            </Link>
         </form>
-
-        <ToastContainer />
     </div>
   )
 }

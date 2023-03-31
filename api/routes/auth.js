@@ -39,20 +39,25 @@ router.post('/register', async (req, res) => {
    try{
       const {username, email, password} = req.body
 
-      // generate new password
-      const salt = await bcrypt.genSalt(10) // a salt is random data that is used as an additional input to a one-way function that hashes data
-      const hashedPassword = await bcrypt.hash(password, salt)
+      const userExists = await User.findOne({ email })
+      if(!userExists){
+         // generate new password
+         const salt = await bcrypt.genSalt(10) // a salt is random data that is used as an additional input to a one-way function that hashes data
+         const hashedPassword = await bcrypt.hash(password, salt)
 
-      // create a new user
-      const newUser = new User({
-         username, email, password: hashedPassword
-      })
-   
-      // save user and send respond
-      const user = await newUser.save()
-      res.status(200).json({message: 'New User Created!', user: user})
+         // create a new user
+         const newUser = new User({
+            username, email, password: hashedPassword
+         })
+
+         // save user and send respond
+         const user = await newUser.save()
+         res.status(200).json({ message: 'Successfully registered!', user: user })
+      } else {
+         res.status(403).json({ message: "User already exists!" })
+      }
    } catch(err){
-      res.status(500).json(err)
+      res.status(500).json({ message: "An error occured, Try again!" })
    }
 })
 
@@ -60,12 +65,22 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
    try{
       const user = await User.findOne({email: req.body.email})
-      !user && res.status(400).json({ message: "User not found!" })
+      if(user){
+         console.log(user)
+         bcrypt.compare(req.body.password, user.password, (err, data) => {
+            if(err){
+               res.status(403).json({ message: err.message })
+            }
 
-      const validPassword = await bcrypt.compare(req.body.password, user.password)
-      !validPassword && res.status(400).json({ message: "Wrong Password!" })
-
-      res.status(200).json({ message: 'Login Successfull!', user: user, token: `Bearer ${generateToken(user._id, user.username)}` })
+            if(data){
+               res.status(200).json({ message: 'Login Successfull!', user: user, token: `Bearer ${generateToken(user._id, user.username)}` })
+            } else {
+               res.status(403).json({ message: "Password doesn't match!" })
+            }
+         })
+      } else {
+         res.status(403).json({ message: "User not found!" })
+      }
    } catch(err) {
       res.status(500).json(err)
    }

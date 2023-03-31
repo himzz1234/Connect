@@ -6,6 +6,8 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "./context/AuthContext";
 import axios from "axios";
 import Loading from "./components/Loading";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const [loading, setLoading] = useState(true)
@@ -52,6 +54,8 @@ function App() {
           />
         </Routes>
       )}
+
+      <ToastContainer toastStyle={{ backgroundColor: "hsl(206,28%,15%)" }} />
     </div>
   );
 }

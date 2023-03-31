@@ -11,7 +11,7 @@ function Lsidebar() {
   const [friends, setFriends] = useState([]);
   const [canEdit, setCanEdit] = useState(false);
   const [descText, setDescText] = useState(user?.desc);
-  const [count, setCount] = useState(user?.desc.length);
+  const [count, setCount] = useState(user.desc?.length);
 
   useEffect(() => {
     const getFriends = async () => {

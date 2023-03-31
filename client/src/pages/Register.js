@@ -1,6 +1,8 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Register() {
     const username = useRef()
@@ -9,6 +11,31 @@ function Register() {
     const passwordAgain = useRef()
 
     const navigate = useNavigate()
+    const notify = (message, type) => {
+      if(type === 'error'){
+        toast.error(message, {
+          position: "bottom-center",
+          autoClose: 1000,
+          hideProgressBar: true,
+          closeOnClick: false,
+          pauseOnHover: false,
+          draggable: false,
+          progress: undefined,
+          theme: "dark",
+        })
+      } else {
+        toast.success(message, {
+          position: "bottom-center",
+          autoClose: 1000,
+          hideProgressBar: true,
+          closeOnClick: false,
+          pauseOnHover: false,
+          draggable: false,
+          progress: undefined,
+          theme: "dark",
+        })
+      }
+    }
 
     const handleSubmit = async (e) => {
       e.preventDefault()
@@ -23,11 +50,12 @@ function Register() {
         }
 
         try{
-          await axios.post('http://localhost:8800/api/auth/register', user)
+          const res = await axios.post('http://localhost:8800/api/auth/register', user)
+          notify(res.data.message, 'success')
           
           navigate('/login')
         } catch(err){
-          console.log(err)
+          notify(err.response.data.message, 'error')
         }
       }
     }

@@ -7,7 +7,6 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
 import useDebounce from "../hooks/useDebounce";
-import Dropdown from "./Dropdown";
 import { useNavigate } from 'react-router-dom';
 
 function Topbar() {
@@ -74,7 +73,7 @@ function Topbar() {
           </div>
            
           {users.length > 0 && (
-            <div className="bg-bodySecondary w-[500px] rounded-b-md text-white absolute top-10 border-t-2 border-bodyPrimary shadow-2xl">
+            <div className="animate__animated animate__flipInX animate__faster bg-bodySecondary w-[500px] rounded-b-md text-white absolute top-10 border-t-2 border-bodyPrimary shadow-2xl">
               {users?.map((u, index) => (
                 <div key={u._id} className={`relative flex space-x-3 items-center ${index > 0 && 'before:absolute before:w-full before:h-[1px] before:bg-[#28343e] before:-top-0'}`}>
                   <div className="flex flex-1 items-center space-x-3 py-3 pl-3">
@@ -133,7 +132,7 @@ function Topbar() {
           </p>
 
           {showDropdown && (
-            <div className='text-white absolute w-full right-0 -bottom-12 bg-bodySecondary py-2 px-4 rounded-full shadow-2xl border-2 border-bodyPrimary'>              
+            <div className='animate__animated animate__flipInX text-white absolute w-full right-0 -bottom-12 bg-bodySecondary py-2 px-4 rounded-full shadow-2xl border-2 border-bodyPrimary'>              
               <div onClick={logout} className="flex items-center justify-between">
                 <p className="text-sm">Logout</p>
                 <CgEnter className='text-red-500' />
