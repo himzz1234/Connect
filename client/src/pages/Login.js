@@ -1,15 +1,16 @@
-import React, { useContext, useRef } from 'react'
+import React, { useContext, useRef, useState } from 'react'
 import { AuthContext } from '../context/AuthContext'
-import { Link, useNavigate } from 'react-router-dom'
+import { BsEyeFill, BsEyeSlashFill } from 'react-icons/bs'
+import { Link } from 'react-router-dom'
 import ReactLoading from 'react-loading'
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 
 function Login() {
   const email = useRef()
   const password = useRef()
-  const navigate = useNavigate()
+  const [showPassword, setShowPassword] = useState(false)
 
   const notify = (message, type) => {
     if(type === 'error'){
@@ -77,8 +78,9 @@ function Login() {
             <div className='bg-[#28343e] w-full rounded-md px-3 py-3'>
               <input required ref={email} type='email' placeholder='Email' className='w-full outline-none bg-transparent'/>
             </div>
-            <div className='bg-[#28343e] w-full rounded-md px-3 py-3'>
-              <input required ref={password} minLength='6' type='password' placeholder='Password' className='w-full outline-none bg-transparent'/>
+            <div className='bg-[#28343e] w-full rounded-md px-3 py-3 flex items-center space-x-3'>
+              <input required ref={password} minLength='6' type={showPassword ? 'text' : 'password'} placeholder='Password' className='w-full outline-none bg-transparent'/>
+              {showPassword ? <BsEyeFill className='cursor-pointer' color='darkgray' onClick={() => setShowPassword(false)} /> : <BsEyeSlashFill className='cursor-pointer' color='darkgray' onClick={() => setShowPassword(true)} />}
             </div>
 
             <p className='py-1 text-sm cursor-pointer'>Forgot Password?</p>

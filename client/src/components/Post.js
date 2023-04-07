@@ -57,10 +57,10 @@ function Post({ post }) {
         <div style={{backgroundImage: `url(${user?.profilePicture})`}} className={`w-12 h-12 bg-cover rounded-full -ml-2`}></div>
         <div className="flex-1">
           <div className="flex items-center space-x-2">
-            <h2 className="">{user?.username}</h2>
+            <h2 className="text-[15px]">{user?.username}</h2>
             <small className="text-[13.5px] text-[#73899a]">@{user.email?.split('@')[0]}</small>
           </div>
-          <small className="text-[#73899a] text-[13.5px]">{format(post.createdAt)}</small>
+          <small className="text-[#73899a] text-[12.5px]">{format(post.createdAt)}</small>
         </div>
         <div onClick={() => setShowDropdown(!showDropdown)} className="relative cursor-pointer">
           <BiDotsHorizontalRounded color="white" />
@@ -76,7 +76,7 @@ function Post({ post }) {
       </div>
 
       <div className="my-6">
-        <h2>{post?.desc}</h2>
+        <h2 className="text-[15px]">{post?.desc}</h2>
         {post?.img &&         
           <img
             src={post?.img}

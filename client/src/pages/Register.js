@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { ToastContainer, toast } from 'react-toastify';
+import { BsEyeFill, BsEyeSlashFill } from 'react-icons/bs'
 import 'react-toastify/dist/ReactToastify.css';
 
 function Register() {
@@ -9,6 +10,9 @@ function Register() {
     const email = useRef()
     const password = useRef()
     const passwordAgain = useRef()
+
+    const [showPassword, setShowPassword] = useState(false)
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
     const navigate = useNavigate()
     const notify = (message, type) => {
@@ -86,11 +90,13 @@ function Register() {
               <div className='bg-[#28343e] w-full rounded-md px-3 py-3'>
                 <input required ref={email} type='email' placeholder='Email' className='w-full outline-none bg-transparent'/>
               </div>
-              <div className='bg-[#28343e] w-full rounded-md px-3 py-3'>
-                <input minLength='6' required ref={password} type='password' placeholder='Password' className='w-full outline-none bg-transparent'/>
+              <div className='bg-[#28343e] w-full rounded-md px-3 py-3 flex items-center space-x-3'>
+                <input minLength='6' required ref={password} type={showPassword ? 'text' : 'password'} placeholder='Password' className='w-full outline-none bg-transparent'/>
+                {showPassword ? <BsEyeFill className='cursor-pointer' color='darkgray' onClick={() => setShowPassword(false)} /> : <BsEyeSlashFill className='cursor-pointer' color='darkgray' onClick={() => setShowPassword(true)} />}
               </div>
-              <div className='bg-[#28343e] w-full rounded-md px-3 py-3'>
-                <input minLength='6' required ref={passwordAgain} type='password' placeholder='Confirm Password' className='w-full outline-none bg-transparent'/>
+              <div className='bg-[#28343e] w-full rounded-md px-3 py-3 flex items-center space-x-3'>
+                <input minLength='6' required ref={passwordAgain} type={showConfirmPassword ? 'text' : 'password'} placeholder='Confirm Password' className='w-full outline-none bg-transparent'/>
+                {showConfirmPassword ? <BsEyeFill className='cursor-pointer' color='darkgray' onClick={() => setShowConfirmPassword(false)} /> : <BsEyeSlashFill className='cursor-pointer' color='darkgray' onClick={() => setShowConfirmPassword(true)} />}
               </div>
              </div>
   
