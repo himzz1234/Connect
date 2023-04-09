@@ -19,7 +19,7 @@ function Home() {
         setOnlineUsers(users.map((user) => user.userId));
       });
     }
-  }, [onlineUsers]);
+  }, []);
 
   return (
     <div className="">

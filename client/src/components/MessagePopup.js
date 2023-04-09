@@ -55,6 +55,7 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
     const receiverId = currentChat.conversation.members.find(
       (member) => member !== user._id
     );
+
     socket.emit("sendMessage", {
       senderId: user._id,
       receiverId,
@@ -87,7 +88,7 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
             className={`absolute -right-0.5 -top-1 ${
               onlineUsers.includes(currentChat.user?._id)
                 ? "bg-[#20da97]"
-                : "bg-gray-700"
+                : "bg-[#abc3c9]"
             } w-3 h-3 rounded-full border-[2px] border-bodyPrimary`}
           ></div>
           <div

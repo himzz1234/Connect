@@ -4,9 +4,11 @@ import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
 import MessagePopup from "./MessagePopup";
 import Conversation from "./Conversation";
+import { AnimatePresence, motion } from "framer-motion";
 
 function Sidebar({ onlineUsers }) {
   const { user } = useContext(AuthContext);
+  const [searchTerm, setSearchTerm] = useState("");
   const [currentChat, setCurrentChat] = useState(null);
   const [conversations, setConversations] = useState([]);
 
@@ -39,24 +41,35 @@ function Sidebar({ onlineUsers }) {
         ))}
       </div>
 
-      <div className="bg-[#28343e] py-2 px-3 rounded-md flex items-center">
+      {/* <div className="bg-[#28343e] py-2 px-3 rounded-md flex items-center">
         <input
           type="text"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
           placeholder="Search for friends"
           className="flex-1 bg-transparent outline-none placeholder-[#617484]"
         />
         <div className="bg-[#1da1f2] rounded-full w-5 h-5 flex items-center justify-center">
           <AiOutlinePlus color="white" className="text-[14px]" />
         </div>
-      </div>
+      </div> */}
 
-      {currentChat && (
-        <MessagePopup
-          currentChat={currentChat}
-          setCurrentChat={setCurrentChat}
-          onlineUsers={onlineUsers}
-        />
-      )}
+      <AnimatePresence>
+        {currentChat && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3, type: "tween" }}
+            exit={{ opacity: 0 }}
+          >
+            <MessagePopup
+              currentChat={currentChat}
+              setCurrentChat={setCurrentChat}
+              onlineUsers={onlineUsers}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

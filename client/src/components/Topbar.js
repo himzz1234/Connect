@@ -3,9 +3,10 @@ import { FiSearch } from "react-icons/fi";
 import { HiUser } from "react-icons/hi";
 import { BsChatLeftDotsFill } from "react-icons/bs";
 import { IoNotifications } from "react-icons/io5";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
+import { AnimatePresence, motion } from "framer-motion";
 import useDebounce from "../hooks/useDebounce";
 import { useNavigate } from "react-router-dom";
 import { SocketContext } from "../context/SocketContext";
@@ -31,6 +32,7 @@ function Topbar({ setOnlineUsers }) {
     const res = await axios.post("http://localhost:8800/api/users", {
       userId: user?._id,
     });
+
     setUsers(
       res.data.filter((user) =>
         user.username.toLowerCase().includes(username.toLowerCase())
@@ -105,68 +107,59 @@ function Topbar({ setOnlineUsers }) {
             />
           </div>
 
-          {users.length > 0 && (
-            <div className="bg-bodySecondary w-[500px] rounded-b-md text-white absolute top-10 border-t-2 border-bodyPrimary shadow-2xl">
-              {users?.map((u, index) => (
-                <div
-                  key={u._id}
-                  className={`relative flex space-x-3 items-center ${
-                    index > 0 &&
-                    "before:absolute before:w-full before:h-[1px] before:bg-[#28343e] before:-top-0"
-                  }`}
-                >
-                  <div className="flex flex-1 items-center space-x-3 py-3 pl-3">
-                    <div
-                      style={{ backgroundImage: `url(${u?.profilePicture})` }}
-                      className="w-9 h-9 bg-cover rounded-full"
-                    ></div>
-                    <div className="flex-1">
-                      <small className="text-[11px] text-[#73899a]">
-                        @{u.email?.split("@")[0]}
-                      </small>
-                      <p className="flex items-center space-x-[0.5px] text-[14px]">
-                        {u.username.split("").map((str, index) => {
-                          if (
-                            debounceSearchTerm
-                              .toLowerCase()
-                              .includes(str.toLowerCase())
-                          ) {
-                            return (
-                              <span key={index} className="font-bold">
-                                {str}
-                              </span>
-                            );
-                          } else
-                            return (
-                              <span key={index} className="text-[#efefef]">
-                                {str}
-                              </span>
-                            );
-                        })}
-                      </p>
+          <AnimatePresence>
+            {users.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3, type: "spring" }}
+                exit={{ opacity: 0 }}
+                className="bg-bodySecondary w-[500px] rounded-b-md text-white absolute top-10 border-t-2 border-bodyPrimary shadow-2xl"
+              >
+                {users?.map((u, index) => (
+                  <div
+                    key={u._id}
+                    className={`relative flex space-x-3 items-center ${
+                      index > 0 &&
+                      "before:absolute before:w-full before:h-[1px] before:bg-[#28343e] before:-top-0"
+                    }`}
+                  >
+                    <div className="flex flex-1 items-center space-x-3 py-3 pl-3">
+                      <div
+                        style={{ backgroundImage: `url(${u?.profilePicture})` }}
+                        className="w-9 h-9 bg-cover rounded-full"
+                      ></div>
+                      <div className="flex-1">
+                        <small className="text-[11px] text-[#73899a]">
+                          @{u.email?.split("@")[0]}
+                        </small>
+                        <p className="flex items-center space-x-[0.5px] text-[14px] font-semibold">
+                          {u.username}
+                        </p>
+                      </div>
+                    </div>
+                    <div>
+                      {user?.following.findIndex((f) => f === u._id) > -1 ? (
+                        <button
+                          onClick={() => unfollowUser(u._id)}
+                          className="text-[#1da1f2] text-xs px-3 py-1 rounded-sm"
+                        >
+                          Unfollow
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => followUser(u._id)}
+                          className="text-[#1da1f2] text-xs px-3 py-1 rounded-sm"
+                        >
+                          Follow
+                        </button>
+                      )}
                     </div>
                   </div>
-                  <div>
-                    {user?.following.findIndex((f) => f === u._id) > -1 ? (
-                      <button
-                        onClick={() => unfollowUser(u._id)}
-                        className="text-[#1da1f2] text-xs px-3 py-1 rounded-sm"
-                      >
-                        Unfollow
-                      </button>
-                    ) : (
-                      <button
-                        onClick={() => followUser(u._id)}
-                        className="text-[#1da1f2] text-xs px-3 py-1 rounded-sm"
-                      >
-                        Follow
-                      </button>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
         <div className="flex items-center space-x-8 text-tabContentColor ml-14">
@@ -202,17 +195,25 @@ function Topbar({ setOnlineUsers }) {
             {user?.username}
           </p>
 
-          {showDropdown && (
-            <div className="animate__animated animate__flipInX text-white absolute w-full right-0 -bottom-12 bg-bodySecondary py-2 px-4 rounded-full shadow-2xl border-2 border-bodyPrimary">
-              <div
-                onClick={logout}
-                className="flex items-center justify-between"
+          <AnimatePresence>
+            {showDropdown && (
+              <motion.div
+                initial={{ opacity: 0, y: -15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.1, stiffness: 60, type: "spring" }}
+                exit={{ opacity: 0, y: -15 }}
+                className="text-white absolute w-full right-0 -bottom-12 bg-bodySecondary py-2 px-4 rounded-full shadow-2xl border-2 border-bodyPrimary"
               >
-                <p className="text-sm">Logout</p>
-                <CgEnter className="text-red-500" />
-              </div>
-            </div>
-          )}
+                <div
+                  onClick={logout}
+                  className="flex items-center justify-between"
+                >
+                  <p className="text-sm">Logout</p>
+                  <CgEnter className="text-red-500" />
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
     </div>

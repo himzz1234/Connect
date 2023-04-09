@@ -4,7 +4,6 @@ import axios from "axios";
 import CoverPicture from "./CoverPicture";
 import ProfilePicture from "./ProfilePicture";
 import { FaPen, FaCheck } from "react-icons/fa";
-import { BsCheck } from "react-icons/bs";
 
 function Lsidebar() {
   const { user } = useContext(AuthContext);

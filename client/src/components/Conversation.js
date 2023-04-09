@@ -31,7 +31,7 @@ function Conversation({ conversation, setCurrentChat, onlineUsers }) {
       <div className="relative">
         <div
           className={`absolute -right-0.5 -top-1 ${
-            onlineUsers.includes(user?._id) ? "bg-[#20da97]" : "bg-gray-700"
+            onlineUsers.includes(user?._id) ? "bg-[#20da97]" : "bg-[#abc3c9]"
           } w-3 h-3 rounded-full border-[2px] border-bodyPrimary`}
         ></div>
         <div
