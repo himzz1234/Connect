@@ -46,7 +46,7 @@ function Login({ setOnlineUsers }) {
 
     dispatch({ type: "LOGIN_START" });
     try {
-      const res = await axios.post("http://localhost:8800/api/auth/login", {
+      const res = await axios.post("/auth/login", {
         email: email.current.value,
         password: password.current.value,
       });

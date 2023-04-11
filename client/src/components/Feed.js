@@ -33,9 +33,7 @@ function Feed() {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const res = await axios.get(
-        `http://localhost:8800/api/post/timeline/${user?._id}`
-      );
+      const res = await axios.get(`/post/timeline/${user?._id}`);
       setPosts(
         res.data.sort((a, b) => {
           return new Date(b.createdAt) - new Date(a.createdAt);
@@ -56,7 +54,7 @@ function Feed() {
     };
 
     try {
-      const res = await axios.post("http://localhost:8800/api/post", newPost);
+      const res = await axios.post("/post", newPost);
       setPosts((prev) => [res.data, ...prev]);
 
       desc.current.value = "";

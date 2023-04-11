@@ -15,9 +15,7 @@ function Lsidebar() {
   useEffect(() => {
     const getFriends = async () => {
       try {
-        const friendsList = await axios.get(
-          `http://localhost:8800/api/users/friends/${user._id}`
-        );
+        const friendsList = await axios.get(`/users/friends/${user._id}`);
         setFriends(friendsList.data);
       } catch (err) {
         console.log(err);
@@ -25,12 +23,12 @@ function Lsidebar() {
     };
 
     getFriends();
-  }, [user._id]);
+  }, []);
 
   const changeDescription = async () => {
     if (count <= 50) {
       try {
-        await axios.put(`http://localhost:8800/api/users/${user._id}`, {
+        await axios.put(`/users/${user._id}`, {
           userId: user._id,
           desc: descText,
         });

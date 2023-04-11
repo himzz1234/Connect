@@ -23,7 +23,7 @@ function ProfilePicture() {
         "https://api.cloudinary.com/v1_1/dzcein87k/image/upload",
         data
       );
-      await axios.put(`http://localhost:8800/api/users/${user._id}`, {
+      await axios.put(`/users/${user._id}`, {
         userId: user._id,
         profilePicture: file.data.url.toString(),
       });

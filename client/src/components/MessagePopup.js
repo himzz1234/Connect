@@ -1,17 +1,23 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { MdOpenInNew } from "react-icons/md";
+import { GrEmoji } from "react-icons/gr";
+import { MdClose } from "react-icons/md";
 import axios from "axios";
 import { format } from "timeago.js";
 import { AuthContext } from "../context/AuthContext";
 import { SocketContext } from "../context/SocketContext";
+import data from "@emoji-mart/data";
+import Picker from "@emoji-mart/react";
+import { AnimatePresence, motion } from "framer-motion";
 
 function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
+  const scrollRef = useRef(null);
+  const [input, setInput] = useState("");
   const { user } = useContext(AuthContext);
   const { socket } = useContext(SocketContext);
-  const [input, setInput] = useState("");
   const [messages, setMessages] = useState([]);
+  const [showEmojis, setShowEmojis] = useState(false);
   const [arrivalMessage, setArrivalMessage] = useState(null);
-  const scrollRef = useRef(null);
 
   useEffect(() => {
     socket.on("getMessage", (data) => {
@@ -32,9 +38,7 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
   useEffect(() => {
     const getMessages = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:8800/api/message/${currentChat.conversation._id}`
-        );
+        const res = await axios.get(`/message/${currentChat.conversation._id}`);
 
         setMessages(res.data);
       } catch (err) {
@@ -70,7 +74,7 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
           text: input,
         };
 
-        await axios.post(`http://localhost:8800/api/message`, message);
+        await axios.post(`/message`, message);
 
         setMessages((prev) => [...prev, message]);
         setInput("");
@@ -87,9 +91,9 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
           <div
             className={`absolute -right-0.5 -top-1 ${
               onlineUsers.includes(currentChat.user?._id)
-                ? "bg-[#20da97]"
-                : "bg-[#abc3c9]"
-            } w-3 h-3 rounded-full border-[2px] border-bodyPrimary`}
+                ? "bg-[#20da97] border-[2px] border-bodyPrimary"
+                : "bg-transparent"
+            } w-3 h-3 rounded-full `}
           ></div>
           <div
             style={{
@@ -131,7 +135,7 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
 
       <form
         onSubmit={sendMessage}
-        className="bg-[#28343e] p-2 flex items-center rounded-md m-3"
+        className="bg-[#28343e] p-2 flex items-center rounded-md m-3 relative"
       >
         <input
           value={input}
@@ -140,7 +144,36 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
           placeholder="Type a message..."
           className="text-[16px] flex-1 bg-transparent outline-none placeholder-[#617484]"
         />
+        {showEmojis ? (
+          <div onClick={() => setShowEmojis(false)}>
+            <MdClose className="text-xl cursor-pointer" color="#1da1f2" />
+          </div>
+        ) : (
+          <div onClick={() => setShowEmojis(true)}>
+            <GrEmoji className="text-xl cursor-pointer" color="#c7d6e5" />
+          </div>
+        )}
       </form>
+      <AnimatePresence>
+        {showEmojis && (
+          <motion.div
+            initial={{ opacity: 1, y: 400 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, type: "tween" }}
+            exit={{ opacity: 1, y: 400 }}
+            className="border-[#2f3c47] rounded-sm"
+          >
+            <Picker
+              data={data}
+              onEmojiSelect={(e) => setInput(input + e.native)}
+              emojiSize={20}
+              dynamicWidth={true}
+              previewPosition="none"
+              searchPosition="none"
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

@@ -2,8 +2,9 @@ import { CgEnter } from "react-icons/cg";
 import { FiSearch } from "react-icons/fi";
 import { HiUser } from "react-icons/hi";
 import { BsChatLeftDotsFill } from "react-icons/bs";
+import { AiFillHeart } from "react-icons/ai";
 import { IoNotifications } from "react-icons/io5";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
 import { AnimatePresence, motion } from "framer-motion";
@@ -19,6 +20,15 @@ function Topbar({ setOnlineUsers }) {
   const [searchTerm, setSearchTerm] = useState("");
   const debounceSearchTerm = useDebounce(searchTerm, 500);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
+
+  const [notifications, setNotifications] = useState([]);
+
+  useEffect(() => {
+    socket.on("getNotification", (data) => {
+      setNotifications((prev) => [...prev, data]);
+    });
+  }, []);
 
   useEffect(() => {
     if (debounceSearchTerm) {
@@ -28,8 +38,30 @@ function Topbar({ setOnlineUsers }) {
     }
   }, [debounceSearchTerm]);
 
+  const displayNotifications = ({ sender, type }, index) => {
+    if (type == 1) {
+      return (
+        <div
+          key={index}
+          className={`${
+            index > 0 && "border-t-2 border-[#28343e]"
+          } flex items-center space-x-3 px-5 py-3`}
+        >
+          <div
+            style={{ backgroundImage: `url(${sender?.profilePicture})` }}
+            className="w-8 h-8 bg-cover rounded-full -ml-2"
+          ></div>
+          <p className="flex-1">{`${sender.username} liked your post`}</p>
+          <AiFillHeart color="#fb2f55" />
+        </div>
+      );
+    } else {
+      return <p>{`You got a new message from ${sender.username}`}</p>;
+    }
+  };
+
   const fetchUsers = async (username) => {
-    const res = await axios.post("http://localhost:8800/api/users", {
+    const res = await axios.post("/users", {
       userId: user?._id,
     });
 
@@ -42,7 +74,7 @@ function Topbar({ setOnlineUsers }) {
 
   const followUser = async (id) => {
     try {
-      await axios.post(`http://localhost:8800/api/conversation`, {
+      await axios.post(`/conversation`, {
         senderId: user?._id,
         receiverId: id,
       });
@@ -50,7 +82,7 @@ function Topbar({ setOnlineUsers }) {
       console.log(error);
     }
 
-    await axios.put(`http://localhost:8800/api/users/follow/${id}`, {
+    await axios.put(`/users/follow/${id}`, {
       userId: user?._id,
     });
 
@@ -58,7 +90,7 @@ function Topbar({ setOnlineUsers }) {
   };
 
   const unfollowUser = async (id) => {
-    await axios.put(`http://localhost:8800/api/users/unfollow/${id}`, {
+    await axios.put(`/users/unfollow/${id}`, {
       userId: user?._id,
     });
 
@@ -162,7 +194,7 @@ function Topbar({ setOnlineUsers }) {
           </AnimatePresence>
         </div>
 
-        <div className="flex items-center space-x-8 text-tabContentColor ml-14">
+        <div className="relative flex items-center space-x-8 text-tabContentColor ml-14">
           <div className="relative">
             <div className="absolute text-white font-semibold text-[8px] grid place-content-center -right-2 -top-3 bg-[#1da1f2] border-[3px] border-bodySecondary w-5 h-5 rounded-full">
               1
@@ -176,11 +208,39 @@ function Topbar({ setOnlineUsers }) {
             <BsChatLeftDotsFill className="text-[20px]" />
           </div>
           <div className="relative">
-            <div className="absolute text-white font-semibold text-[8px] grid place-content-center -right-2 -top-3 bg-[#1da1f2] border-[3px] border-bodySecondary w-5 h-5 rounded-full">
-              1
+            {notifications.length > 0 && (
+              <div className="absolute text-white font-semibold text-[8px] grid place-content-center -right-2 -top-3 bg-[#1da1f2] border-[3px] border-bodySecondary w-5 h-5 rounded-full">
+                {notifications.length}
+              </div>
+            )}
+            <div onClick={() => setShowNotifications(!showNotifications)}>
+              <IoNotifications className="text-[20px] cursor-pointer" />
             </div>
-            <IoNotifications className="text-[20px]" />
           </div>
+          <AnimatePresence>
+            {showNotifications && notifications.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: -15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.1, stiffness: 60, type: "spring" }}
+                exit={{ opacity: 0, y: -15 }}
+                className="absolute top-10 bg-bodySecondary shadow-2xl right-0 w-[360px] rounded-md"
+              >
+                {notifications?.map((notification, index) =>
+                  displayNotifications(notification, index)
+                )}
+                <button
+                  onClick={() => {
+                    setNotifications([]);
+                    setShowNotifications(false);
+                  }}
+                  className="bg-[#2b80ff] text-center w-full m-2 py-1 rounded-sm"
+                >
+                  Mark all as read
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
         <div

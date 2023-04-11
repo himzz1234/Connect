@@ -19,14 +19,11 @@ function App() {
         dispatch({ type: "LOGIN_START" });
 
         try {
-          const res = await axios.get(
-            "http://localhost:8800/api/auth/getauth",
-            {
-              headers: {
-                "x-access-token": localStorage.getItem("userToken"),
-              },
-            }
-          );
+          const res = await axios.get("/auth/getauth", {
+            headers: {
+              "x-access-token": localStorage.getItem("userToken"),
+            },
+          });
 
           if (res.data.user) {
             dispatch({ type: "LOGIN_SUCCESS", payload: res.data.user });

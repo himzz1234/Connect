@@ -11,3 +11,24 @@
     @apply scrollbar scrollbar-w-0;
   }
 }
+
+em-emoji-picker {
+  --border-radius: 5px;
+  --color-border-over: rgb(40, 52, 62);
+  --color-border: rgb(40, 52, 62);
+  --font-family: "Open Sans", sans-serif;
+  --font-size: 13px;
+  --rgb-accent: 43, 128, 255;
+  --rgb-background: 28, 40, 49;
+  --rgb-color: 199, 214, 229;
+  --rgb-input: 40, 52, 62;
+
+  height: 40vh;
+  min-height: 50px;
+  max-height: 400px;
+  width: 100%;
+}
+
+em-emoji-picker input[type="search"] {
+  border-radius: 2px;
+}

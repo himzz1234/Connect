@@ -27,6 +27,15 @@ io.on("connection", (socket) => {
     io.emit("getUsers", users);
   });
 
+  // receive Notification
+  socket.on("sendNotification", ({ sender, receiver, type }) => {
+    const user = getUser(receiver._id);
+    io.to(user.socketId).emit("getNotification", {
+      sender,
+      type,
+    });
+  });
+
   // send and get message
   socket.on("sendMessage", ({ senderId, receiverId, text }) => {
     const user = getUser(receiverId);

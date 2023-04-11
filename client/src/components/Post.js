@@ -1,11 +1,12 @@
 import axios from "axios";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { BiDotsHorizontalRounded } from "react-icons/bi";
 import { AiFillHeart, AiFillLike } from "react-icons/ai";
 import { AuthContext } from "../context/AuthContext";
 import { FaTrash } from "react-icons/fa";
 import { format } from "timeago.js";
 import { AnimatePresence, motion } from "framer-motion";
+import { SocketContext } from "../context/SocketContext";
 
 function Post({ post, setPosts, posts }) {
   const [user, setUser] = useState({});
@@ -13,16 +14,15 @@ function Post({ post, setPosts, posts }) {
   const [like, setLike] = useState(post?.likes.length);
   const { user: currentUser } = useContext(AuthContext);
   const [showDropdown, setShowDropdown] = useState(false);
+  const { socket } = useContext(SocketContext);
 
   useEffect(() => {
     setIsLiked(post.likes.includes(currentUser._id));
-  }, [currentUser._id, post.likes]);
+  }, [post.likes]);
 
   useEffect(() => {
     const fetchUser = async () => {
-      const res = await axios.get(
-        `http://localhost:8800/api/users/${post.userId}`
-      );
+      const res = await axios.get(`/users/${post.userId}`);
       setUser(res.data);
     };
 
@@ -31,11 +31,19 @@ function Post({ post, setPosts, posts }) {
 
   const likeAPost = async () => {
     try {
-      await axios.put(`http://localhost:8800/api/post/${post._id}/like`, {
+      await axios.put(`/post/${post._id}/like`, {
         userId: currentUser._id,
       });
     } catch (err) {
       console.log(err);
+    }
+
+    if (!isLiked) {
+      socket.emit("sendNotification", {
+        sender: currentUser,
+        receiver: user,
+        type: 1,
+      });
     }
 
     setLike(isLiked ? like - 1 : like + 1);
@@ -44,7 +52,7 @@ function Post({ post, setPosts, posts }) {
 
   const deleteAPost = async (id) => {
     try {
-      await axios.delete(`http://localhost:8800/api/post/${id}`, {
+      await axios.delete(`/post/${id}`, {
         data: {
           userId: currentUser?._id,
         },

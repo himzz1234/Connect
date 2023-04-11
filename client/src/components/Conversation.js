@@ -11,9 +11,7 @@ function Conversation({ conversation, setCurrentChat, onlineUsers }) {
 
     const getUser = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:8800/api/users/${friendId}`
-        );
+        const res = await axios.get(`/users/${friendId}`);
         setUser(res.data);
       } catch (err) {
         console.log(err);
@@ -31,8 +29,10 @@ function Conversation({ conversation, setCurrentChat, onlineUsers }) {
       <div className="relative">
         <div
           className={`absolute -right-0.5 -top-1 ${
-            onlineUsers.includes(user?._id) ? "bg-[#20da97]" : "bg-[#abc3c9]"
-          } w-3 h-3 rounded-full border-[2px] border-bodyPrimary`}
+            onlineUsers.includes(user?._id)
+              ? "bg-[#20da97] border-[2px] border-bodyPrimary"
+              : "bg-transparent"
+          } w-3 h-3 rounded-full`}
         ></div>
         <div
           style={{ backgroundImage: `url(${user?.profilePicture})` }}

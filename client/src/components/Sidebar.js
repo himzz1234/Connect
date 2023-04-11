@@ -15,9 +15,7 @@ function Sidebar({ onlineUsers }) {
   useEffect(() => {
     const getConversations = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:8800/api/conversation/${user._id}`
-        );
+        const res = await axios.get(`/conversation/${user._id}`);
 
         setConversations(res.data);
       } catch (err) {
