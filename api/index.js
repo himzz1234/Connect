@@ -10,6 +10,7 @@ const authRoutes = require("./routes/auth");
 const postRoutes = require("./routes/post");
 const convRoutes = require("./routes/conversations");
 const messageRoutes = require("./routes/message");
+const commentRoutes = require("./routes/comment");
 const multer = require("multer");
 
 dotenv.config();
@@ -41,6 +42,7 @@ app.get("/", (req, res) => {
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/post", postRoutes);
+app.use("/api/comment", commentRoutes);
 app.use("/api/message", messageRoutes);
 app.use("/api/conversation", convRoutes);
 

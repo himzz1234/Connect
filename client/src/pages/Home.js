@@ -24,7 +24,7 @@ function Home() {
   return (
     <div className="">
       <Topbar setOnlineUsers={setOnlineUsers} />
-      <section className="scrollbar scrollbar-w-0 flex items-start text-white space-x-8 max-w-[1480px] mx-auto">
+      <section className="mb-5 lg:mb-0 space-y-5 scrollbar scrollbar-w-0 flex flex-col lg:flex-row items-start text-white lg:space-x-8 lg:space-y-0 max-w-[600px] px-5 md:max-w-[1000px] lg:max-w-[1580px] mx-auto">
         <Profile />
         <Feed />
         <Sidebar onlineUsers={onlineUsers} />

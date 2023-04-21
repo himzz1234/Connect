@@ -4,7 +4,7 @@
 
 @layer base {
   html {
-    @apply overflow-hidden;
+    @apply lg:overflow-hidden;
   }
 
   body {
@@ -23,7 +23,7 @@ em-emoji-picker {
   --rgb-color: 199, 214, 229;
   --rgb-input: 40, 52, 62;
 
-  height: 40vh;
+  height: 25vh;
   min-height: 50px;
   max-height: 400px;
   width: 100%;

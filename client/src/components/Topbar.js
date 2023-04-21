@@ -26,6 +26,7 @@ function Topbar({ setOnlineUsers }) {
 
   useEffect(() => {
     socket.on("getNotification", (data) => {
+      console.log(data);
       setNotifications((prev) => [...prev, data]);
     });
   }, []);
@@ -51,12 +52,30 @@ function Topbar({ setOnlineUsers }) {
             style={{ backgroundImage: `url(${sender?.profilePicture})` }}
             className="w-8 h-8 bg-cover rounded-full -ml-2"
           ></div>
-          <p className="flex-1">{`${sender.username} liked your post`}</p>
-          <AiFillHeart color="#fb2f55" />
+          <p className="flex-1 text-[13.5px]">
+            <span className="font-semibold">{sender.username}</span> liked your
+            post
+          </p>
         </div>
       );
     } else {
-      return <p>{`You got a new message from ${sender.username}`}</p>;
+      return (
+        <div
+          key={index}
+          className={`${
+            index > 0 && "border-t-2 border-[#28343e]"
+          } flex items-center space-x-3 px-5 py-3`}
+        >
+          <div
+            style={{ backgroundImage: `url(${sender?.profilePicture})` }}
+            className="w-8 h-8 bg-cover rounded-full -ml-2"
+          ></div>
+          <p className="flex-1 text-[13.5px]">
+            <span className="font-semibold">{sender.username}</span> commented
+            on your post
+          </p>
+        </div>
+      );
     }
   };
 
@@ -111,7 +130,7 @@ function Topbar({ setOnlineUsers }) {
   };
 
   return (
-    <div className="sticky top-0 left-0 z-30 bg-bodyPrimary w-full px-6">
+    <div className="sticky top-0 left-0 py-2 z-30 h-[90px] bg-bodyPrimary w-full px-6">
       <div className="flex items-center">
         <div className="-ml-4">
           <img
@@ -127,15 +146,15 @@ function Topbar({ setOnlineUsers }) {
           <div
             className={`bg-bodySecondary ${
               users.length > 0 ? "rounded-t-md" : "rounded-md"
-            } flex items-center px-3 py-2 w-[500px]`}
+            } flex items-center lg:px-3 py-2 px-2 w-[200px] lg:w-[500px]`}
           >
-            <FiSearch color="#707e8b" />
+            <FiSearch color="#707e8b" className="lg:block hidden" />
             <input
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search for friend, post or video"
-              className="bg-transparent text-white flex-1 outline-none placeholder-[#707e8b] ml-2"
+              className="text-[14px] lg:text-normal bg-transparent text-white flex-1 outline-none placeholder-[#707e8b] lg:ml-2"
             />
           </div>
 
@@ -194,27 +213,27 @@ function Topbar({ setOnlineUsers }) {
           </AnimatePresence>
         </div>
 
-        <div className="relative flex items-center space-x-8 text-tabContentColor ml-14">
+        <div className="relative flex items-center space-x-6 lg:space-x-8 text-tabContentColor ml-10 lg:ml-14">
           <div className="relative">
-            <div className="absolute text-white font-semibold text-[8px] grid place-content-center -right-2 -top-3 bg-[#1da1f2] border-[3px] border-bodySecondary w-5 h-5 rounded-full">
+            <div className="absolute text-white font-semibold text-[8px] grid place-content-center -right-2 -top-3 bg-[#1094e6] border-[3px] border-bodySecondary w-5 h-5 rounded-full">
               1
             </div>
-            <HiUser className="text-[20px]" />
+            <HiUser className="text-[16px] lg:text-[20px]" />
           </div>
           <div className="relative">
-            <div className="absolute text-white font-semibold text-[8px] grid place-content-center -right-2.5 -top-3 bg-[#1da1f2] border-[3px] border-bodySecondary w-5 h-5 rounded-full">
+            <div className="absolute text-white font-semibold text-[8px] grid place-content-center -right-2.5 -top-3 bg-[#1094e6] border-[3px] border-bodySecondary w-5 h-5 rounded-full">
               1
             </div>
-            <BsChatLeftDotsFill className="text-[20px]" />
+            <BsChatLeftDotsFill className="text-[16px] lg:text-[20px]" />
           </div>
           <div className="relative">
             {notifications.length > 0 && (
-              <div className="absolute text-white font-semibold text-[8px] grid place-content-center -right-2 -top-3 bg-[#1da1f2] border-[3px] border-bodySecondary w-5 h-5 rounded-full">
+              <div className="absolute text-white font-semibold text-[8px] grid place-content-center -right-2 -top-3 bg-[#1094e6] border-[3px] border-bodySecondary w-5 h-5 rounded-full">
                 {notifications.length}
               </div>
             )}
             <div onClick={() => setShowNotifications(!showNotifications)}>
-              <IoNotifications className="text-[20px] cursor-pointer" />
+              <IoNotifications className="text-[16px] lg:text-[20px] cursor-pointer" />
             </div>
           </div>
           <AnimatePresence>
@@ -234,7 +253,7 @@ function Topbar({ setOnlineUsers }) {
                     setNotifications([]);
                     setShowNotifications(false);
                   }}
-                  className="bg-[#2b80ff] text-center w-full m-2 py-1 rounded-sm"
+                  className="bg-[#1094e6] text-center w-full m-2 py-1 text-[15px] rounded-sm"
                 >
                   Mark all as read
                 </button>
@@ -245,7 +264,7 @@ function Topbar({ setOnlineUsers }) {
 
         <div
           onClick={() => setShowDropdown(!showDropdown)}
-          className="cursor-pointer relative ml-14 px-4 py-1.5 rounded-full bg-[hsl(206,23%,16%)] flex items-center"
+          className="cursor-pointer relative w-32 ml-5 lg:ml-14 px-4 py-1.5 rounded-full bg-[hsl(206,23%,16%)] flex items-center"
         >
           <div
             style={{ backgroundImage: `url(${user?.profilePicture})` }}

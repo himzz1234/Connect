@@ -12,6 +12,7 @@ function ProfilePicture() {
 
   const setMediaFile = async (image) => {
     setIsLoading(true);
+    setIsProfileShown(false);
 
     const data = new FormData();
     data.append("file", image);
@@ -38,11 +39,13 @@ function ProfilePicture() {
 
   return (
     <div
-      onMouseEnter={() => setIsProfileShown(true)}
-      onMouseLeave={() => setIsProfileShown(false)}
-      className={`${
-        isLoading ? "pointer-events-none" : "pointer-events-auto"
-      } absolute bottom-0 right-1/2 translate-x-1/2 translate-y-1/2 w-14 h-14 rounded-full border-4 border-bodySecondary cursor-pointer z-20`}
+      onMouseEnter={() => {
+        !isLoading && setIsProfileShown(true);
+      }}
+      onMouseLeave={() => {
+        !isLoading && setIsProfileShown(false);
+      }}
+      className={`absolute bottom-0 right-1/2 translate-x-1/2 translate-y-1/2 w-14 h-14 rounded-full border-4 border-bodySecondary cursor-pointer z-20`}
     >
       <div
         style={{ backgroundImage: `url(${profilePicture})` }}

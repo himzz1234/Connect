@@ -41,7 +41,7 @@ function Lsidebar() {
   };
 
   return (
-    <div className="w-3/12 bg-bodySecondary rounded-md px-5 py-6 h-[600px]">
+    <div className="w-full lg:w-3/12 bg-bodySecondary rounded-md px-5 py-6 lg:h-[600px]">
       <div className="">
         <div className="relative">
           <CoverPicture />
@@ -49,12 +49,12 @@ function Lsidebar() {
         </div>
 
         <div className="mt-9 flex items-center flex-col space-y-1">
-          <h2>{user?.username}</h2>
+          <h2 className="font-semibold">{user?.username}</h2>
           <p className="text-[12.5px] text-[#73899a]">{user?.city}</p>
         </div>
 
         <div className="flex flex-col mt-5">
-          <div className="flex items-center justify-between after:absolute after:w-full after:h-[2px] after:bg-[#28343e] after:-bottom-2 before:absolute before:w-full before:-top-2 before:h-[2px] before:bg-[#28343e]">
+          <div className="flex items-center justify-between border-t-2 border-b-2 border-[#28343e] py-2">
             <p className="text-[13px] text-[#6b7985]">Intro</p>
             {canEdit ? (
               <FaCheck
@@ -84,12 +84,12 @@ function Lsidebar() {
               count > 50 ? "text-red-400" : "text-white"
             }`}
           >
-            {count}/50
+            {count ? count : 0}/50
           </small>
         </div>
 
-        <div className="flex flex-col mt-5">
-          <div className="flex items-center relative after:absolute after:w-full after:h-[2px] after:bg-[#28343e] after:-bottom-2 before:absolute before:w-full before:-top-2 before:h-[2px] before:bg-[#28343e]">
+        <div className="hidden lg:flex flex-col mt-5">
+          <div className="flex items-center border-t-2 border-b-2 border-[#28343e] py-2">
             <p className="flex-1 text-[13px] text-[#6b7985]">Friends</p>
           </div>
           <div className="space-x-3 mt-6 flex items-center justify-center">

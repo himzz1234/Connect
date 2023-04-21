@@ -6,7 +6,7 @@ const bcrypt = require("bcrypt");
 router.post("/", async (req, res) => {
   try {
     const users = await User.find({});
-    res.status(200).json(users.filter(user => user._id != req.body.userId));
+    res.status(200).json(users.filter((user) => user._id != req.body.userId));
   } catch (err) {
     res.status(500).json(err);
   }
@@ -59,7 +59,7 @@ router.get("/:id", async (req, res) => {
     const { password, updatedAt, ...other } = user._doc;
     res.status(200).json(other);
   } catch (err) {
-    res.status(500).json(ErrorEvent);
+    res.status(500).json(err);
   }
 });
 

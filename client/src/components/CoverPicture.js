@@ -12,6 +12,7 @@ function CoverPicture() {
 
   const setMediaFile = async (image) => {
     setIsLoading(true);
+    setIsCoverShown(false);
 
     const data = new FormData();
     data.append("file", image);
@@ -37,50 +38,23 @@ function CoverPicture() {
   };
 
   return (
-    <>
-      {coverPicture ? (
-        <div
-          className={`relative z-10 ${
-            isLoading ? "pointer-events-none" : "pointer-events-auto"
-          }`}
-          onMouseEnter={() => setIsCoverShown(true)}
-          onMouseLeave={() => setIsCoverShown(false)}
-        >
-          {isLoading && (
-            <div className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 z-10">
-              <ReactLoading type="spin" color="white" height={20} width={20} />
-            </div>
-          )}
-
-          {isCoverShown && (
-            <div className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 z-20">
-              <label htmlFor="cover">
-                <MdAddAPhoto
-                  color="#898f9d"
-                  className="text-5xl cursor-pointer"
-                />
-              </label>
-              <input
-                type="file"
-                id="cover"
-                name="cover"
-                accept="image/png, image/jpg, image/jpeg"
-                className="hidden"
-                onChange={(e) => setMediaFile(e.target.files[0])}
-              />
-            </div>
-          )}
-          <img
-            src={coverPicture}
-            className={`rounded-md h-[180px] w-full object-cover ${
-              isCoverShown || isLoading
-                ? "opacity-25 cursor-pointer"
-                : "opacity-100"
-            }`}
-          />
+    <div
+      className={`relative z-10`}
+      onMouseEnter={() => {
+        !isLoading && setIsCoverShown(true);
+      }}
+      onMouseLeave={() => {
+        !isLoading && setIsCoverShown(false);
+      }}
+    >
+      {isLoading && (
+        <div className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 z-10">
+          <ReactLoading type="spin" color="white" height={20} width={20} />
         </div>
-      ) : (
-        <div className="h-[180px] w-full rounded-md bg-[#d2d8df] grid place-content-center">
+      )}
+
+      {isCoverShown && (
+        <div className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 z-20">
           <label htmlFor="cover">
             <MdAddAPhoto color="#898f9d" className="text-5xl cursor-pointer" />
           </label>
@@ -94,7 +68,15 @@ function CoverPicture() {
           />
         </div>
       )}
-    </>
+      <img
+        src={coverPicture}
+        className={`rounded-md h-[180px] w-full object-cover ${
+          isCoverShown || isLoading
+            ? "opacity-25 cursor-pointer"
+            : "opacity-100"
+        }`}
+      />
+    </div>
   );
 }
 

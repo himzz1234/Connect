@@ -37,13 +37,15 @@ io.on("connection", (socket) => {
   });
 
   // send and get message
-  socket.on("sendMessage", ({ senderId, receiverId, text }) => {
+  socket.on("sendMessage", ({ senderId, receiverId, text, type, url }) => {
     const user = getUser(receiverId);
 
     if (user) {
       io.to(user.socketId).emit("getMessage", {
         senderId,
         text,
+        type,
+        url,
       });
     }
   });

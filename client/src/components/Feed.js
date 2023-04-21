@@ -34,6 +34,7 @@ function Feed() {
   useEffect(() => {
     const fetchPosts = async () => {
       const res = await axios.get(`/post/timeline/${user?._id}`);
+      console.log(res.data);
       setPosts(
         res.data.sort((a, b) => {
           return new Date(b.createdAt) - new Date(a.createdAt);
@@ -58,13 +59,14 @@ function Feed() {
       setPosts((prev) => [res.data, ...prev]);
 
       desc.current.value = "";
+      setImageToSend("");
     } catch (err) {
       console.log(err);
     }
   };
 
   return (
-    <div className="w-6/12 h-[600px] overflow-y-auto scrollbar scrollbar-w-0">
+    <div className="w-full lg:w-6/12 h-[600px] overflow-y-auto scrollbar scrollbar-w-0">
       <div className="bg-bodySecondary px-6 py-5 rounded-md">
         <div className="flex items-center space-x-4">
           <div
