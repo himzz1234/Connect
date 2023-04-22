@@ -1,14 +1,9 @@
 import React from "react";
 import { format } from "timeago.js";
 
-function Message({ message, index, currentChat }) {
+function Message({ message, currentChat }) {
   return (
-    <div
-      className={`space-y-2 w-48 ${
-        message.sender !== currentChat.user._id && "self-end"
-      }`}
-      key={index}
-    >
+    <>
       <div
         className={`p-2 ${
           message.sender !== currentChat.user._id
@@ -23,7 +18,7 @@ function Message({ message, index, currentChat }) {
         )}
       </div>
       <p className="text-xs">{format(message.createdAt)}</p>
-    </div>
+    </>
   );
 }
 

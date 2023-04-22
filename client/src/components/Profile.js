@@ -41,7 +41,7 @@ function Lsidebar() {
   };
 
   return (
-    <div className="order-1 lg:order-1 w-full lg:w-3/12 bg-bodySecondary rounded-md px-5 py-6 lg:h-[600px]">
+    <div className="order-1 lg:order-1 w-full lg:w-3/12 bg-bodySecondary rounded-md px-5 py-6 lg:h-[85vh]">
       <div className="">
         <div className="relative">
           <CoverPicture />

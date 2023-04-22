@@ -76,10 +76,11 @@ io.on("connection", (socket) => {
   });
 
   // receive Notification
-  socket.on("sendNotification", ({ sender, receiver, type }) => {
+  socket.on("sendNotification", ({ sender, receiver, text, type }) => {
     const user = getUser(receiver._id);
     io.to(user.socketId).emit("getNotification", {
       sender,
+      text,
       type,
     });
   });

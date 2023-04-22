@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import { AiFillHeart, AiFillLike } from "react-icons/ai";
 import { AuthContext } from "../context/AuthContext";
-import { FaTrash, FaComment } from "react-icons/fa";
+import { FaTrash } from "react-icons/fa";
 import { format } from "timeago.js";
 import { AnimatePresence, motion } from "framer-motion";
 import { SocketContext } from "../context/SocketContext";
@@ -49,6 +49,7 @@ function Post({ post, setPosts, posts }) {
       socket.emit("sendNotification", {
         sender: currentUser,
         receiver: post.userId,
+        text: "",
         type: 1,
       });
     }
@@ -83,6 +84,7 @@ function Post({ post, setPosts, posts }) {
       socket.emit("sendNotification", {
         sender: currentUser,
         receiver: post.userId,
+        text: commentRef.current.value,
         type: 2,
       });
     }

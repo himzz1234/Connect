@@ -22,7 +22,7 @@ function Home() {
   }, []);
 
   return (
-    <div className="">
+    <div className="relative">
       <Topbar setOnlineUsers={setOnlineUsers} />
       <section className="mb-5 lg:mb-0 space-y-5 scrollbar scrollbar-w-0 flex flex-col lg:flex-row items-start text-white lg:space-x-8 lg:space-y-0 max-w-[600px] px-5 md:max-w-[1000px] lg:max-w-[1580px] mx-auto">
         <Profile />

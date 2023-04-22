@@ -65,7 +65,7 @@ function Register() {
   };
 
   return (
-    <div className="flex lg:flex-row flex-col items-center justify-center h-full text-white">
+    <div className="flex lg:flex-row flex-col items-center justify-center h-full px-5 text-white">
       <div className="lg:mr-20 lg:mb-0 mb-10 lg:w-[450px] ">
         <div className="flex items-center justify-center lg:justify-start">
           <img
@@ -79,14 +79,14 @@ function Register() {
           <h1 className="text-5xl font-bold">Connect</h1>
         </div>
 
-        <p className="text-lg lg:text-2xl font-semibold leading-[40px]">
+        <p className="text-lg lg:text-2xl font-semibold leading-[40px] text-center lg:text-left">
           Connect with friends and the world around you.
         </p>
       </div>
 
       <form
         onSubmit={handleSubmit}
-        className="bg-bodySecondary p-5 w-[450px] h-[450px] flex flex-col rounded-md space-y-5"
+        className="bg-bodySecondary p-5 w-full max-w-[450px] lg:w-[450px] h-[450px] flex flex-col rounded-md space-y-5"
       >
         <div className="space-y-5 flex-1">
           <div className="bg-[#28343e] w-full rounded-md px-3 py-3">

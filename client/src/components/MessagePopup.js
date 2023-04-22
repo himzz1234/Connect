@@ -15,6 +15,7 @@ import useDebounce from "../hooks/useDebounce";
 const giphyFetch = new GiphyFetch("CXF6IIaPBwHC4p3hBfz1HUpUTEZNFiHm");
 
 function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
+  const scrollRef = useRef();
   const [gifs, setGifs] = useState("");
   const [input, setInput] = useState("");
   const { user } = useContext(AuthContext);
@@ -151,8 +152,12 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
     }
   };
 
+  useEffect(() => {
+    scrollRef?.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
   return (
-    <div className="z-[99999] flex flex-col absolute bottom-0 right-0 w-full lg:w-[500px] h-full lg:h-96 rounded-tl-md border-t-4 border-l-4 border-bodyPrimary shadow-2xl bg-bodySecondary">
+    <div className="h-screen z-[99999] flex flex-col fixed lg:absolute top-0 lg:top-auto lg:bottom-0 right-0 w-full lg:w-[500px] lg:h-96 rounded-tl-md lg:border-t-4 lg:border-l-4 border-bodyPrimary shadow-2xl bg-bodySecondary">
       <div className="flex items-center px-3 py-3 relative space-x-3 border-b-2 border-[#28343e]">
         <div className="relative">
           <div
@@ -177,9 +182,21 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
         />
       </div>
 
-      <div className="h-full lg:h-2/3 flex flex-col py-5 px-3 space-y-4 overflow-auto scrollbar scrollbar-w-0">
+      <div className="flex-1 flex flex-col py-5 px-3 space-y-4 overflow-auto scrollbar scrollbar-w-0">
         {messages.map((message, index) => (
-          <Message message={message} index={index} currentChat={currentChat} />
+          <div
+            key={message._id}
+            ref={scrollRef}
+            className={`space-y-2 w-48 ${
+              message.sender !== currentChat.user._id && "self-end"
+            }`}
+          >
+            <Message
+              message={message}
+              index={index}
+              currentChat={currentChat}
+            />
+          </div>
         ))}
       </div>
 

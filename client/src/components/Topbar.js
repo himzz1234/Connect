@@ -38,7 +38,8 @@ function Topbar({ setOnlineUsers }) {
     }
   }, [debounceSearchTerm]);
 
-  const displayNotifications = ({ sender, type }, index) => {
+  const displayNotifications = ({ sender, text, type }, index) => {
+    console.log(text);
     if (type == 1) {
       return (
         <div
@@ -71,7 +72,7 @@ function Topbar({ setOnlineUsers }) {
           ></div>
           <p className="flex-1 text-[13.5px]">
             <span className="font-semibold">{sender.username}</span> commented
-            on your post
+            on your post: <span className="font-semibold">{text}</span>
           </p>
         </div>
       );
@@ -129,15 +130,13 @@ function Topbar({ setOnlineUsers }) {
   };
 
   return (
-    <div className="sticky top-0 left-0 py-2 z-30 h-[90px] bg-bodyPrimary w-full px-6">
-      <div className="flex items-center">
+    <div className="sticky flex items-center top-0 left-0 py-2 z-30 h-[90px] bg-bodyPrimary max-w-[600px] md:max-w-[1000px] lg:max-w-[1580px] mx-auto px-6">
+      <div className="flex items-center w-full">
         <div className="-ml-4">
           <img
             src="/assets/socialLogo.png"
             alt="logo"
-            width="100"
-            height="100"
-            className="object-contain"
+            className="object-contain w-[100px] h-[100px] min-w-[60px] min-h-[60px]"
           />
         </div>
 
@@ -145,7 +144,7 @@ function Topbar({ setOnlineUsers }) {
           <div
             className={`bg-bodySecondary ${
               users.length > 0 ? "rounded-t-md" : "rounded-md"
-            } flex items-center lg:px-3 py-2 px-2 w-[200px] lg:w-[500px]`}
+            } flex items-center lg:px-3 py-2 px-2 w-full md:w-[400px] lg:w-[500px]`}
           >
             <FiSearch color="#707e8b" className="lg:block hidden" />
             <input
@@ -212,14 +211,14 @@ function Topbar({ setOnlineUsers }) {
           </AnimatePresence>
         </div>
 
-        <div className="relative flex items-center space-x-6 lg:space-x-8 text-tabContentColor ml-5 lg:ml-14">
-          <div className="relative">
+        <div className="relative flex items-center space-x-6 lg:space-x-8 text-tabContentColor lg:ml-14">
+          <div className="relative hidden md:block">
             <div className="absolute text-white font-semibold text-[8px] grid place-content-center -right-2 -top-3 bg-[#1094e6] border-[3px] border-bodySecondary w-5 h-5 rounded-full">
               1
             </div>
             <HiUser className="text-[17px] lg:text-[20px]" />
           </div>
-          <div className="relative">
+          <div className="relative hidden md:block">
             <div className="absolute text-white font-semibold text-[8px] grid place-content-center -right-2.5 -top-3 bg-[#1094e6] border-[3px] border-bodySecondary w-5 h-5 rounded-full">
               1
             </div>

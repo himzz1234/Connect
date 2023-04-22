@@ -64,7 +64,7 @@ function Feed() {
   };
 
   return (
-    <div className="order-3 lg:order-2 w-full lg:w-6/12 lg:h-[600px] overflow-y-auto scrollbar scrollbar-w-0">
+    <div className="order-3 lg:order-2 w-full lg:w-6/12 lg:h-[85vh] overflow-y-auto scrollbar scrollbar-w-0">
       <div className="bg-bodySecondary px-6 py-5 rounded-md">
         <div className="flex items-center space-x-4">
           <div

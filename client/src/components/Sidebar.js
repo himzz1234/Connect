@@ -1,4 +1,3 @@
-import { AiOutlinePlus } from "react-icons/ai";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import axios from "../axios";
@@ -27,7 +26,7 @@ function Sidebar({ onlineUsers }) {
   }, []);
 
   return (
-    <div className="order-2 lg:order-3 lg:relative w-full lg:w-3/12 lg:h-[600px] flex flex-col bg-bodySecondary py-5 px-5 rounded-md">
+    <div className="order-2 lg:order-3 lg:relative w-full lg:w-3/12 lg:h-[85vh] flex flex-col bg-bodySecondary py-5 px-5 rounded-md">
       <div className="space-y-5 flex-1">
         {conversations.map((c) => (
           <Conversation
