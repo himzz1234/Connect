@@ -152,7 +152,7 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
   };
 
   return (
-    <div className="flex flex-col absolute bottom-0 right-0 w-[500px] h-96 rounded-tl-md border-t-4 border-l-4 border-bodyPrimary shadow-2xl bg-bodySecondary">
+    <div className="z-[99999] flex flex-col absolute bottom-0 right-0 w-full lg:w-[500px] h-full lg:h-96 rounded-tl-md border-t-4 border-l-4 border-bodyPrimary shadow-2xl bg-bodySecondary">
       <div className="flex items-center px-3 py-3 relative space-x-3 border-b-2 border-[#28343e]">
         <div className="relative">
           <div
@@ -177,7 +177,7 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
         />
       </div>
 
-      <div className="h-2/3 flex flex-col py-5 px-3 space-y-4 overflow-auto scrollbar scrollbar-w-0">
+      <div className="h-full lg:h-2/3 flex flex-col py-5 px-3 space-y-4 overflow-auto scrollbar scrollbar-w-0">
         {messages.map((message, index) => (
           <Message message={message} index={index} currentChat={currentChat} />
         ))}
@@ -223,7 +223,7 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, type: "tween" }}
             exit={{ opacity: 1, y: 400 }}
-            className="border-[#2f3c47] rounded-sm"
+            className="border-[#2f3c47] rounded-sm h-[45vh]"
           >
             <Picker
               data={data}
@@ -243,7 +243,7 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, type: "tween" }}
             exit={{ opacity: 1, y: 400 }}
-            className="border-[#2f3c47] flex flex-col h-[1200px] overflow-y-auto scrollbar scrollbar-0"
+            className="border-[#2f3c47] flex flex-col h-[45vh] overflow-y-auto scrollbar scrollbar-0"
           >
             <input
               value={gifInput}

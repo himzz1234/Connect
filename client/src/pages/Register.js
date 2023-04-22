@@ -65,9 +65,9 @@ function Register() {
   };
 
   return (
-    <div className="flex items-center justify-center h-full text-white">
-      <div className="w-[450px] mr-20">
-        <div className="flex items-center">
+    <div className="flex lg:flex-row flex-col items-center justify-center h-full text-white">
+      <div className="lg:mr-20 lg:mb-0 mb-10 lg:w-[450px] ">
+        <div className="flex items-center justify-center lg:justify-start">
           <img
             src="/assets/socialLogo.png"
             alt="logo"
@@ -79,7 +79,7 @@ function Register() {
           <h1 className="text-5xl font-bold">Connect</h1>
         </div>
 
-        <p className="text-2xl font-semibold leading-[40px]">
+        <p className="text-lg lg:text-2xl font-semibold leading-[40px]">
           Connect with friends and the world around you.
         </p>
       </div>

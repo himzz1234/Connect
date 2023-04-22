@@ -2,10 +2,8 @@ import { useState, useEffect, useContext, useRef } from "react";
 import axios from "axios";
 import { RiAttachment2 } from "react-icons/ri";
 import { IoIosClose } from "react-icons/io";
-import Post from "./Post";
 import { AuthContext } from "../context/AuthContext";
-import { AnimatePresence, motion } from "framer-motion";
-import LoadingPost from "./LoadingPost";
+import Posts from "./Posts";
 
 function Feed() {
   const desc = useRef();
@@ -66,7 +64,7 @@ function Feed() {
   };
 
   return (
-    <div className="w-full lg:w-6/12 h-[600px] overflow-y-auto scrollbar scrollbar-w-0">
+    <div className="order-3 lg:order-2 w-full lg:w-6/12 lg:h-[600px] overflow-y-auto scrollbar scrollbar-w-0">
       <div className="bg-bodySecondary px-6 py-5 rounded-md">
         <div className="flex items-center space-x-4">
           <div
@@ -117,18 +115,7 @@ function Feed() {
       </div>
 
       <div className="mt-6 space-y-5">
-        {posts.map((post) => (
-          <AnimatePresence key={post._id}>
-            <motion.div
-              initial={{ opacity: 0, scale: 0.5 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.1, stiffness: 60, type: "spring" }}
-              exit={{ opacity: 0, scale: 0.5 }}
-            >
-              <Post post={post} setPosts={setPosts} posts={posts} />
-            </motion.div>
-          </AnimatePresence>
-        ))}
+        <Posts posts={posts} setPosts={setPosts} />
       </div>
     </div>
   );

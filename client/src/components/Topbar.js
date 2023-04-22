@@ -154,7 +154,7 @@ function Topbar({ setOnlineUsers }) {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search for friend, post or video"
-              className="text-[14px] lg:text-normal bg-transparent text-white flex-1 outline-none placeholder-[#707e8b] lg:ml-2"
+              className="text-[13.5px] md:text-[14px] lg:text-normal bg-transparent text-white flex-1 outline-none placeholder-[#707e8b] lg:ml-2"
             />
           </div>
 
@@ -165,7 +165,7 @@ function Topbar({ setOnlineUsers }) {
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.3, type: "spring" }}
                 exit={{ opacity: 0 }}
-                className="bg-bodySecondary w-[500px] rounded-b-md text-white absolute top-10 border-t-2 border-bodyPrimary shadow-2xl"
+                className="bg-bodySecondary w-[300px] lg:w-[500px] rounded-b-md text-white absolute top-10 border-t-2 border-bodyPrimary shadow-2xl"
               >
                 {users?.map((u, index) => (
                   <div
@@ -213,18 +213,18 @@ function Topbar({ setOnlineUsers }) {
           </AnimatePresence>
         </div>
 
-        <div className="relative flex items-center space-x-6 lg:space-x-8 text-tabContentColor ml-10 lg:ml-14">
+        <div className="relative flex items-center space-x-6 lg:space-x-8 text-tabContentColor ml-5 lg:ml-14">
           <div className="relative">
             <div className="absolute text-white font-semibold text-[8px] grid place-content-center -right-2 -top-3 bg-[#1094e6] border-[3px] border-bodySecondary w-5 h-5 rounded-full">
               1
             </div>
-            <HiUser className="text-[16px] lg:text-[20px]" />
+            <HiUser className="text-[17px] lg:text-[20px]" />
           </div>
           <div className="relative">
             <div className="absolute text-white font-semibold text-[8px] grid place-content-center -right-2.5 -top-3 bg-[#1094e6] border-[3px] border-bodySecondary w-5 h-5 rounded-full">
               1
             </div>
-            <BsChatLeftDotsFill className="text-[16px] lg:text-[20px]" />
+            <BsChatLeftDotsFill className="text-[17px] lg:text-[20px]" />
           </div>
           <div className="relative">
             {notifications.length > 0 && (
@@ -233,7 +233,7 @@ function Topbar({ setOnlineUsers }) {
               </div>
             )}
             <div onClick={() => setShowNotifications(!showNotifications)}>
-              <IoNotifications className="text-[16px] lg:text-[20px] cursor-pointer" />
+              <IoNotifications className="text-[17px] lg:text-[20px] cursor-pointer" />
             </div>
           </div>
           <AnimatePresence>
@@ -264,13 +264,13 @@ function Topbar({ setOnlineUsers }) {
 
         <div
           onClick={() => setShowDropdown(!showDropdown)}
-          className="cursor-pointer relative w-32 ml-5 lg:ml-14 px-4 py-1.5 rounded-full bg-[hsl(206,23%,16%)] flex items-center"
+          className="cursor-pointer relative lg:w-32 ml-5 lg:ml-14 lg:px-4 px-1.5 py-1.5 rounded-full bg-[hsl(206,23%,16%)] flex items-center"
         >
           <div
             style={{ backgroundImage: `url(${user?.profilePicture})` }}
-            className="w-6 h-6 bg-cover rounded-full -ml-2"
+            className="w-7 h-7 lg:w-6 lg:h-6 bg-cover rounded-full lg:-ml-2"
           ></div>
-          <p className="text-sm text-[#adbdc4] font-semibold ml-2">
+          <p className="text-sm hidden lg:block text-[#adbdc4] font-semibold ml-2">
             {user?.username}
           </p>
 
@@ -281,7 +281,7 @@ function Topbar({ setOnlineUsers }) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.1, stiffness: 60, type: "spring" }}
                 exit={{ opacity: 0, y: -15 }}
-                className="text-white absolute w-full right-0 -bottom-12 bg-bodySecondary py-2 px-4 rounded-full shadow-2xl border-2 border-bodyPrimary"
+                className="text-white absolute w-32 right-0 -bottom-12 bg-bodySecondary py-2 px-4 rounded-full shadow-2xl border-2 border-bodyPrimary"
               >
                 <div
                   onClick={logout}
