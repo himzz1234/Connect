@@ -4,7 +4,7 @@ import Post from "./Post";
 
 function Posts({ posts, setPosts }) {
   return (
-    <div>
+    <div className="space-y-5">
       {posts.map((post) => (
         <AnimatePresence key={post._id}>
           <motion.div

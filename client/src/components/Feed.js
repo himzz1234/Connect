@@ -114,7 +114,7 @@ function Feed() {
         )}
       </div>
 
-      <div className="mt-6 space-y-5">
+      <div className="mt-6">
         <Posts posts={posts} setPosts={setPosts} />
       </div>
     </div>
