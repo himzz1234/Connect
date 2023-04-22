@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext, useRef } from "react";
-import axios from "axios";
+import axios from "../axios";
 import { RiAttachment2 } from "react-icons/ri";
 import { IoIosClose } from "react-icons/io";
 import { AuthContext } from "../context/AuthContext";

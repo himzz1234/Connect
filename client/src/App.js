@@ -4,7 +4,7 @@ import Register from "./pages/Register";
 import { Route, Routes, Navigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "./context/AuthContext";
-import axios from "axios";
+import axios from "./axios";
 import Loading from "./components/Loading";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";

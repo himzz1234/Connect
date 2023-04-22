@@ -1,7 +1,7 @@
 import { AiOutlinePlus } from "react-icons/ai";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
-import axios from "axios";
+import axios from "../axios";
 import MessagePopup from "./MessagePopup";
 import Conversation from "./Conversation";
 import { AnimatePresence, motion } from "framer-motion";

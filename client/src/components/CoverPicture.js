@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import { MdAddAPhoto } from "react-icons/md";
 import ReactLoading from "react-loading";
 import { AuthContext } from "../context/AuthContext";
-import axios from "axios";
+import axios from "../axios";
 
 function CoverPicture() {
   const { user } = useContext(AuthContext);

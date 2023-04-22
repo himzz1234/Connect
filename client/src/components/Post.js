@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../axios";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import { AiFillHeart, AiFillLike } from "react-icons/ai";

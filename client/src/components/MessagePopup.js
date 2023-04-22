@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { MdOpenInNew } from "react-icons/md";
 import { GrEmoji } from "react-icons/gr";
 import { AiOutlineGif } from "react-icons/ai";
-import axios from "axios";
+import axios from "../axios";
 import { AuthContext } from "../context/AuthContext";
 import { SocketContext } from "../context/SocketContext";
 import data from "@emoji-mart/data";

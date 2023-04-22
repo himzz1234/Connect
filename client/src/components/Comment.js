@@ -4,7 +4,7 @@ import { BiDotsVerticalRounded } from "react-icons/bi";
 import { AnimatePresence, motion } from "framer-motion";
 import { AuthContext } from "../context/AuthContext";
 import { FaTrash } from "react-icons/fa";
-import axios from "axios";
+import axios from "../axios";
 
 function Comment({ comment, index, setComments, comments }) {
   const [showDropdown, setShowDropdown] = useState(false);

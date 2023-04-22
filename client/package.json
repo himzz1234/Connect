@@ -49,7 +49,6 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:8800/api",
   "devDependencies": {
     "tailwindcss": "^3.2.7"
   }

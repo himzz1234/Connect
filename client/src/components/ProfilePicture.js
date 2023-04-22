@@ -2,7 +2,7 @@ import { AuthContext } from "../context/AuthContext";
 import { MdAddAPhoto } from "react-icons/md";
 import { useContext, useState } from "react";
 import ReactLoading from "react-loading";
-import axios from "axios";
+import axios from "../axios";
 
 function ProfilePicture() {
   const { user } = useContext(AuthContext);

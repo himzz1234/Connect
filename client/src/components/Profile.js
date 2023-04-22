@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect, useRef, useCallback } from "react";
 import { AuthContext } from "../context/AuthContext";
-import axios from "axios";
+import axios from "../axios";
 import CoverPicture from "./CoverPicture";
 import ProfilePicture from "./ProfilePicture";
 import { FaPen, FaCheck } from "react-icons/fa";

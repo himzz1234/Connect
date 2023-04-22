@@ -12,7 +12,7 @@ export const SocketContextProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    setSocket(io("http://localhost:8800"));
+    setSocket(io("https://connectsocialapp.onrender.com"));
   }, []);
 
   return (
