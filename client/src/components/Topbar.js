@@ -266,7 +266,7 @@ function Topbar({ setOnlineUsers }) {
         >
           <div
             style={{ backgroundImage: `url(${user?.profilePicture})` }}
-            className="w-7 h-7 lg:w-6 lg:h-6 bg-cover rounded-full lg:-ml-2"
+            className="w-7 h-7 bg-cover rounded-full lg:-ml-2"
           ></div>
           <p className="text-sm hidden lg:block text-[#adbdc4] font-semibold ml-2">
             {user?.username}
