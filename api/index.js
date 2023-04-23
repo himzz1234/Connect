@@ -36,13 +36,6 @@ app.get("/", (req, res) => {
   res.json("kokofekfe");
 });
 
-app.use("/api/users", userRoutes);
-app.use("/api/auth", authRoutes);
-app.use("/api/post", postRoutes);
-app.use("/api/comment", commentRoutes);
-app.use("/api/message", messageRoutes);
-app.use("/api/conversation", convRoutes);
-
 let users = [];
 
 const addUser = (userId, socketId) => {
@@ -95,5 +88,13 @@ io.on("connection", (socket) => {
     io.emit("getUsers", users);
   });
 });
+
+app.use("/api/users", userRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/post", postRoutes);
+app.use("/api/comment", commentRoutes);
+app.use("/api/message", messageRoutes);
+app.use("/api/conversation", convRoutes);
+
 
 server.listen(8800, () => console.log("Server up and running⚡"));

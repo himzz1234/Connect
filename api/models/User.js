@@ -28,7 +28,7 @@ const userSchema = new mongoose.Schema(
     coverPicture: {
       type: String,
       default:
-        "https://www.google.com/url?sa=i&url=https%3A%2F%2Fstock.adobe.com%2Fsearch%3Fk%3Dplain%2520grey%2520backgrounds&psig=AOvVaw2anFL-jQukOE4VgBvwLkZz&ust=1681670205148000&source=images&cd=vfe&ved=0CBEQjRxqFwoTCLi5j-zDrP4CFQAAAAAdAAAAABAE",
+        "https://res.cloudinary.com/dzcein87k/image/upload/v1682271488/zbmcf5cmlkpw47hqmr41.jpg",
     },
     followers: {
       type: Array,
