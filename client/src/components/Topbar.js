@@ -93,10 +93,11 @@ function Topbar({ setOnlineUsers }) {
 
   const followUser = async (id) => {
     try {
-      await axios.post(`/conversation`, {
+      const res = await axios.post(`/conversation`, {
         senderId: user?._id,
         receiverId: id,
       });
+      console.log(user?._id, id, res.data)
     } catch (error) {
       console.log(error);
     }
@@ -105,7 +106,7 @@ function Topbar({ setOnlineUsers }) {
       userId: user?._id,
     });
 
-    window.location.reload();
+    // window.location.reload();
   };
 
   const unfollowUser = async (id) => {

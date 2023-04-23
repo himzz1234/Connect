@@ -4,9 +4,8 @@ const Conversation = require("../models/Conversation");
 // New conversation
 
 router.post("/", async (req, res) => {
-  console.log(req.body.senderId, req.body.receiverId);
   const conversation = await Conversation.find({
-    members: { $in: [req.body.receiverId] },
+    members: { $all: [req.body.receiverId, req.body.senderId] },
   });
 
   try {

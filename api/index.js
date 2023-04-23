@@ -19,7 +19,6 @@ const postRoutes = require("./routes/post");
 const convRoutes = require("./routes/conversations");
 const messageRoutes = require("./routes/message");
 const commentRoutes = require("./routes/comment");
-const multer = require("multer");
 
 dotenv.config();
 
@@ -32,15 +31,6 @@ mongoose.connect(process.env.MONGO_URL, {
 app.use(cors());
 app.use(express.json());
 app.use(helmet());
-
-const upload = multer();
-app.post("api/upload", upload.single("file"), (req, res) => {
-  try {
-    return res.status(200).json("File uploaded successfully");
-  } catch (err) {
-    console.log(err);
-  }
-});
 
 app.get("/", (req, res) => {
   res.json("kokofekfe");
