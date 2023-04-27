@@ -52,6 +52,8 @@ function Feed() {
       img: imageToSend,
     };
 
+    if(imageToSend === "" && desc.current.value === '') return
+
     try {
       const res = await axios.post("/post", newPost);
       setPosts((prev) => [res.data, ...prev]);

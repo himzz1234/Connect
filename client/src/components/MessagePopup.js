@@ -135,20 +135,22 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
       url,
     });
 
-    try {
-      const message = {
-        conversationId: currentChat.conversation._id,
-        sender: user._id,
-        url: url,
-        type: "gif",
-      };
-
-      await axios.post(`/message`, message);
-
-      setMessages((prev) => [...prev, message]);
-      setInput("");
-    } catch (err) {
-      console.log(err);
+    if(url){
+      try {
+        const message = {
+          conversationId: currentChat.conversation._id,
+          sender: user._id,
+          url: url,
+          type: "gif",
+        };
+  
+        await axios.post(`/message`, message);
+  
+        setMessages((prev) => [...prev, message]);
+        setInput("");
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
 
@@ -240,7 +242,7 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, type: "tween" }}
             exit={{ opacity: 1, y: 400 }}
-            className="border-[#2f3c47] rounded-sm h-[45vh]"
+            className="border-[#2f3c47] rounded-sm relative h-[45vh] overflow-y-auto scrollbar-0 scrollbar"
           >
             <Picker
               data={data}

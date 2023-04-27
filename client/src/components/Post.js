@@ -7,7 +7,7 @@ import { FaTrash } from "react-icons/fa";
 import { format } from "timeago.js";
 import { AnimatePresence, motion } from "framer-motion";
 import { SocketContext } from "../context/SocketContext";
-import Comment from "./Comment";
+import Comments from "./Comments";
 
 function Post({ post, setPosts, posts }) {
   const [isLiked, setIsLiked] = useState(false);
@@ -74,6 +74,7 @@ function Post({ post, setPosts, posts }) {
 
   const postComment = async (e) => {
     e.preventDefault();
+    if (commentRef.current.value === "") return;
     const newComment = {
       userId: currentUser._id,
       text: commentRef.current.value,
@@ -194,23 +195,7 @@ function Post({ post, setPosts, posts }) {
 
       <AnimatePresence>
         {showComments && (
-          <motion.div
-            initial={{ opacity: 0, height: 0, y: -30 }}
-            animate={{ opacity: 1, height: "fit-content", y: 0 }}
-            transition={{ duration: 0.3, type: "tween" }}
-            exit={{ opacity: 0, height: 0, y: -30 }}
-            className="px-3"
-          >
-            {comments.map((c, index) => (
-              <Comment
-                key={index}
-                comment={c}
-                index={index}
-                setComments={setComments}
-                comments={comments}
-              />
-            ))}
-          </motion.div>
+          <Comments comments={comments} setComments={setComments} />
         )}
       </AnimatePresence>
     </div>

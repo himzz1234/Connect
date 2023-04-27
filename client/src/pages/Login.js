@@ -39,8 +39,9 @@ function Login() {
     }
   };
 
-  const { user, isFetching, dispatch } = useContext(AuthContext);
+  const { isFetching, dispatch } = useContext(AuthContext);
   const { socket } = useContext(SocketContext);
+  
   const handleClick = async (e) => {
     e.preventDefault();
 

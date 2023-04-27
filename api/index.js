@@ -61,11 +61,14 @@ io.on("connection", (socket) => {
   // receive Notification
   socket.on("sendNotification", ({ sender, receiver, text, type }) => {
     const user = getUser(receiver._id);
-    io.to(user.socketId).emit("getNotification", {
-      sender,
-      text,
-      type,
-    });
+
+    if (user) {
+      io.to(user.socketId).emit("getNotification", {
+        sender,
+        text,
+        type,
+      });
+    }
   });
 
   // send and get message
@@ -95,6 +98,5 @@ app.use("/api/post", postRoutes);
 app.use("/api/comment", commentRoutes);
 app.use("/api/message", messageRoutes);
 app.use("/api/conversation", convRoutes);
-
 
 server.listen(8800, () => console.log("Server up and running⚡"));

@@ -1,13 +1,16 @@
-import Home from "./pages/Home";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
+import { lazy } from "react";
+import { toast } from "react-toastify";
 import { Route, Routes, Navigate } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
+import { Suspense, useContext, useEffect, useState } from "react";
 import { AuthContext } from "./context/AuthContext";
 import axios from "./axios";
 import Loading from "./components/Loading";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
+const Home = lazy(() => import("./pages/Home"));
+const Login = lazy(() => import("./pages/Login"));
+const Register = lazy(() => import("./pages/Register"));
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -28,6 +31,19 @@ function App() {
           if (res.data.user) {
             dispatch({ type: "LOGIN_SUCCESS", payload: res.data.user });
             setLoading(false);
+          } else {
+            toast.error("An error occurred!", {
+              position: "bottom-center",
+              autoClose: 1000,
+              hideProgressBar: true,
+              closeOnClick: false,
+              pauseOnHover: false,
+              draggable: false,
+              progress: undefined,
+              theme: "dark",
+            });
+
+            setLoading(false);
           }
         } catch (err) {
           dispatch({ type: "LOGIN_FAILURE", payload: err });
@@ -44,17 +60,19 @@ function App() {
       {loading ? (
         <Loading />
       ) : (
-        <Routes>
-          <Route path="/" element={user ? <Home /> : <Register />} />
-          <Route
-            path="/login"
-            element={user ? <Navigate replace to="/" /> : <Login />}
-          />
-          <Route
-            path="/register"
-            element={user ? <Navigate replace to="/" /> : <Register />}
-          />
-        </Routes>
+        <Suspense fallback={<Loading />}>
+          <Routes>
+            <Route path="/" element={user ? <Home /> : <Register />} />
+            <Route
+              path="/login"
+              element={user ? <Navigate replace to="/" /> : <Login />}
+            />
+            <Route
+              path="/register"
+              element={user ? <Navigate replace to="/" /> : <Register />}
+            />
+          </Routes>
+        </Suspense>
       )}
 
       <ToastContainer toastStyle={{ backgroundColor: "hsl(206,28%,15%)" }} />

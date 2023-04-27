@@ -39,7 +39,6 @@ function Topbar({ setOnlineUsers }) {
   }, [debounceSearchTerm]);
 
   const displayNotifications = ({ sender, text, type }, index) => {
-    console.log(text);
     if (type == 1) {
       return (
         <div
@@ -106,7 +105,7 @@ function Topbar({ setOnlineUsers }) {
       userId: user?._id,
     });
 
-    // window.location.reload();
+    window.location.reload();
   };
 
   const unfollowUser = async (id) => {
