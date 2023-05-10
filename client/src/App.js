@@ -54,7 +54,7 @@ function App() {
           setLoading(false);
         }
       } else {
-        dispatch({ type: "LOGIN_FAILURE", payload: err });
+        dispatch({ type: "LOGIN_FAILURE", payload: "error" });
         setLoading(false);
       }
     }
