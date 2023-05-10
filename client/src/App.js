@@ -53,7 +53,10 @@ function App() {
           dispatch({ type: "LOGIN_FAILURE", payload: err });
           setLoading(false);
         }
-      } else setLoading(false);
+      } else {
+        dispatch({ type: "LOGIN_FAILURE", payload: err });
+        setLoading(false);
+      }
     }
 
     fetchUser();
