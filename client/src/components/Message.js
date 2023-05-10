@@ -1,9 +1,14 @@
 import React from "react";
 import { format } from "timeago.js";
+import { motion } from "framer-motion";
 
 function Message({ message, currentChat }) {
   return (
-    <>
+    <motion.div
+      initial={{ y: 20, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.2 }}
+    >
       <div
         className={`p-2 ${
           message.sender !== currentChat.user._id
@@ -18,7 +23,7 @@ function Message({ message, currentChat }) {
         )}
       </div>
       <p className="text-xs">{format(message.createdAt)}</p>
-    </>
+    </motion.div>
   );
 }
 

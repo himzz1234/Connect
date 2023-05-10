@@ -1,6 +1,7 @@
 import axios from "../axios";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { BiDotsVerticalRounded } from "react-icons/bi";
+import { BsSendFill } from "react-icons/bs";
 import { AiFillHeart, AiFillLike } from "react-icons/ai";
 import { AuthContext } from "../context/AuthContext";
 import { FaTrash } from "react-icons/fa";
@@ -183,13 +184,20 @@ function Post({ post, setPosts, posts }) {
       </div>
 
       <div className="mt-10 border-t-2 border-[#28343e] py-4">
-        <form onSubmit={postComment}>
+        <form
+          onSubmit={postComment}
+          className="bg-[#28343e] flex items-center rounded-sm px-2 py-2"
+        >
           <input
             ref={commentRef}
             type="text"
             placeholder="Add a comment"
-            className="w-full bg-[#28343e] placeholder-[#617484] rounded-sm px-2 py-2 text-[14px] text-white outline-none"
+            className="w-full bg-transparent flex-1 placeholder-[#617484] text-[14px] text-white outline-none"
           />
+
+          <button type="submit">
+            <BsSendFill color="#1da1f2" />
+          </button>
         </form>
       </div>
 

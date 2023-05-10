@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { MdOpenInNew } from "react-icons/md";
 import { GrEmoji } from "react-icons/gr";
+import { BsSendFill } from "react-icons/bs";
 import { AiOutlineGif } from "react-icons/ai";
 import axios from "../axios";
 import { AuthContext } from "../context/AuthContext";
@@ -104,6 +105,8 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
 
     if (input !== "") {
       try {
+        setMessages((prev) => [...prev, message]);
+        setInput("");
         const message = {
           conversationId: currentChat.conversation._id,
           sender: user._id,
@@ -113,9 +116,6 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
         };
 
         await axios.post(`/message`, message);
-
-        setMessages((prev) => [...prev, message]);
-        setInput("");
       } catch (err) {
         console.log(err);
       }
@@ -135,7 +135,7 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
       url,
     });
 
-    if(url){
+    if (url) {
       try {
         const message = {
           conversationId: currentChat.conversation._id,
@@ -143,9 +143,9 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
           url: url,
           type: "gif",
         };
-  
+
         await axios.post(`/message`, message);
-  
+
         setMessages((prev) => [...prev, message]);
         setInput("");
       } catch (err) {
@@ -234,6 +234,10 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
             color={!showEmojis ? "#c7d6e5" : "#1da1f2"}
           />
         </div>
+
+        <button type="submit">
+          <BsSendFill color="#1da1f2" />
+        </button>
       </form>
       <AnimatePresence>
         {showEmojis && (

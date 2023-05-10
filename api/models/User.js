@@ -34,10 +34,18 @@ const userSchema = new mongoose.Schema(
       type: Array,
       default: [],
     },
-    following: {
-      type: Array,
-      default: [],
-    },
+    following: [
+      {
+        user: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+        },
+
+        status: {
+          type: String,
+        },
+      },
+    ],
     isAdmin: {
       type: Boolean,
       default: false,

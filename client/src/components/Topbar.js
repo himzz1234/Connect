@@ -96,7 +96,7 @@ function Topbar({ setOnlineUsers }) {
         senderId: user?._id,
         receiverId: id,
       });
-      console.log(user?._id, id, res.data)
+      console.log(user?._id, id, res.data);
     } catch (error) {
       console.log(error);
     }
@@ -163,7 +163,7 @@ function Topbar({ setOnlineUsers }) {
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.3, type: "spring" }}
                 exit={{ opacity: 0 }}
-                className="bg-bodySecondary w-[300px] lg:w-[500px] rounded-b-md text-white absolute top-10 border-t-2 border-bodyPrimary shadow-2xl"
+                className="bg-bodySecondary w-screen lg:w-[500px] rounded-b-md text-white absolute -left-28 lg:left-0 top-10 border-t-2 border-bodyPrimary shadow-2xl"
               >
                 {users?.map((u, index) => (
                   <div
@@ -241,7 +241,7 @@ function Topbar({ setOnlineUsers }) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.1, stiffness: 60, type: "spring" }}
                 exit={{ opacity: 0, y: -15 }}
-                className="absolute top-10 bg-bodySecondary shadow-2xl right-0 w-[360px] rounded-md"
+                className="absolute top-10 bg-bodySecondary shadow-2xl p-2 right-0 w-[40vh] lg:w-[360px] rounded-md"
               >
                 {notifications?.map((notification, index) =>
                   displayNotifications(notification, index)
@@ -251,7 +251,7 @@ function Topbar({ setOnlineUsers }) {
                     setNotifications([]);
                     setShowNotifications(false);
                   }}
-                  className="bg-[#1094e6] text-center w-full m-2 py-1 text-[15px] rounded-sm"
+                  className="bg-[#1094e6] text-center w-full py-1 text-[15px] rounded-sm"
                 >
                   Mark all as read
                 </button>

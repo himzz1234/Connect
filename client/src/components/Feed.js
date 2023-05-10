@@ -2,6 +2,7 @@ import { useState, useEffect, useContext, useRef } from "react";
 import axios from "../axios";
 import { RiAttachment2 } from "react-icons/ri";
 import { IoIosClose } from "react-icons/io";
+import { BsSendFill } from "react-icons/bs";
 import { AuthContext } from "../context/AuthContext";
 import Posts from "./Posts";
 
@@ -52,7 +53,7 @@ function Feed() {
       img: imageToSend,
     };
 
-    if(imageToSend === "" && desc.current.value === '') return
+    if (imageToSend === "" && desc.current.value === "") return;
 
     try {
       const res = await axios.post("/post", newPost);
@@ -74,7 +75,7 @@ function Feed() {
             className="w-12 h-12 bg-cover rounded-full -ml-2"
           ></div>
           <form onSubmit={submitHandler} className="flex-1">
-            <div className="bg-[#28343e] flex flex-1 items-center px-3 py-2 rounded-md space-x-2">
+            <div className="bg-[#28343e] flex flex-1 items-center px-3 py-2 rounded-md space-x-3">
               <input
                 type="text"
                 ref={desc}
@@ -96,6 +97,10 @@ function Feed() {
                 className="hidden"
                 onChange={(e) => setMediaFile(e.target.files[0])}
               />
+
+              <button type="submit">
+                <BsSendFill color="#1da1f2" />
+              </button>
             </div>
           </form>
         </div>

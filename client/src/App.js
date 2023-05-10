@@ -43,6 +43,10 @@ function App() {
               theme: "dark",
             });
 
+            dispatch({
+              type: "LOGIN_FAILURE",
+              payload: "Something went wrong!",
+            });
             setLoading(false);
           }
         } catch (err) {
@@ -69,7 +73,7 @@ function App() {
             />
             <Route
               path="/register"
-              element={user ? <Navigate replace to="/" /> : <Register />}
+              element={user ? <Navigate to="/" replace /> : <Register />}
             />
           </Routes>
         </Suspense>
