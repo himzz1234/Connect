@@ -69,14 +69,8 @@ function App() {
         // <Suspense fallback={<Loading />}>
         <Routes>
           <Route path="/" element={user ? <Home /> : <Register />} />
-          <Route
-            path="/login"
-            element={user ? <Navigate replace to="/" /> : <Login />}
-          />
-          <Route
-            path="/register"
-            element={user ? <Navigate to="/" replace /> : <Register />}
-          />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
         </Routes>
         // </Suspense>
       )}
