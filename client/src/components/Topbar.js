@@ -101,7 +101,7 @@ function Topbar({ setOnlineUsers }) {
       setOnlineUsers(users.map((user) => user.userId));
     });
 
-    navigate("/login");
+    navigate("/");
   };
 
   return (
