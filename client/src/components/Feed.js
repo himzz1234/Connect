@@ -68,11 +68,11 @@ function Feed() {
 
   return (
     <div className="order-3 lg:order-2 w-full lg:w-6/12 lg:h-[85vh] overflow-y-auto scrollbar scrollbar-w-0">
-      <div className="bg-bodySecondary px-6 py-5 rounded-md">
-        <div className="flex items-center space-x-4">
+      <div className="bg-bodySecondary px-5 md:px-6 py-5 rounded-md">
+        <div className="flex items-center space-x-3 md:space-x-4">
           <div
             style={{ backgroundImage: `url(${user?.profilePicture})` }}
-            className="w-12 h-12 bg-cover rounded-full -ml-2"
+            className={`w-8 h-8 md:w-9 md:h-9 bg-cover rounded-full -ml-2`}
           ></div>
           <form onSubmit={submitHandler} className="flex-1">
             <div className="bg-[#28343e] flex flex-1 items-center px-3 py-2 rounded-md space-x-3">
@@ -80,12 +80,12 @@ function Feed() {
                 type="text"
                 ref={desc}
                 placeholder={`What's on your mind ${user?.username}?`}
-                className="bg-transparent flex-1 rounded-md outline-none placeholder-[#617484]"
+                className="bg-transparent text-[12px] sm:text-[13px] md:text-[14px] flex-1 rounded-md outline-none placeholder-[#617484]"
               />
 
               <label htmlFor="addAPhoto" className="">
                 <RiAttachment2
-                  className="cursor-pointer text-xl"
+                  className="cursor-pointer text-[16px] sm:text-xl"
                   color="#c7d6e5"
                 />
               </label>
@@ -99,7 +99,10 @@ function Feed() {
               />
 
               <button type="submit">
-                <BsSendFill color="#1da1f2" />
+                <BsSendFill
+                  color="#1da1f2"
+                  className="text-[12px] sm:text-base"
+                />
               </button>
             </div>
           </form>

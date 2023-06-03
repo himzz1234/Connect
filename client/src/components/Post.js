@@ -107,18 +107,18 @@ function Post({ post, setPosts, posts }) {
       <div className="flex items-center space-x-4">
         <div
           style={{ backgroundImage: `url(${post.userId?.profilePicture})` }}
-          className={`w-12 h-12 bg-cover rounded-full -ml-2`}
+          className={`w-8 h-8 md:w-9 md:h-9 bg-cover rounded-full -ml-2`}
         ></div>
         <div className="flex-1">
           <div className="flex items-center space-x-2">
-            <h2 className="text-[15px] font-semibold">
+            <h2 className="text-[14px] md:text-[15px] font-semibold">
               {post.userId?.username}
             </h2>
-            <small className="text-[12.5px] text-[#73899a]">
+            <small className="text-[11.5px] md:text-[12.5px] text-[#73899a]">
               @{post.userId.email?.split("@")[0]}
             </small>
           </div>
-          <small className="text-[#73899a] text-[12px]">
+          <small className="text-[#73899a] text-[11px] md:text-[12px]">
             {format(post.createdAt)}
           </small>
         </div>
@@ -150,7 +150,7 @@ function Post({ post, setPosts, posts }) {
       </div>
 
       <div className="my-6">
-        <h2 className="text-[15px]">{post?.desc}</h2>
+        <h2 className="text-[14px] md:text-[15px]">{post?.desc}</h2>
         {post?.img && (
           <img
             src={post?.img}
@@ -161,12 +161,12 @@ function Post({ post, setPosts, posts }) {
 
       <div className="flex items-center my-2">
         <div className="flex-1 flex items-center space-x-2 relative">
-          <div className="border-[2px] border-bodySecondary absolute active:scale-95 transition-all duration-150 cursor-pointer bg-[#fb2f55] w-7 h-7 rounded-full flex items-center justify-center">
+          <div className="border-[2px] border-bodySecondary absolute active:scale-95 transition-all duration-150 cursor-pointer bg-[#fb2f55] w-6 h-6 md:w-7 md:h-7 rounded-full flex items-center justify-center">
             <AiFillHeart className="text-sm" />
           </div>
           <div
             onClick={likeAPost}
-            className="border-[2px] border-bodySecondary absolute z-10 left-3 active:scale-95 transition-all duration-150 cursor-pointer bg-[#2b80ff] w-7 h-7 rounded-full flex items-center justify-center"
+            className="border-[2px] border-bodySecondary absolute z-10 left-3 active:scale-95 transition-all duration-150 cursor-pointer bg-[#2b80ff] w-6 h-6 md:w-7 md:h-7 rounded-full flex items-center justify-center"
           >
             <AiFillLike className="text-sm" />
           </div>
@@ -183,7 +183,7 @@ function Post({ post, setPosts, posts }) {
         </div>
       </div>
 
-      <div className="mt-10 border-t-2 border-[#28343e] py-4">
+      <div className="mt-5 md:mt-10 border-t-2 border-[#28343e] py-4">
         <form
           onSubmit={postComment}
           className="bg-[#28343e] flex items-center rounded-sm px-2 py-2"

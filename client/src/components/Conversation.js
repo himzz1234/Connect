@@ -36,7 +36,7 @@ function Conversation({ conversation, setCurrentChat, onlineUsers }) {
         ></div>
         <div
           style={{ backgroundImage: `url(${user?.profilePicture})` }}
-          className="w-8 h-8 bg-cover rounded-full"
+          className="w-8 h-8 md:w-9 md:h-9 bg-cover rounded-full -ml-2"
         ></div>
       </div>
       <p className="text-[14.5px] ml-2">{user?.username}</p>

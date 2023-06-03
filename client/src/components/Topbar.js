@@ -10,6 +10,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import useDebounce from "../hooks/useDebounce";
 import { useNavigate } from "react-router-dom";
 import { SocketContext } from "../context/SocketContext";
+import Searchbar from "./Searchbar";
 
 function Topbar({ setOnlineUsers }) {
   const navigate = useNavigate();
@@ -90,32 +91,6 @@ function Topbar({ setOnlineUsers }) {
     );
   };
 
-  const followUser = async (id) => {
-    try {
-      const res = await axios.post(`/conversation`, {
-        senderId: user?._id,
-        receiverId: id,
-      });
-      console.log(user?._id, id, res.data);
-    } catch (error) {
-      console.log(error);
-    }
-
-    await axios.put(`/users/follow/${id}`, {
-      userId: user?._id,
-    });
-
-    window.location.reload();
-  };
-
-  const unfollowUser = async (id) => {
-    await axios.put(`/users/unfollow/${id}`, {
-      userId: user?._id,
-    });
-
-    window.location.reload();
-  };
-
   const logout = () => {
     dispatch({ type: "LOGOUT" });
 
@@ -136,7 +111,7 @@ function Topbar({ setOnlineUsers }) {
           <img
             src="/assets/socialLogo.png"
             alt="logo"
-            className="object-contain w-[100px] h-[100px] min-w-[60px] min-h-[60px]"
+            className="object-cover w-[65px] h-[65px] sm:w-[75px] sm:h-[75px] md:w-[80px] md:h-[80px]"
           />
         </div>
 
@@ -152,66 +127,16 @@ function Topbar({ setOnlineUsers }) {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search for friend, post or video"
-              className="text-[13.5px] md:text-[14px] lg:text-normal bg-transparent text-white flex-1 outline-none placeholder-[#707e8b] lg:ml-2"
+              className="text-[12px] sm:text-[13px] md:text-[14px] lg:text-normal bg-transparent text-white flex-1 outline-none placeholder-[#707e8b] lg:ml-2"
             />
           </div>
 
           <AnimatePresence>
-            {users.length > 0 && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.3, type: "spring" }}
-                exit={{ opacity: 0 }}
-                className="bg-bodySecondary w-screen lg:w-[500px] rounded-b-md text-white absolute -left-28 lg:left-0 top-10 border-t-2 border-bodyPrimary shadow-2xl"
-              >
-                {users?.map((u, index) => (
-                  <div
-                    key={u._id}
-                    className={`relative flex space-x-3 items-center ${
-                      index > 0 &&
-                      "before:absolute before:w-full before:h-[1px] before:bg-[#28343e] before:-top-0"
-                    }`}
-                  >
-                    <div className="flex flex-1 items-center space-x-3 py-3 pl-3">
-                      <div
-                        style={{ backgroundImage: `url(${u?.profilePicture})` }}
-                        className="w-9 h-9 bg-cover rounded-full"
-                      ></div>
-                      <div className="flex-1">
-                        <small className="text-[11px] text-[#73899a]">
-                          @{u.email?.split("@")[0]}
-                        </small>
-                        <p className="flex items-center space-x-[0.5px] text-[14px] font-semibold">
-                          {u.username}
-                        </p>
-                      </div>
-                    </div>
-                    <div>
-                      {user?.following.findIndex((f) => f === u._id) > -1 ? (
-                        <button
-                          onClick={() => unfollowUser(u._id)}
-                          className="text-[#1da1f2] text-xs px-3 py-1 rounded-sm"
-                        >
-                          Unfollow
-                        </button>
-                      ) : (
-                        <button
-                          onClick={() => followUser(u._id)}
-                          className="text-[#1da1f2] text-xs px-3 py-1 rounded-sm"
-                        >
-                          Follow
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </motion.div>
-            )}
+            {users.length > 0 && <Searchbar users={users} user={user} />}
           </AnimatePresence>
         </div>
 
-        <div className="relative flex items-center space-x-6 lg:space-x-8 text-tabContentColor lg:ml-14">
+        <div className="relative flex items-center space-x-4 sm:space-x-6 lg:space-x-8 text-tabContentColor lg:ml-14">
           <div className="relative hidden md:block">
             <div className="absolute text-white font-semibold text-[8px] grid place-content-center -right-2 -top-3 bg-[#1094e6] border-[3px] border-bodySecondary w-5 h-5 rounded-full">
               1
@@ -262,7 +187,7 @@ function Topbar({ setOnlineUsers }) {
 
         <div
           onClick={() => setShowDropdown(!showDropdown)}
-          className="cursor-pointer relative lg:w-32 ml-5 lg:ml-14 lg:px-4 px-1.5 py-1.5 rounded-full bg-[hsl(206,23%,16%)] flex items-center"
+          className="cursor-pointer relative lg:w-32 ml-2 sm:ml-5 lg:ml-14 lg:px-4 px-1.5 py-1.5 rounded-full bg-[hsl(206,23%,16%)] flex items-center"
         >
           <div
             style={{ backgroundImage: `url(${user?.profilePicture})` }}
