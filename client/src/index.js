@@ -8,11 +8,11 @@ import { SocketContextProvider } from "./context/SocketContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <AuthContextProvider>
-    <SocketContextProvider>
-      <BrowserRouter>
+  <BrowserRouter>
+    <AuthContextProvider>
+      <SocketContextProvider>
         <App />
-      </BrowserRouter>
-    </SocketContextProvider>
-  </AuthContextProvider>
+      </SocketContextProvider>
+    </AuthContextProvider>
+  </BrowserRouter>
 );
