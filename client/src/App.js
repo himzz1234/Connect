@@ -63,24 +63,19 @@ function App() {
 
   return (
     <div className="bg-bodyPrimary w-full h-screen lg:overflow-y-hidden overflow-x-hidden font-opensans scrollbar">
-      {loading ? (
-        <Loading />
-      ) : (
-        // <Suspense fallback={<Loading />}>
-        <Routes>
-          <Route path="/" element={user ? <Home /> : <Register />} />
-          <Route
-            path="/login"
-            element={user ? <Navigate to="/" /> : <Login />}
-          />
-          <Route
-            path="/register"
-            element={user ? <Navigate to="/" /> : <Register />}
-          />
-        </Routes>
-        // </Suspense>
-      )}
-
+      {/* <Suspense fallback={<Loading />}> */}
+      <Routes>
+        <Route path="/" element={user ? <Home /> : <Register />} />
+        <Route
+          path="/login"
+          element={user ? <Navigate replace to="/" /> : <Login />}
+        />
+        <Route
+          path="/register"
+          element={user ? <Navigate to="/" replace /> : <Register />}
+        />
+      </Routes>
+      // {/* </Suspense> */}
       <ToastContainer toastStyle={{ backgroundColor: "hsl(206,28%,15%)" }} />
     </div>
   );
