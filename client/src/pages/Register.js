@@ -65,103 +65,118 @@ function Register() {
   };
 
   return (
-    <div className="flex lg:flex-row flex-col items-center justify-center h-full px-5 text-white">
-      <div className="lg:mr-20 lg:mb-0 mb-10 lg:w-[450px] ">
-        <div className="flex items-center justify-center lg:justify-start">
-          <img
-            src="/assets/socialLogo.png"
-            alt="logo"
-            width="120"
-            height="120"
-            className="object-contain -ml-6"
-          />
-
-          <h1 className="text-5xl font-bold">Connect</h1>
-        </div>
-
-        <p className="text-lg lg:text-2xl font-semibold leading-[40px] text-center lg:text-left">
-          Connect with friends and the world around you.
-        </p>
+    <div className="h-full flex flex-col">
+      <div className="px-5 flex items-center justify-center lg:justify-start">
+        <img
+          src="/assets/socialLogo.png"
+          alt="logo"
+          className="object-contain lg:w-[100px] lg:h-[100px] w-[140px] h-[140px]"
+        />
+        <h1 className="hidden lg:flex text-2xl font-bold text-white">
+          Connect
+        </h1>
       </div>
+      <div className="flex flex-1 lg:flex-row lg:mt-20 flex-col px-5 items-center lg:items-start lg:justify-center text-white">
+        <div className="lg:mr-20 lg:mb-0 mb-2">
+          <div className="lg:flex items-center justify-center lg:justify-start hidden">
+            <img
+              src="/assets/Illustration.png"
+              alt="logo"
+              width="500"
+              height="500"
+              className="object-contain"
+            />
+          </div>
 
-      <form
-        onSubmit={handleSubmit}
-        className="bg-bodySecondary p-5 w-full max-w-[450px] lg:w-[450px] h-[450px] flex flex-col rounded-md space-y-5"
-      >
-        <div className="space-y-5 flex-1">
-          <div className="bg-[#28343e] w-full rounded-md px-3 py-3">
-            <input
-              required
-              ref={username}
-              type="text"
-              placeholder="Username"
-              className="w-full outline-none bg-transparent"
-            />
-          </div>
-          <div className="bg-[#28343e] w-full rounded-md px-3 py-3">
-            <input
-              required
-              ref={email}
-              type="email"
-              placeholder="Email"
-              className="w-full outline-none bg-transparent"
-            />
-          </div>
-          <div className="bg-[#28343e] w-full rounded-md px-3 py-3 flex items-center space-x-3">
-            <input
-              minLength="6"
-              required
-              ref={password}
-              type={showPassword ? "text" : "password"}
-              placeholder="Password"
-              className="w-full outline-none bg-transparent"
-            />
-            {showPassword ? (
-              <BsEyeFill
-                className="cursor-pointer"
-                color="darkgray"
-                onClick={() => setShowPassword(false)}
-              />
-            ) : (
-              <BsEyeSlashFill
-                className="cursor-pointer"
-                color="darkgray"
-                onClick={() => setShowPassword(true)}
-              />
-            )}
-          </div>
-          <div className="bg-[#28343e] w-full rounded-md px-3 py-3 flex items-center space-x-3">
-            <input
-              minLength="6"
-              required
-              ref={passwordAgain}
-              type={showConfirmPassword ? "text" : "password"}
-              placeholder="Confirm Password"
-              className="w-full outline-none bg-transparent"
-            />
-            {showConfirmPassword ? (
-              <BsEyeFill
-                className="cursor-pointer"
-                color="darkgray"
-                onClick={() => setShowConfirmPassword(false)}
-              />
-            ) : (
-              <BsEyeSlashFill
-                className="cursor-pointer"
-                color="darkgray"
-                onClick={() => setShowConfirmPassword(true)}
-              />
-            )}
-          </div>
+          {/* <p className="hidden lg:block text-lg lg:text-2xl font-semibold leading-[40px] text-center lg:text-left">
+          Connect with friends and the world around you.
+        </p> */}
         </div>
 
-        <button type="submit" className="w-full bg-[#139e6b] py-2 rounded-md">
-          Sign Up
-        </button>
-        <Link to="/login">
-          <button className="w-full py-2 rounded-md">Login Into Account</button>
-        </Link>
-      </form>
+        <form
+          onSubmit={handleSubmit}
+          className="bg-bodySecondary p-5 w-full max-w-[450px] lg:w-[450px] h-[400px] md:h-[450px] flex flex-col rounded-md space-y-2 lg:space-y-5"
+        >
+          <div className="space-y-5 flex-1">
+            <div className="bg-[#28343e] w-full rounded-md px-3 py-3">
+              <input
+                required
+                ref={username}
+                type="text"
+                placeholder="Username"
+                className="w-full outline-none bg-transparent text-[14px] md:text-base"
+              />
+            </div>
+            <div className="bg-[#28343e] w-full rounded-md px-3 py-3">
+              <input
+                required
+                ref={email}
+                type="email"
+                placeholder="Email"
+                className="w-full outline-none bg-transparent text-[14px] md:text-base"
+              />
+            </div>
+            <div className="bg-[#28343e] w-full rounded-md px-3 py-3 flex items-center space-x-3">
+              <input
+                minLength="6"
+                required
+                ref={password}
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+                className="w-full outline-none bg-transparent text-[14px] md:text-base"
+              />
+              {showPassword ? (
+                <BsEyeFill
+                  className="cursor-pointer"
+                  color="darkgray"
+                  onClick={() => setShowPassword(false)}
+                />
+              ) : (
+                <BsEyeSlashFill
+                  className="cursor-pointer"
+                  color="darkgray"
+                  onClick={() => setShowPassword(true)}
+                />
+              )}
+            </div>
+            <div className="bg-[#28343e] w-full rounded-md px-3 py-3 flex items-center space-x-3">
+              <input
+                minLength="6"
+                required
+                ref={passwordAgain}
+                type={showConfirmPassword ? "text" : "password"}
+                placeholder="Confirm Password"
+                className="w-full outline-none bg-transparent text-[14px] md:text-base"
+              />
+              {showConfirmPassword ? (
+                <BsEyeFill
+                  className="cursor-pointer"
+                  color="darkgray"
+                  onClick={() => setShowConfirmPassword(false)}
+                />
+              ) : (
+                <BsEyeSlashFill
+                  className="cursor-pointer"
+                  color="darkgray"
+                  onClick={() => setShowConfirmPassword(true)}
+                />
+              )}
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            className="w-full bg-[#139e6b] py-2 rounded-md text-[14px] md:text-base"
+          >
+            Sign Up
+          </button>
+          <Link to="/login">
+            <button className="w-full py-2 rounded-md text-[14px] md:text-base">
+              Login Into Account
+            </button>
+          </Link>
+        </form>
+      </div>
     </div>
   );
 }
