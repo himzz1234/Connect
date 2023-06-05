@@ -17,12 +17,12 @@ function Message({ message, currentChat }) {
         }`}
       >
         {message.type == "text" ? (
-          <p className="text-[14px]">{message.text}</p>
+          <p className="text-[14px] break-words">{message.text}</p>
         ) : (
           <img src={message.url} className="w-full" />
         )}
       </div>
-      <p className="text-xs">{format(message.createdAt)}</p>
+      <p className="text-xs mt-2">{format(message.createdAt)}</p>
     </motion.div>
   );
 }
