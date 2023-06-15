@@ -72,7 +72,7 @@ function Feed() {
         <div className="flex items-center space-x-3 md:space-x-4">
           <div
             style={{ backgroundImage: `url(${user?.profilePicture})` }}
-            className={`w-8 h-8 md:w-9 md:h-9 bg-cover rounded-full -ml-2`}
+            className={`w-8 h-8 md:w-[44px] md:h-[44px] bg-cover rounded-full -ml-2`}
           ></div>
           <form onSubmit={submitHandler} className="flex-1">
             <div className="bg-[#28343e] flex flex-1 items-center px-3 py-2 rounded-md space-x-3">
@@ -80,7 +80,7 @@ function Feed() {
                 type="text"
                 ref={desc}
                 placeholder={`What's on your mind ${user?.username}?`}
-                className="bg-transparent text-[12px] sm:text-[13px] md:text-[14px] flex-1 rounded-md outline-none placeholder-[#617484]"
+                className="bg-transparent text-[12px] sm:text-[13px] md:text-[16px] flex-1 rounded-md outline-none placeholder-[#617484]"
               />
 
               <label htmlFor="addAPhoto" className="">

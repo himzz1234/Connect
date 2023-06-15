@@ -107,11 +107,11 @@ function Post({ post, setPosts, posts }) {
       <div className="flex items-center space-x-4">
         <div
           style={{ backgroundImage: `url(${post.userId?.profilePicture})` }}
-          className={`w-8 h-8 md:w-9 md:h-9 bg-cover rounded-full -ml-2`}
+          className={`w-8 h-8 md:w-[44px] md:h-[44px] bg-cover rounded-full -ml-2`}
         ></div>
         <div className="flex-1">
           <div className="flex items-center space-x-2">
-            <h2 className="text-[14px] md:text-[15px] font-semibold">
+            <h2 className="text-[14px] md:text-[15.5px] font-semibold">
               {post.userId?.username}
             </h2>
             <small className="text-[11.5px] md:text-[12.5px] text-[#73899a]">
