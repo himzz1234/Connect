@@ -38,6 +38,9 @@ function Post({ post, setPosts, posts }) {
   }, []);
 
   const likeAPost = async () => {
+    setLike(isLiked ? like - 1 : like + 1);
+    setIsLiked(!isLiked);
+
     try {
       await axios.put(`/post/${post._id}/like`, {
         userId: currentUser._id,
@@ -54,20 +57,16 @@ function Post({ post, setPosts, posts }) {
         type: 1,
       });
     }
-
-    setLike(isLiked ? like - 1 : like + 1);
-    setIsLiked(!isLiked);
   };
 
   const deleteAPost = async (id) => {
     try {
+      setPosts(posts.filter((p) => p._id !== id));
       await axios.delete(`/post/${id}`, {
         data: {
           userId: currentUser?._id,
         },
       });
-
-      setPosts(posts.filter((p) => p._id !== id));
     } catch (err) {
       console.log(err);
     }

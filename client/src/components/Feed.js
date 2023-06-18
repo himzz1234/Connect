@@ -4,6 +4,7 @@ import { RiAttachment2 } from "react-icons/ri";
 import { IoIosClose } from "react-icons/io";
 import { BsSendFill } from "react-icons/bs";
 import { AuthContext } from "../context/AuthContext";
+import ReactLoading from "react-loading";
 import Posts from "./Posts";
 
 function Feed() {
@@ -11,23 +12,12 @@ function Feed() {
   const [posts, setPosts] = useState([]);
   const { user } = useContext(AuthContext);
   const [imageToSend, setImageToSend] = useState("");
+  const imageRef = useRef(null);
+  const [loading, setLoading] = useState(false);
 
   const setMediaFile = async (image) => {
-    const data = new FormData();
-    data.append("file", image);
-    data.append("upload_preset", "social-media");
-    data.append("cloud_name", "dzcein87k");
-
-    try {
-      const imageURL = await axios.post(
-        "https://api.cloudinary.com/v1_1/dzcein87k/image/upload",
-        data
-      );
-
-      setImageToSend(imageURL.data.url.toString());
-    } catch (err) {
-      console.log(err);
-    }
+    setImageToSend(image);
+    imageRef.current.src = URL.createObjectURL(image);
   };
 
   useEffect(() => {
@@ -47,21 +37,42 @@ function Feed() {
   const submitHandler = async (e) => {
     e.preventDefault();
 
+    setLoading(true);
+
+    let imageURL = "";
+    if (imageToSend) {
+      try {
+        const data = new FormData();
+        data.append("file", imageToSend);
+        data.append("upload_preset", "social-media");
+        data.append("cloud_name", "dzcein87k");
+
+        imageURL = await axios.post(
+          "https://api.cloudinary.com/v1_1/dzcein87k/image/upload",
+          data
+        );
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
     let newPost = {
       userId: user?._id,
       desc: desc.current.value,
-      img: imageToSend,
+      img: imageURL ? imageURL.data.url.toString() : null,
     };
 
     if (imageToSend === "" && desc.current.value === "") return;
 
     try {
       const res = await axios.post("/post", newPost);
+      setLoading(false);
       setPosts((prev) => [res.data, ...prev]);
 
       desc.current.value = "";
       setImageToSend("");
     } catch (err) {
+      setLoading(false);
       console.log(err);
     }
   };
@@ -69,18 +80,23 @@ function Feed() {
   return (
     <div className="order-3 lg:order-2 w-full lg:w-6/12 lg:h-[85vh] overflow-y-auto scrollbar scrollbar-w-0">
       <div className="bg-bodySecondary px-5 md:px-6 py-5 rounded-md">
-        <div className="flex items-center space-x-3 md:space-x-4">
+        <div
+          className={`flex items-center space-x-3 md:space-x-4 ${
+            loading ? "pointer-events-none opacity-50" : "pointer-events-auto"
+          }`}
+        >
           <div
             style={{ backgroundImage: `url(${user?.profilePicture})` }}
             className={`w-8 h-8 md:w-[44px] md:h-[44px] bg-cover rounded-full -ml-2`}
           ></div>
-          <form onSubmit={submitHandler} className="flex-1">
+          <form onSubmit={submitHandler} className={`flex-1`}>
             <div className="bg-[#28343e] flex flex-1 items-center px-3 py-2 rounded-md space-x-3">
               <input
                 type="text"
                 ref={desc}
+                readOnly={loading}
                 placeholder={`What's on your mind ${user?.username}?`}
-                className="bg-transparent text-[12px] sm:text-[13px] md:text-[16px] flex-1 rounded-md outline-none placeholder-[#617484]"
+                className={`bg-transparent text-[12px] sm:text-[13px] md:text-[16px] flex-1 rounded-md outline-none placeholder-[#617484]`}
               />
 
               <label htmlFor="addAPhoto" className="">
@@ -108,21 +124,36 @@ function Feed() {
           </form>
         </div>
 
-        {imageToSend && (
-          <div className="mt-10 relative">
-            <div
-              onClick={() => setImageToSend(null)}
-              className="absolute -top-3 right-0  bg-[#1da1f2] w-6 h-6 cursor-pointer rounded-full grid place-content-center"
-            >
-              <IoIosClose color="white" className="text-xl " />
-            </div>
-            <img
-              src={imageToSend}
-              className="w-full max-h-[300px] object-contain"
-            />
+        <div
+          className={`mt-10 ${
+            loading ? "pointer-events-none opacity-50" : "pointer-events-auto"
+          } relative flex items-center justify-center ${
+            imageToSend ? "block" : "hidden"
+          }`}
+        >
+          <div
+            onClick={() => {
+              setImageToSend(null);
+              imageRef.current.src = "#";
+            }}
+            className="absolute -top-3 -right-3  bg-[#1da1f2] w-6 h-6 cursor-pointer rounded-full grid place-content-center"
+          >
+            <IoIosClose color="white" className="text-xl " />
           </div>
-        )}
+          <img
+            ref={imageRef}
+            src="#"
+            alt="preview image"
+            className="max-h-[400px] object-contain"
+          />
+        </div>
       </div>
+
+      {loading && (
+        <div className="flex items-center justify-center mt-5 bg-[#1c2831] py-2 rounded-sm">
+          <ReactLoading type="spin" color="white" height={24} width={24} />
+        </div>
+      )}
 
       <div className="mt-6">
         <Posts posts={posts} setPosts={setPosts} />

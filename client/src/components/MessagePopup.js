@@ -12,6 +12,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { GiphyFetch } from "@giphy/js-fetch-api";
 import Message from "./Message";
 import useDebounce from "../hooks/useDebounce";
+import ReactLoading from "react-loading";
 
 const giphyFetch = new GiphyFetch("CXF6IIaPBwHC4p3hBfz1HUpUTEZNFiHm");
 
@@ -25,6 +26,7 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
   const [messages, setMessages] = useState([]);
   const [showGifs, setShowGifs] = useState(false);
   const [showEmojis, setShowEmojis] = useState(false);
+  const [loadingGifs, setLoadingGifs] = useState(false);
   const [arrivalMessage, setArrivalMessage] = useState(null);
 
   const debounceSearchTerm = useDebounce(gifInput, 500);
@@ -71,6 +73,7 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
 
   useEffect(() => {
     const fetchGifs = async () => {
+      setLoadingGifs(true);
       if (debounceSearchTerm) {
         const res = await giphyFetch.search(gifInput, {
           sort: "relevant",
@@ -78,10 +81,11 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
           limit: 12,
         });
 
+        setLoadingGifs(false);
         setGifs(res.data);
       } else {
         const res = await giphyFetch.trending({ limit: 12 });
-
+        setLoadingGifs(false);
         setGifs(res.data);
       }
     };
@@ -107,6 +111,8 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
       try {
         setMessages((prev) => [...prev, message]);
         setInput("");
+
+        setShowEmojis(false);
         const message = {
           conversationId: currentChat.conversation._id,
           sender: user._id,
@@ -137,6 +143,8 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
 
     if (url) {
       try {
+        setMessages((prev) => [...prev, message]);
+        setShowGifs(false);
         const message = {
           conversationId: currentChat.conversation._id,
           sender: user._id,
@@ -145,8 +153,6 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
         };
 
         await axios.post(`/message`, message);
-
-        setMessages((prev) => [...prev, message]);
         setInput("");
       } catch (err) {
         console.log(err);
@@ -274,24 +280,36 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
               placeholder="Search GIFs"
               className="m-1 rounded-sm placeholder-[#617484] px-2 py-1 text-sm w-60 bg-[#28343e] outline-none"
             />
-            <div className="flex items-center flex-wrap flex-1">
-              {gifs.map((gif) => {
-                const url = gif.images.downsized_medium.url;
-                return (
-                  <div
-                    onClick={() => sendGif(url)}
-                    key={gif.id}
-                    className="cursor-pointer"
-                  >
-                    <img
-                      src={url}
-                      width={155}
-                      className="max-h-[80px] rounded-sm m-1 object-cover"
-                    />
-                  </div>
-                );
-              })}
-            </div>
+            {loadingGifs ? (
+              <div className="flex flex-col space-y-2 items-center justify-center mt-5">
+                <ReactLoading
+                  type="spin"
+                  color="white"
+                  height={24}
+                  width={24}
+                />
+                <p className="text-[14px]">GIF's are loading...</p>
+              </div>
+            ) : (
+              <div className="flex items-center flex-wrap flex-1">
+                {gifs.map((gif) => {
+                  const url = gif.images.downsized_medium.url;
+                  return (
+                    <div
+                      onClick={() => sendGif(url)}
+                      key={gif.id}
+                      className="cursor-pointer"
+                    >
+                      <img
+                        src={url}
+                        width={152}
+                        className="max-h-[80px] rounded-sm m-1 object-cover"
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </motion.div>
         )}
       </AnimatePresence>

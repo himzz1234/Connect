@@ -12,13 +12,12 @@ function Comment({ comment, index, setComments, comments }) {
 
   const deleteAComment = async (id) => {
     try {
+      setComments(comments.filter((c) => c._id != id));
       await axios.delete(`/comment/${id}`, {
         data: {
           userId: currentUser?._id,
         },
       });
-
-      setComments(comments.filter((c) => c._id != id));
     } catch (err) {
       console.log(err);
     }
@@ -37,7 +36,7 @@ function Comment({ comment, index, setComments, comments }) {
       >
         <div
           style={{ backgroundImage: `url(${comment.userId.profilePicture})` }}
-          className="w-10 h-10 bg-cover rounded-full -ml-2"
+          className="w-8 h-8 md:w-[36px] md:h-[36px] bg-cover rounded-full -ml-2"
         ></div>
         <div className="space-y-1 flex-1">
           <div className="flex items-center space-x-2">
