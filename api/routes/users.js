@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const router = require("express").Router();
 const bcrypt = require("bcrypt");
+const cloudinary = require("cloudinary").v2
 
 // get all users
 router.post("/", async (req, res) => {
@@ -24,8 +25,30 @@ router.put("/:id", async (req, res) => {
       }
     }
 
+    let url = ''
     try {
-      const user = await User.findByIdAndUpdate(req.params.id, {
+      if(req.body.profilePicture){
+        const regex = /\/([^\/]+)$/;
+
+        const match = req.body.profilePicture.match(regex);
+        if (match) {
+          url = cloudinary.url(match[1], {quality: "auto:eco"})
+          req.body.profilePicture = url
+        }
+      }
+
+      if(req.body.coverPicture){
+        const regex = /\/([^\/]+)$/;
+
+        const match = req.body.coverPicture.match(regex);
+        if (match) {
+          url = cloudinary.url(match[1], {height: 400, quality: "auto:best"})
+          req.body.coverPicture = url
+          console.log(url)
+        }
+      }
+
+      await User.findByIdAndUpdate(req.params.id, {
         $set: req.body,
       });
 

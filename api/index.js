@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const server = require("http").createServer(app);
+const cloudinary = require("cloudinary").v2
 
 const io = require("socket.io")(server, {
   perMessageDeflate: false,
@@ -21,6 +22,12 @@ const messageRoutes = require("./routes/message");
 const commentRoutes = require("./routes/comment");
 
 dotenv.config();
+
+cloudinary.config({
+  cloud_name: 'dzcein87k',
+  api_key: '736436625225625',
+  api_secret: 'IlGc5ZM6MM75TgF00kMeh1Mnemk'
+})
 
 mongoose.connect(process.env.MONGO_URL, {
   useNewUrlParser: true,

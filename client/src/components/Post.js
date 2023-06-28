@@ -62,6 +62,7 @@ function Post({ post, setPosts, posts }) {
   const deleteAPost = async (id) => {
     try {
       setPosts(posts.filter((p) => p._id !== id));
+      
       await axios.delete(`/post/${id}`, {
         data: {
           userId: currentUser?._id,

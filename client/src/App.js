@@ -62,7 +62,7 @@ function App() {
   }, []);
 
   return (
-    <div className="bg-bodyPrimary w-full h-screen lg:overflow-y-hidden overflow-x-hidden font-opensans scrollbar">
+    <div className="bg-bodyPrimary w-full h-screen lg:overflow-y-hidden overflow-x-hidden font-opensans scrollbar scrollbar-none">
       {loading ? (
         <Loading />
       ) : (
