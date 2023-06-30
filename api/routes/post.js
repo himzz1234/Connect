@@ -6,6 +6,17 @@ const cloudinary = require("cloudinary").v2
 
 // create a post
 router.post("/", async (req, res) => {
+  if(req.body.img){
+    const regex = /\/([^\/]+)$/;
+
+    const match = req.body.img.match(regex);
+    if (match) {
+      url = cloudinary.url(match[1], {quality: "auto:best"})
+      req.body.img = url
+      console.log(url)
+    }
+  }
+
   const newPost = new Post(req.body);
   try {
     const savedPost = await newPost.save();
@@ -85,19 +96,19 @@ router.get(":/id", async (req, res) => {
 
 // get timeline posts
 router.get("/timeline/:userId", async (req, res) => {
+  const pageNumber = parseInt(req.query.pageNumber) || 1
+  const postsPerPage = 3
+  const skipCount = (pageNumber - 1) * postsPerPage
+
   try {
     const currentUser = await User.findById(req.params.userId);
-    const userPosts = await Post.find({ userId: currentUser._id }).populate(
-      "userId"
-    );
+    const allUsers = [currentUser._id.toString(), ...currentUser.following]
 
-    const feedPosts = await Promise.all(
-      currentUser.following.map(async (fId) => {
-        return await Post.find({ userId: fId }).populate("userId");
-      })
-    );
+    const feedPosts = await Post.find({userId: { $in: allUsers }}).populate("userId").sort({createdAt: -1}).skip(skipCount).limit(postsPerPage)
+    const totalCount = await Post.find({userId: { $in: allUsers }}).countDocuments()
 
-    res.status(200).json(userPosts.concat(...feedPosts));
+
+    res.status(200).json({posts: [...feedPosts], max_page: Math.ceil(totalCount / postsPerPage)});
   } catch (err) {
     res.status(500).json(err);
   }

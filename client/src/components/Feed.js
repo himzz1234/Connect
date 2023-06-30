@@ -9,11 +9,16 @@ import Posts from "./Posts";
 
 function Feed() {
   const desc = useRef();
+  const imageRef = useRef(null);
+  const [page, setPage] = useState(1)
   const [posts, setPosts] = useState([]);
   const { user } = useContext(AuthContext);
-  const [imageToSend, setImageToSend] = useState("");
-  const imageRef = useRef(null);
   const [loading, setLoading] = useState(false);
+  const [imageToSend, setImageToSend] = useState("");
+  const [totalPages, setTotalPages] = useState(0)
+
+  const [loadingPosts, setLoadingPosts] = useState(false)
+  const scrollRef = useRef(null)
 
   const setMediaFile = async (image) => {
     setImageToSend(image);
@@ -21,18 +26,33 @@ function Feed() {
   };
 
   useEffect(() => {
+    if (page < totalPages) setLoadingPosts(true)
+
     const fetchPosts = async () => {
-      const res = await axios.get(`/post/timeline/${user?._id}`);
-      console.log(res.data);
-      setPosts(
-        res.data.sort((a, b) => {
-          return new Date(b.createdAt) - new Date(a.createdAt);
-        })
-      );
+      const res = await axios.get(`/post/timeline/${user?._id}?pageNumber=${page}`);
+      setTotalPages(res.data.max_page)
+      setPosts(prevPosts => [...prevPosts, ...res.data.posts]);
+      setLoadingPosts(false)
     };
 
     fetchPosts();
-  }, []);
+  }, [page]);
+
+
+  const handleScroll = () => {
+    const container = scrollRef?.current
+    if (container.scrollHeight - container.scrollTop <= container.clientHeight + 1){
+      setLoadingPosts(true)
+      setPage(prev => prev + 1)
+    }
+  }
+
+  useEffect(() => {
+    const container = scrollRef.current
+    container.addEventListener('scroll', handleScroll)
+
+    return () => container.removeEventListener('scroll', handleScroll)
+  }, [])
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -73,12 +93,11 @@ function Feed() {
       setImageToSend("");
     } catch (err) {
       setLoading(false);
-      console.log(err);
     }
   };
 
   return (
-    <div className="order-3 lg:order-2 w-full lg:w-6/12 lg:h-[85vh] overflow-y-auto scrollbar scrollbar-w-0">
+    <div ref={scrollRef} className="order-3 lg:order-2 w-full lg:w-6/12 lg:h-[85vh] overflow-y-auto scrollbar scrollbar-w-0">
       <div className="bg-bodySecondary px-5 md:px-6 py-5 rounded-md">
         <div
           className={`flex items-center space-x-3 md:space-x-4 ${
@@ -157,6 +176,11 @@ function Feed() {
 
       <div className="mt-6">
         <Posts posts={posts} setPosts={setPosts} />
+        {loadingPosts && (
+           <div className="flex items-center justify-center py-2 rounded-sm">
+             <ReactLoading type="spin" color="white" height={20} width={20} />
+           </div>
+         )}
       </div>
     </div>
   );

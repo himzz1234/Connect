@@ -9,6 +9,7 @@ import { format } from "timeago.js";
 import { AnimatePresence, motion } from "framer-motion";
 import { SocketContext } from "../context/SocketContext";
 import Comments from "./Comments";
+import ReactLoading from "react-loading";
 
 function Post({ post, setPosts, posts }) {
   const [isLiked, setIsLiked] = useState(false);
@@ -16,6 +17,7 @@ function Post({ post, setPosts, posts }) {
   const { user: currentUser } = useContext(AuthContext);
   const [comments, setComments] = useState([]);
   const [showComments, setShowComments] = useState(false);
+  const [loading, setLoading] = useState(false)
   const [showDropdown, setShowDropdown] = useState(false);
   const { socket } = useContext(SocketContext);
   const commentRef = useRef();
@@ -24,18 +26,19 @@ function Post({ post, setPosts, posts }) {
     setIsLiked(post.likes.includes(currentUser._id));
   }, [post.likes]);
 
-  useEffect(() => {
-    const fetchComments = async () => {
-      try {
-        const res = await axios.get(`/comment/${post._id}`);
-        setComments(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    fetchComments();
-  }, []);
+  const fetchComments = async () => {
+    setLoading(true)
+    try {
+      const res = await axios.get(`/comment/${post._id}`);
+      setComments(res.data);
+      
+      setShowComments(!showComments)
+      setLoading(false)
+    } catch (err) {
+      setLoading(false)
+      console.log(err);
+    }
+  };
 
   const likeAPost = async () => {
     setLike(isLiked ? like - 1 : like + 1);
@@ -176,7 +179,7 @@ function Post({ post, setPosts, posts }) {
         </div>
 
         <div
-          onClick={() => setShowComments(!showComments)}
+          onClick={fetchComments}
           className="flex items-center space-x-2 cursor-pointer"
         >
           <p className="text-[13px]">{comments.length || 0} comments</p>
