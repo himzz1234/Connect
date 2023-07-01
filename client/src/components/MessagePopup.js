@@ -84,7 +84,7 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
         setLoadingGifs(false);
         setGifs(res.data);
       } else {
-        const res = await giphyFetch.trending({ limit: 12 });
+        const res = await giphyFetch.trending({ limit: 12, type: "videos" });
         setLoadingGifs(false);
         setGifs(res.data);
       }
@@ -302,8 +302,7 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
                     >
                       <img
                         src={url}
-                        width={152}
-                        className="max-h-[80px] rounded-sm m-1 object-cover"
+                        className="max-h-[80px] md:max-h-[100px] lg:max-h-[80px] lg:w-[152px] md:w-[216px] sm:w-[128px] w-[90px] rounded-sm m-1 object-cover"
                       />
                     </div>
                   );

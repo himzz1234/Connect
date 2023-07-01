@@ -2,18 +2,18 @@ const router = require("express").Router();
 const Post = require("../models/Post");
 const User = require("../models/User");
 const Comment = require("../models/Comment");
-const cloudinary = require("cloudinary").v2
+const cloudinary = require("cloudinary").v2;
 
 // create a post
 router.post("/", async (req, res) => {
-  if(req.body.img){
+  if (req.body.img) {
     const regex = /\/([^\/]+)$/;
 
     const match = req.body.img.match(regex);
     if (match) {
-      url = cloudinary.url(match[1], {quality: "auto:best"})
-      req.body.img = url
-      console.log(url)
+      url = cloudinary.url(match[1], { quality: "auto:best" });
+      req.body.img = url;
+      console.log(url);
     }
   }
 
@@ -48,13 +48,13 @@ router.delete("/:id", async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
 
-    if (post.userId == req.body.userId) {          
+    if (post.userId == req.body.userId) {
       const regex = /\/([^\/]+)$/;
 
       const match = post.img.match(regex);
       if (match) {
-        const public_id = match[1].split('.')[0];
-        await cloudinary.uploader.destroy(public_id)
+        const public_id = match[1].split(".")[0];
+        await cloudinary.uploader.destroy(public_id);
       }
 
       await post.deleteOne();
@@ -96,19 +96,25 @@ router.get(":/id", async (req, res) => {
 
 // get timeline posts
 router.get("/timeline/:userId", async (req, res) => {
-  const pageNumber = parseInt(req.query.pageNumber) || 1
-  const postsPerPage = 3
-  const skipCount = (pageNumber - 1) * postsPerPage
+  const pageNumber = parseInt(req.query.pageNumber) || 1;
+  const postsPerPage = 3;
+  const skipCount = (pageNumber - 1) * postsPerPage;
 
   try {
     const currentUser = await User.findById(req.params.userId);
-    const allUsers = [currentUser._id.toString(), ...currentUser.following]
+    const allUsers = [currentUser._id.toString(), ...currentUser.following];
 
-    const feedPosts = await Post.find({userId: { $in: allUsers }}).populate("userId").sort({createdAt: -1}).skip(skipCount).limit(postsPerPage)
-    const totalCount = await Post.find({userId: { $in: allUsers }}).countDocuments()
+    const feedPosts = await Post.find({ userId: { $in: allUsers } })
+      .sort({ createdAt: -1 })
+      .populate("userId")
+      .skip(skipCount)
+      .limit(postsPerPage);
 
+    const totalCount = await Post.find({
+      userId: { $in: allUsers },
+    }).countDocuments();
 
-    res.status(200).json({posts: [...feedPosts], max_page: Math.ceil(totalCount / postsPerPage)});
+    res.status(200).json({ posts: [...feedPosts], length: totalCount });
   } catch (err) {
     res.status(500).json(err);
   }

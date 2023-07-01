@@ -7,9 +7,10 @@ import axios from "./axios";
 import Loading from "./components/Loading";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Home from "./pages/Home";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
+
+const Home = lazy(() => import("./pages/Home"));
+const Login = lazy(() => import("./pages/Login"));
+const Register = lazy(() => import("./pages/Register"));
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -62,23 +63,23 @@ function App() {
   }, []);
 
   return (
-    <div className="bg-bodyPrimary w-full h-screen lg:overflow-y-hidden overflow-x-hidden font-opensans scrollbar scrollbar-none">
+    <div className="outer-section bg-bodyPrimary w-full h-screen lg:overflow-y-hidden overflow-x-hidden font-opensans scrollbar scrollbar-none">
       {loading ? (
         <Loading />
       ) : (
-        // <Suspense fallback={<Loading />}>
-        <Routes>
-          <Route path="/" element={user ? <Home /> : <Register />} />
-          <Route
-            path="/login"
-            element={user ? <Navigate replace to="/" /> : <Login />}
-          />
-          <Route
-            path="/register"
-            element={user ? <Navigate to="/" replace /> : <Register />}
-          />
-        </Routes>
-        // </Suspense>
+        <Suspense fallback={<Loading />}>
+          <Routes>
+            <Route path="/" element={user ? <Home /> : <Register />} />
+            <Route
+              path="/login"
+              element={user ? <Navigate replace to="/" /> : <Login />}
+            />
+            <Route
+              path="/register"
+              element={user ? <Navigate to="/" replace /> : <Register />}
+            />
+          </Routes>
+        </Suspense>
       )}
 
       <ToastContainer toastStyle={{ backgroundColor: "hsl(206,28%,15%)" }} />
