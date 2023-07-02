@@ -84,7 +84,9 @@ function Feed() {
   const submitHandler = async (e) => {
     e.preventDefault();
 
-    setLoading(true);
+    if (imageToSend || desc.current.value) {
+      setLoading(true);
+    }
 
     let imageURL = "";
     if (imageToSend) {

@@ -49,12 +49,14 @@ router.delete("/:id", async (req, res) => {
     const post = await Post.findById(req.params.id);
 
     if (post.userId == req.body.userId) {
-      const regex = /\/([^\/]+)$/;
+      if (post.img) {
+        const regex = /\/([^\/]+)$/;
 
-      const match = post.img.match(regex);
-      if (match) {
-        const public_id = match[1].split(".")[0];
-        await cloudinary.uploader.destroy(public_id);
+        const match = post.img.match(regex);
+        if (match) {
+          const public_id = match[1].split(".")[0];
+          await cloudinary.uploader.destroy(public_id);
+        }
       }
 
       await post.deleteOne();
