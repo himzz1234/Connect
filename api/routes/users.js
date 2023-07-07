@@ -1,7 +1,7 @@
 const User = require("../models/User");
 const router = require("express").Router();
 const bcrypt = require("bcrypt");
-const cloudinary = require("cloudinary").v2
+const cloudinary = require("cloudinary").v2;
 
 // get all users
 router.post("/", async (req, res) => {
@@ -25,26 +25,25 @@ router.put("/:id", async (req, res) => {
       }
     }
 
-    let url = ''
+    let url = "";
     try {
-      if(req.body.profilePicture){
+      if (req.body.profilePicture) {
         const regex = /\/([^\/]+)$/;
 
         const match = req.body.profilePicture.match(regex);
         if (match) {
-          url = cloudinary.url(match[1], {quality: "auto:eco"})
-          req.body.profilePicture = url
+          url = cloudinary.url(match[1], { quality: "auto:eco" });
+          req.body.profilePicture = url;
         }
       }
 
-      if(req.body.coverPicture){
+      if (req.body.coverPicture) {
         const regex = /\/([^\/]+)$/;
 
         const match = req.body.coverPicture.match(regex);
         if (match) {
-          url = cloudinary.url(match[1], {height: 400, quality: "auto:best"})
-          req.body.coverPicture = url
-          console.log(url)
+          url = cloudinary.url(match[1], { height: 400, quality: "auto:best" });
+          req.body.coverPicture = url;
         }
       }
 
@@ -52,6 +51,7 @@ router.put("/:id", async (req, res) => {
         $set: req.body,
       });
 
+      console.log("updated");
       res.status(200).json("Account has been updated!");
     } catch (err) {
       res.status(500).json(err);

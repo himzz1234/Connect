@@ -49,9 +49,13 @@ function Feed() {
   const handleScroll = () => {
     const container = scrollRef?.current;
     if (window.innerWidth >= 1024) {
+      console.log(
+        container.scrollHeight - container.scrollTop,
+        container.clientHeight
+      );
       if (
         container.scrollHeight - container.scrollTop <=
-        container.clientHeight + 1
+        container.clientHeight + 10
       ) {
         setPage((prev) => prev + 1);
       }
@@ -59,7 +63,7 @@ function Feed() {
       if (
         document.querySelector(".outer-section").scrollHeight -
           document.querySelector(".outer-section").scrollTop <=
-        window.innerHeight + 1
+        window.innerHeight + 10
       ) {
         setPage((prev) => prev + 1);
       }
