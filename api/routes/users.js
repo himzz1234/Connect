@@ -27,25 +27,25 @@ router.put("/:id", async (req, res) => {
 
     let url = "";
     try {
-      // if (req.body.profilePicture) {
-      //   const regex = /\/([^\/]+)$/;
+      if (req.body.profilePicture) {
+        const regex = /\/([^\/]+)$/;
 
-      //   const match = req.body.profilePicture.match(regex);
-      //   if (match) {
-      //     url = cloudinary.url(match[1], { quality: "auto:eco" });
-      //     req.body.profilePicture = url;
-      //   }
-      // }
+        const match = req.body.profilePicture.match(regex);
+        if (match) {
+          url = cloudinary.url(match[1], { quality: "auto:eco" });
+          req.body.profilePicture = url;
+        }
+      }
 
-      // if (req.body.coverPicture) {
-      //   const regex = /\/([^\/]+)$/;
+      if (req.body.coverPicture) {
+        const regex = /\/([^\/]+)$/;
 
-      //   const match = req.body.coverPicture.match(regex);
-      //   if (match) {
-      //     url = cloudinary.url(match[1], { height: 400, quality: "auto:best" });
-      //     req.body.coverPicture = url;
-      //   }
-      // }
+        const match = req.body.coverPicture.match(regex);
+        if (match) {
+          url = cloudinary.url(match[1], { height: 400, quality: "auto:best" });
+          req.body.coverPicture = url;
+        }
+      }
 
       await User.findByIdAndUpdate(req.params.id, {
         $set: req.body,
