@@ -9,7 +9,7 @@ function Searchbar({ users, user }) {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3, type: "spring" }}
       exit={{ opacity: 0 }}
-      className="bg-bodySecondary max-h-[210px] overflow-auto w-full md:w-[400px] lg:w-[500px] rounded-b-md text-white absolute -left-0 lg:left-0 top-10 border-t-2 border-bodyPrimary shadow-2xl"
+      className="bg-bodySecondary max-h-[210px] scrollbar-none scrollbar-track-bodySecondary scrollbar-thumb-bodyPrimary overflow-auto w-full md:w-[400px] lg:w-[500px] rounded-b-md text-white absolute -left-0 lg:left-0 top-10 border-t-2 border-bodyPrimary shadow-2xl"
     >
       {users?.map((u, index) => (
         <SearchbarResults key={u._id} u={u} index={index} user={user} />
