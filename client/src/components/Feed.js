@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, useRef } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import axios from "../axios";
 import { RiAttachment2 } from "react-icons/ri";
 import { IoIosClose } from "react-icons/io";
@@ -6,7 +6,6 @@ import { BsSendFill } from "react-icons/bs";
 import { AuthContext } from "../context/AuthContext";
 import ReactLoading from "react-loading";
 import Posts from "./Posts";
-import PostSkeleton from "./PostSkeleton";
 
 function Feed() {
   const desc = useRef();
@@ -222,4 +221,4 @@ function Feed() {
   );
 }
 
-export default Feed;
+export default React.memo(Feed);

@@ -32,17 +32,6 @@ function App() {
             dispatch({ type: "LOGIN_SUCCESS", payload: res.data.user });
             setLoading(false);
           } else {
-            toast.error("An error occurred!", {
-              position: "bottom-center",
-              autoClose: 1000,
-              hideProgressBar: true,
-              closeOnClick: false,
-              pauseOnHover: false,
-              draggable: false,
-              progress: undefined,
-              theme: "dark",
-            });
-
             dispatch({
               type: "LOGIN_FAILURE",
               payload: "Something went wrong!",
@@ -50,7 +39,18 @@ function App() {
             setLoading(false);
           }
         } catch (err) {
-          dispatch({ type: "LOGIN_FAILURE", payload: err });
+          toast.error("An error occurred!", {
+            position: "bottom-center",
+            autoClose: 1000,
+            hideProgressBar: true,
+            closeOnClick: false,
+            pauseOnHover: false,
+            draggable: false,
+            progress: undefined,
+            theme: "dark",
+          });
+
+          dispatch({ type: "LOGIN_FAILURE", payload: "Something went wrong!" });
           setLoading(false);
         }
       } else {

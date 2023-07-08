@@ -3,7 +3,7 @@ import { FiSearch } from "react-icons/fi";
 import { HiUser } from "react-icons/hi";
 import { BsChatLeftDotsFill } from "react-icons/bs";
 import { IoNotifications } from "react-icons/io5";
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import axios from "../axios";
 import { AnimatePresence, motion } from "framer-motion";
@@ -222,4 +222,4 @@ function Topbar({ setOnlineUsers }) {
   );
 }
 
-export default Topbar;
+export default React.memo(Topbar);

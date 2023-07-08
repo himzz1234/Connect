@@ -1,24 +1,16 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
-import axios from "../axios";
 
 function Conversation({ conversation, setCurrentChat, onlineUsers }) {
   const [user, setUser] = useState(null);
   const { user: currentUser } = useContext(AuthContext);
 
   useEffect(() => {
-    const friendId = conversation.members.find((m) => m !== currentUser._id);
-
-    const getUser = async () => {
-      try {
-        const res = await axios.get(`/users/${friendId}`);
-        setUser(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    getUser();
+    const friend =
+      conversation.sender._id != currentUser._id
+        ? conversation.sender
+        : conversation.receiver;
+    setUser(friend);
   }, []);
 
   return (

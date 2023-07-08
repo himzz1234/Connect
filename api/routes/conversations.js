@@ -4,14 +4,33 @@ const Conversation = require("../models/Conversation");
 // New conversation
 
 router.post("/", async (req, res) => {
+  // const conversation = await Conversation.find({
+  //   members: { $all: [req.body.receiverId, req.body.senderId] },
+  // });
+
   const conversation = await Conversation.find({
-    members: { $all: [req.body.receiverId, req.body.senderId] },
+    $or: [
+      {
+        $and: [
+          { receiver: req.body.receiverId },
+          { sender: req.body.senderId },
+        ],
+      },
+
+      {
+        $and: [
+          { receiver: req.body.senderId },
+          { sender: req.body.receiverId },
+        ],
+      },
+    ],
   });
 
   try {
     if (!conversation.length) {
       const newConversation = new Conversation({
-        members: [req.body.senderId, req.body.receiverId],
+        receiver: req.body.receiverId,
+        sender: req.body.senderId,
       });
 
       const savedConversation = await newConversation.save();
@@ -25,8 +44,10 @@ router.post("/", async (req, res) => {
 router.get("/:userId", async (req, res) => {
   try {
     const conversation = await Conversation.find({
-      members: { $in: [req.params.userId] },
-    });
+      $or: [{ receiver: req.params.userId }, { sender: req.params.userId }],
+    })
+      .populate("receiver")
+      .populate("sender");
     res.status(200).json(conversation);
   } catch (err) {
     res.status(500).json(err);

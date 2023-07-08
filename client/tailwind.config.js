@@ -3,8 +3,6 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        kumbh: ["Kumbh Sans", "sans-serif"],
-        ptsans: ["PT Sans", "sans-serif"],
         opensans: ["Open Sans", "sans-serif"],
       },
       colors: {

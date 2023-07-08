@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { MdOpenInNew } from "react-icons/md";
 import { GrEmoji } from "react-icons/gr";
 import { BsSendFill } from "react-icons/bs";
@@ -33,6 +33,7 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
 
   useEffect(() => {
     socket.on("getMessage", (data) => {
+      console.log(data);
       if (data.type == "text") {
         setArrivalMessage({
           sender: data.senderId,
@@ -53,7 +54,8 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
 
   useEffect(() => {
     arrivalMessage &&
-      currentChat?.conversation.members.includes(arrivalMessage.sender) &&
+      (currentChat?.conversation.sender._id == arrivalMessage.sender ||
+        currentChat?.conversation.receiver._id == arrivalMessage.sender) &&
       setMessages((prev) => [...prev, arrivalMessage]);
   }, [arrivalMessage, currentChat.conversation]);
 
@@ -96,9 +98,10 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
   const sendMessage = async (e) => {
     e.preventDefault();
 
-    const receiverId = currentChat.conversation.members.find(
-      (member) => member !== user._id
-    );
+    const receiverId =
+      currentChat.conversation.sender._id != user._id
+        ? currentChat.conversation.sender._id
+        : currentChat.conversation.receiver._id;
 
     socket.emit("sendMessage", {
       senderId: user._id,
@@ -110,9 +113,8 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
     if (input !== "") {
       try {
         setMessages((prev) => [...prev, message]);
-        setInput("");
-
         setShowEmojis(false);
+
         const message = {
           conversationId: currentChat.conversation._id,
           sender: user._id,
@@ -121,6 +123,7 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
           url: "",
         };
 
+        setInput("");
         await axios.post(`/message`, message);
       } catch (err) {
         console.log(err);
@@ -129,10 +132,10 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
   };
 
   const sendGif = async (url) => {
-    const receiverId = currentChat.conversation.members.find(
-      (member) => member !== user._id
-    );
-
+    const receiverId =
+      currentChat.conversation.sender._id != user._id
+        ? currentChat.conversation.sender._id
+        : currentChat.conversation.receiver._id;
     socket.emit("sendMessage", {
       senderId: user._id,
       receiverId,
@@ -193,7 +196,7 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
       <div className="flex-1 flex flex-col py-5 px-3 space-y-4 overflow-auto scrollbar scrollbar-w-0">
         {messages.map((message, index) => (
           <div
-            key={message._id}
+            key={index}
             ref={scrollRef}
             className={`space-y-2 w-48 ${
               message.sender !== currentChat.user._id && "self-end"
@@ -316,4 +319,4 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
   );
 }
 
-export default MessagePopup;
+export default React.memo(MessagePopup);

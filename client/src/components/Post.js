@@ -1,5 +1,5 @@
 import axios from "../axios";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import { BsSendFill } from "react-icons/bs";
 import { AiFillHeart, AiFillLike } from "react-icons/ai";
@@ -9,7 +9,6 @@ import { format } from "timeago.js";
 import { AnimatePresence, motion } from "framer-motion";
 import { SocketContext } from "../context/SocketContext";
 import Comments from "./Comments";
-import ReactLoading from "react-loading";
 
 function Post({ post, setPosts, posts }) {
   const [isLiked, setIsLiked] = useState(false);
@@ -17,28 +16,26 @@ function Post({ post, setPosts, posts }) {
   const { user: currentUser } = useContext(AuthContext);
   const [comments, setComments] = useState([]);
   const [showComments, setShowComments] = useState(false);
-  const [loading, setLoading] = useState(false)
   const [showDropdown, setShowDropdown] = useState(false);
   const { socket } = useContext(SocketContext);
   const commentRef = useRef();
 
-  useEffect(() => {
+  useMemo(() => {
     setIsLiked(post.likes.includes(currentUser._id));
   }, [post.likes]);
 
   const fetchComments = async () => {
-    setLoading(true)
     try {
       const res = await axios.get(`/comment/${post._id}`);
       setComments(res.data);
-      
-      setShowComments(!showComments)
-      setLoading(false)
     } catch (err) {
-      setLoading(false)
       console.log(err);
     }
   };
+
+  useEffect(() => {
+    fetchComments();
+  }, []);
 
   const likeAPost = async () => {
     setLike(isLiked ? like - 1 : like + 1);
@@ -65,7 +62,7 @@ function Post({ post, setPosts, posts }) {
   const deleteAPost = async (id) => {
     try {
       setPosts(posts.filter((p) => p._id !== id));
-      
+
       await axios.delete(`/post/${id}`, {
         data: {
           userId: currentUser?._id,
@@ -179,7 +176,7 @@ function Post({ post, setPosts, posts }) {
         </div>
 
         <div
-          onClick={fetchComments}
+          onClick={() => setShowComments(!showComments)}
           className="flex items-center space-x-2 cursor-pointer"
         >
           <p className="text-[13px]">{comments.length || 0} comments</p>
