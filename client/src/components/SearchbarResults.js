@@ -52,10 +52,10 @@ function SearchbarResults({ u, index, user }) {
           className="w-7 h-7 md:w-9 md:h-9 bg-cover rounded-full"
         ></div>
         <div className="flex-1">
-          <small className="text-[11px] text-[#73899a]">
+          <small className="text-[12px] text-[#73899a]">
             @{u.email?.split("@")[0]}
           </small>
-          <p className="flex items-center space-x-[0.5px] text-[13px] sm:text-[14px] font-semibold">
+          <p className="flex items-center space-x-[0.5px] text-[13px] sm:text-[14px] font-medium">
             {u.username}
           </p>
         </div>

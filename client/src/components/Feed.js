@@ -48,10 +48,6 @@ function Feed() {
   const handleScroll = () => {
     const container = scrollRef?.current;
     if (window.innerWidth >= 1024) {
-      console.log(
-        container.scrollHeight - container.scrollTop,
-        container.clientHeight
-      );
       if (
         container.scrollHeight - container.scrollTop <=
         container.clientHeight + 10
@@ -144,13 +140,13 @@ function Feed() {
             className={`w-8 h-8 md:w-[44px] md:h-[44px] bg-cover rounded-full -ml-2`}
           ></div>
           <form onSubmit={submitHandler} className={`flex-1`}>
-            <div className="bg-[#28343e] flex flex-1 items-center px-3 py-2 rounded-md space-x-3">
+            <div className="bg-inputFields flex flex-1 items-center px-3 py-2 rounded-md space-x-3">
               <input
                 type="text"
                 ref={desc}
                 readOnly={loading}
                 placeholder={`What's on your mind ${user?.username}?`}
-                className={`bg-transparent text-[12px] sm:text-[13px] md:text-[16px] flex-1 rounded-md outline-none placeholder-[#617484]`}
+                className={`bg-transparent text-[12px] sm:text-[13px] md:text-[16px] flex-1 rounded-md outline-none placeholder-[#A9A9A9]`}
               />
 
               <label htmlFor="addAPhoto" className="">
@@ -204,7 +200,7 @@ function Feed() {
       </div>
 
       {loading && (
-        <div className="flex items-center justify-center mt-5 bg-[#1c2831] py-2 rounded-sm">
+        <div className="flex items-center justify-center mt-5 bg-bodySecondary py-2 rounded-sm">
           <ReactLoading type="spin" color="white" height={24} width={24} />
         </div>
       )}

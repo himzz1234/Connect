@@ -13,7 +13,6 @@ router.post("/", async (req, res) => {
     if (match) {
       url = cloudinary.url(match[1], { quality: "auto:best" });
       req.body.img = url;
-      console.log(url);
     }
   }
 

@@ -114,11 +114,11 @@ function Post({ post, setPosts, posts }) {
             <h2 className="text-[14px] md:text-[15.5px] font-semibold">
               {post.userId?.username}
             </h2>
-            <small className="text-[11.5px] md:text-[12.5px] text-[#73899a]">
+            <small className="text-[11.5px] md:text-[13.5px] text-[#73899a]">
               @{post.userId.email?.split("@")[0]}
             </small>
           </div>
-          <small className="text-[#73899a] text-[11px] md:text-[12px]">
+          <small className="text-[#73899a] text-[11px] md:text-[13px]">
             {format(post.createdAt)}
           </small>
         </div>
@@ -149,17 +149,17 @@ function Post({ post, setPosts, posts }) {
         </div>
       </div>
 
-      <div className="my-6">
+      <div className="my-4">
         <h2 className="text-[14px] md:text-[15px]">{post?.desc}</h2>
         {post?.img && (
           <img
             src={post?.img}
-            className="w-full max-h-[400px] my-6 object-contain"
+            className="w-full max-h-[400px] my-4 object-contain"
           />
         )}
       </div>
 
-      <div className="flex items-center my-2">
+      <div className="flex items-center mt-4">
         <div className="flex-1 flex items-center space-x-2 relative">
           <div className="border-[2px] border-bodySecondary absolute active:scale-95 transition-all duration-150 cursor-pointer bg-[#fb2f55] w-6 h-6 md:w-7 md:h-7 rounded-full flex items-center justify-center">
             <AiFillHeart className="text-sm" />
@@ -170,29 +170,31 @@ function Post({ post, setPosts, posts }) {
           >
             <AiFillLike className="text-sm" />
           </div>
-          <small className="absolute left-[45px]">
+          <p className="absolute left-[45px] text-[13px] md:text-[14px]">
             {like} people liked it!
-          </small>
+          </p>
         </div>
 
         <div
           onClick={() => setShowComments(!showComments)}
           className="flex items-center space-x-2 cursor-pointer"
         >
-          <p className="text-[13px]">{comments.length || 0} comments</p>
+          <p className="text-[12.5px] md:text-[14px]">
+            {comments.length || 0} comments
+          </p>
         </div>
       </div>
 
-      <div className="mt-5 md:mt-10 border-t-2 border-[#28343e] py-4">
+      <div className="mt-4 md:mt-6 border-t-2 border-divider pt-4">
         <form
           onSubmit={postComment}
-          className="bg-[#28343e] flex items-center rounded-sm px-2 py-2"
+          className="flex bg-inputFields items-center rounded-md px-2 py-2"
         >
           <input
             ref={commentRef}
             type="text"
             placeholder="Add a comment"
-            className="w-full bg-transparent flex-1 placeholder-[#617484] text-[14px] text-white outline-none"
+            className="w-full bg-transparent flex-1 text-[14px] text-white outline-none placeholder-[#A9A9A9]"
           />
 
           <button type="submit">

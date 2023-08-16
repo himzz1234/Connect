@@ -117,7 +117,7 @@ function Topbar({ setOnlineUsers }) {
 
         <div className="flex-1 flex relative">
           <div
-            className={`bg-bodySecondary ${
+            className={`bg-inputFields ${
               users.length > 0 ? "rounded-t-md" : "rounded-md"
             } flex items-center lg:px-3 py-2 px-2 w-full md:w-[400px] lg:w-[500px]`}
           >
@@ -127,7 +127,7 @@ function Topbar({ setOnlineUsers }) {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search for friend, post or video"
-              className="text-[12px] sm:text-[13px] md:text-[14px] lg:text-normal bg-transparent text-white flex-1 outline-none placeholder-[#707e8b] lg:ml-2"
+              className="text-[12px] sm:text-[13px] md:text-[14px] lg:text-normal bg-transparent text-white flex-1 outline-none placeholder-[#A9A9A9] lg:ml-2"
             />
           </div>
 
@@ -138,21 +138,23 @@ function Topbar({ setOnlineUsers }) {
 
         <div className="relative flex items-center space-x-4 sm:space-x-6 lg:space-x-8 text-tabContentColor lg:ml-14">
           <div className="relative hidden md:block">
-            <div className="absolute text-white font-semibold text-[8px] grid place-content-center -right-2 -top-3 bg-[#1094e6] border-[3px] border-bodySecondary w-5 h-5 rounded-full">
-              1
+            <div className="absolute text-[8px] grid place-content-center -right-2 -top-3 bg-[#BAA8FF] text-[#333333] border-[3px] border-bodySecondary w-5 h-5 rounded-full">
+              <p className="font-extrabold font-montserrat">1</p>
             </div>
             <HiUser className="text-[17px] lg:text-[20px]" />
           </div>
           <div className="relative hidden md:block">
-            <div className="absolute text-white font-semibold text-[8px] grid place-content-center -right-2.5 -top-3 bg-[#1094e6] border-[3px] border-bodySecondary w-5 h-5 rounded-full">
-              1
+            <div className="absolute font-semibold text-[8px] grid place-content-center -right-2.5 -top-3 bg-[#BAA8FF] text-[#333333] border-[3px] border-bodySecondary w-5 h-5 rounded-full">
+              <p className="font-extrabold font-montserrat">2</p>
             </div>
             <BsChatLeftDotsFill className="text-[17px] lg:text-[20px]" />
           </div>
           <div className="relative">
             {notifications.length > 0 && (
-              <div className="absolute text-white font-semibold text-[8px] grid place-content-center -right-2 -top-3 bg-[#1094e6] border-[3px] border-bodySecondary w-5 h-5 rounded-full">
-                {notifications.length}
+              <div className="absolute font-semibold text-[8px] grid place-content-center -right-2 -top-3 bg-[#BAA8FF] text-[#333333] border-[3px] border-bodySecondary w-5 h-5 rounded-full">
+                <p className="font-extrabold font-montserrat">
+                  {notifications.length}
+                </p>
               </div>
             )}
             <div onClick={() => setShowNotifications(!showNotifications)}>
@@ -187,7 +189,7 @@ function Topbar({ setOnlineUsers }) {
 
         <div
           onClick={() => setShowDropdown(!showDropdown)}
-          className="cursor-pointer relative lg:w-32 ml-2 sm:ml-5 lg:ml-14 lg:px-4 px-1.5 py-1.5 rounded-full bg-[hsl(206,23%,16%)] flex items-center"
+          className="cursor-pointer relative lg:w-32 ml-2 sm:ml-5 lg:ml-14 lg:px-4 px-1.5 py-1.5 rounded-full bg-inputFields flex items-center"
         >
           <div
             style={{ backgroundImage: `url(${user?.profilePicture})` }}

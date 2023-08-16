@@ -4,12 +4,18 @@ module.exports = {
     extend: {
       fontFamily: {
         opensans: ["Open Sans", "sans-serif"],
+        roboto: ["Roboto", "sans-serif"],
+        oswald: ["Oswald", "sans-serif"],
+        lato: ["Lato", "sans-serif"],
+        montserrat: ["Montserrat", "sans-serif"],
       },
       colors: {
-        bodyPrimary: "hsl(203,66%,7%)",
-        bodySecondary: "hsl(206,28%,15%)",
+        bodyPrimary: "#0A192F",
+        bodySecondary: "#131E34",
         tabContentColor: "hsl(210,37%,84%)",
-        textColor: "hsl(0%, 0%, 100%)",
+        textColor: "#D8D8D8",
+        inputFields: "#1B2533",
+        divider: "#1D3951",
       },
       backgroundImage: {
         profile: "url('/public/assets/profiles/profile.jpg')",

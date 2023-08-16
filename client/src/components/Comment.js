@@ -40,16 +40,16 @@ function Comment({ comment, index, setComments, comments }) {
         ></div>
         <div className="space-y-1 flex-1">
           <div className="flex items-center space-x-2">
-            <h2 className="font-semibold text-[13px]">
+            <h2 className="font-medium text-[14px]">
               {comment.userId.username}
             </h2>
 
-            <p className="text-[11px] text-[#73899a]">
+            <p className="text-[12px] text-[#73899a]">
               {format(comment?.createdAt)}
             </p>
           </div>
 
-          <p className="text-[14px]">{comment.text}</p>
+          <p className="text-[15px] font-medium">{comment.text}</p>
         </div>
         <div
           onClick={() => setShowDropdown(!showDropdown)}

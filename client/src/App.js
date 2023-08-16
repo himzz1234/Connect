@@ -63,7 +63,7 @@ function App() {
   }, []);
 
   return (
-    <div className="outer-section bg-bodyPrimary w-full h-screen lg:overflow-y-hidden overflow-x-hidden font-opensans scrollbar scrollbar-none">
+    <div className="outer-section font-lato bg-bodyPrimary text-textColor w-full h-screen lg:overflow-y-hidden overflow-x-hidden scrollbar scrollbar-none">
       {loading ? (
         <Loading />
       ) : (

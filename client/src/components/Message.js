@@ -12,8 +12,8 @@ function Message({ message, currentChat }) {
       <div
         className={`p-2 ${
           message.sender !== currentChat.user._id
-            ? "bg-[#28343e] rounded-l-md rounded-br-md"
-            : "bg-[#2b80ff] rounded-r-md rounded-bl-md"
+            ? "bg-inputFields rounded-l-sm border-l-[#6A0DAD] border-l-2 rounded-br-sm"
+            : "bg-inputFields rounded-r-sm border-r-[#1DA1F2] border-r-2 rounded-bl-sm"
         }`}
       >
         {message.type == "text" ? (

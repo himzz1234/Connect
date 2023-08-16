@@ -98,32 +98,32 @@ function Register() {
           className="bg-bodySecondary p-5 w-full max-w-[450px] lg:w-[450px] h-[400px] md:h-[450px] flex flex-col rounded-md space-y-2 lg:space-y-5"
         >
           <div className="space-y-5 flex-1">
-            <div className="bg-[#28343e] w-full rounded-md px-3 py-3">
+            <div className="bg-inputFields w-full rounded-md px-3 py-3">
               <input
                 required
                 ref={username}
                 type="text"
                 placeholder="Username"
-                className="w-full outline-none bg-transparent text-[14px] md:text-base"
+                className="w-full outline-none bg-transparent text-[14px] md:text-base placeholder-[#A9A9A9]"
               />
             </div>
-            <div className="bg-[#28343e] w-full rounded-md px-3 py-3">
+            <div className="bg-inputFields w-full rounded-md px-3 py-3">
               <input
                 required
                 ref={email}
                 type="email"
                 placeholder="Email"
-                className="w-full outline-none bg-transparent text-[14px] md:text-base"
+                className="w-full outline-none bg-transparent text-[14px] md:text-base placeholder-[#A9A9A9]"
               />
             </div>
-            <div className="bg-[#28343e] w-full rounded-md px-3 py-3 flex items-center space-x-3">
+            <div className="bg-inputFields w-full rounded-md px-3 py-3 flex items-center space-x-3">
               <input
                 minLength="6"
                 required
                 ref={password}
                 type={showPassword ? "text" : "password"}
                 placeholder="Password"
-                className="w-full outline-none bg-transparent text-[14px] md:text-base"
+                className="w-full outline-none bg-transparent text-[14px] md:text-base placeholder-[#A9A9A9]"
               />
               {showPassword ? (
                 <BsEyeFill
@@ -139,14 +139,14 @@ function Register() {
                 />
               )}
             </div>
-            <div className="bg-[#28343e] w-full rounded-md px-3 py-3 flex items-center space-x-3">
+            <div className="bg-inputFields w-full rounded-md px-3 py-3 flex items-center space-x-3">
               <input
                 minLength="6"
                 required
                 ref={passwordAgain}
                 type={showConfirmPassword ? "text" : "password"}
                 placeholder="Confirm Password"
-                className="w-full outline-none bg-transparent text-[14px] md:text-base"
+                className="w-full outline-none bg-transparent text-[14px] md:text-base placeholder-[#A9A9A9]"
               />
               {showConfirmPassword ? (
                 <BsEyeFill

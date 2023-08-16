@@ -49,12 +49,14 @@ function Lsidebar() {
         </div>
 
         <div className="mt-9 flex items-center flex-col space-y-1">
-          <h2 className="font-semibold">{user?.username}</h2>
+          <h2 className="font-normal font-lato text-[15px] md:text-[17px]">
+            {user?.username}
+          </h2>
           <p className="text-[12.5px] text-[#73899a]">{user?.city}</p>
         </div>
 
         <div className="flex flex-col mt-5">
-          <div className="flex items-center justify-between border-t-2 border-b-2 border-[#28343e] py-2">
+          <div className="flex items-center justify-between border-t-2 border-b-2 border-divider py-2">
             <p className="text-[13px] text-[#6b7985]">Intro</p>
             {canEdit ? (
               <FaCheck
@@ -66,13 +68,13 @@ function Lsidebar() {
               <FaPen
                 onClick={() => setCanEdit(true)}
                 className="text-xs cursor-pointer"
-                color="#1da1f2"
+                color="#BAA8FF"
               />
             )}
           </div>
           <textarea
             rows="3"
-            className="w-full outline-none mt-4 bg-transparent resize-none text-[13px]"
+            className="w-full outline-none mt-4 bg-transparent resize-none text-[12px] md:text-[13.5px]"
             value={descText}
             onChange={(e) => setDescText(e.target.value)}
             onInput={(e) => setCount(e.target.value.length)}
@@ -81,7 +83,7 @@ function Lsidebar() {
 
           <small
             className={`text-right ${
-              count > 50 ? "text-red-400" : "text-white"
+              count > 50 ? "text-red-400" : "text-textColor"
             }`}
           >
             {count ? count : 0}/50
@@ -89,7 +91,7 @@ function Lsidebar() {
         </div>
 
         <div className="hidden lg:flex flex-col mt-5">
-          <div className="flex items-center border-t-2 border-b-2 border-[#28343e] py-2">
+          <div className="flex items-center border-t-2 border-b-2 border-divider py-2">
             <p className="flex-1 text-[13px] text-[#6b7985]">Friends</p>
           </div>
           <div className="space-x-3 mt-6 flex items-center justify-center">

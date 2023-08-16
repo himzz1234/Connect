@@ -80,7 +80,6 @@ io.on("connection", (socket) => {
 
   // send and get message
   socket.on("sendMessage", ({ senderId, receiverId, text, type, url }) => {
-    console.log({ senderId, receiverId, text, type, url });
     const user = getUser(receiverId);
 
     if (user) {

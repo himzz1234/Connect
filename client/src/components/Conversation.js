@@ -31,7 +31,7 @@ function Conversation({ conversation, setCurrentChat, onlineUsers }) {
           className="w-8 h-8 bg-cover rounded-full -ml-2"
         ></div>
       </div>
-      <p className="text-[14.5px] ml-2">{user?.username}</p>
+      <p className="text-[15px] ml-2 font-medium">{user?.username}</p>
     </div>
   );
 }

@@ -33,7 +33,6 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
 
   useEffect(() => {
     socket.on("getMessage", (data) => {
-      console.log(data);
       if (data.type == "text") {
         setArrivalMessage({
           sender: data.senderId,
@@ -168,8 +167,8 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
   }, [messages]);
 
   return (
-    <div className="h-screen z-[99999] flex flex-col fixed lg:absolute top-0 lg:top-auto lg:bottom-0 right-0 w-full lg:w-[500px] lg:h-96 rounded-tl-md lg:border-t-4 lg:border-l-4 border-bodyPrimary shadow-2xl bg-bodySecondary">
-      <div className="flex items-center px-3 py-3 relative space-x-3 border-b-2 border-[#28343e]">
+    <div className="h-screen z-[99999] flex flex-col fixed lg:absolute top-0 lg:top-auto lg:bottom-0 right-0 w-full lg:w-[500px] lg:h-96 rounded-tl-md lg:border-t-2 lg:border-l-2 border-divider shadow-2xl bg-bodySecondary">
+      <div className="flex items-center px-3 py-3 relative space-x-3 border-b-2 border-divider">
         <div className="relative">
           <div
             className={`absolute -right-0.5 -top-1 ${
@@ -213,14 +212,14 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
 
       <form
         onSubmit={sendMessage}
-        className="bg-[#28343e] p-2 flex items-center rounded-md m-3 relative space-x-3"
+        className="bg-inputFields p-2 flex items-center rounded-md m-3 relative space-x-3"
       >
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
           type="text"
           placeholder="Type a message..."
-          className="text-[16px] flex-1 bg-transparent outline-none placeholder-[#617484]"
+          className="text-[15px] flex-1 bg-transparent outline-none placeholder-[#A9A9A9]"
         />
         <div
           onClick={() => {
@@ -255,7 +254,7 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, type: "tween" }}
             exit={{ opacity: 1, y: 400 }}
-            className="border-[#2f3c47] rounded-sm relative h-[45vh] overflow-y-auto scrollbar-0 scrollbar"
+            className="rounded-sm relative h-[45vh] overflow-y-auto scrollbar-0 scrollbar"
           >
             <Picker
               data={data}
@@ -281,7 +280,7 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
               value={gifInput}
               onChange={(e) => setGifInput(e.target.value)}
               placeholder="Search GIFs"
-              className="m-1 rounded-sm placeholder-[#617484] px-2 py-1 text-sm w-60 bg-[#28343e] outline-none"
+              className="m-1 rounded-sm placeholder-[#A9A9A9] px-2 py-1 text-sm w-60 bg-inputFields outline-none"
             />
             {loadingGifs ? (
               <div className="flex flex-col space-y-2 items-center justify-center mt-5">
