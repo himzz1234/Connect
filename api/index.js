@@ -24,9 +24,9 @@ const commentRoutes = require("./routes/comment");
 dotenv.config();
 
 cloudinary.config({
-  cloud_name: "dzcein87k",
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_KEY,
+  api_secret: process.env.CLOUD_SECRET,
 });
 
 mongoose.connect(process.env.MONGO_URL, {
