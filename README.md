@@ -37,7 +37,11 @@ Welcome to the Connect project repository! Connect is a dynamic social media app
 2. Add the following environment variables:
 
 ```
-MONGODB_URI=your-mongodb-connection-string
-JWT_SECRET=your-jwt-secret
+MONGO_URL = your-mongodb-connection-string
+JWT_SECRET = your-jwt-secret
+
+CLOUD_NAME = "your-cloudinary-name"
+CLOUD_KEY = "your-cloudinary-key"
+CLOUD_SECRET = "your-cloudinary-secret"
 ```
 
