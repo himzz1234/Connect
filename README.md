@@ -13,3 +13,21 @@ Welcome to the Connect project repository! Connect is a dynamic social media app
 + Receive notifications for new likes and comments.
 + Find other users easily with the search feature.
 + Enjoy Connect on various devices with its responsive UI.
+
+## Technologies Used
++ Frontend: React
++ Backend: Node.js, Express.js, MongoDB (Database)
++ Real-time Communication: Socket.io
++ Styling: TailwindCSS
++ Deployment: Netlify (Frontend), Render (Backend)
+
+## Getting Started
+### Prerequisites
++ Node.js and npm (Node Package Manager) installed on your machine.
++ MongoDB Atlas account (for database storage).
++ A modern web browser.
+
+### Installation
+1. Clone the repository: ```git clone https://github.com/himzz1234/Social-Mern.git```
+2. Install frontend dependencies: ```cd client && npm install```
+3. Install backend dependencies: ```cd ../api && npm install```
