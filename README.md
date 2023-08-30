@@ -45,3 +45,7 @@ CLOUD_KEY = "your-cloudinary-key"
 CLOUD_SECRET = "your-cloudinary-secret"
 ```
 
+3. Modify the frontend API endpoint in the `client/axios.js` file
+```
+const API_URL = 'http://localhost:5000'; // Change this to your backend URL
+```
