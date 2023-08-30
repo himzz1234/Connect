@@ -5,4 +5,11 @@
 Welcome to the Connect project repository! Connect is a dynamic social media application built using the MERN (MongoDB, Express.js, React, Node.js) stack along with Socket.io for real-time messaging functionality. This platform enables users to create accounts, connect with others, view posts, send messages, and much more.
 
 ## Features
-+ ##User Authentication: Sign up and log in to your personal account.
++ Sign up and log in to your personal account.
++ Set up your profile picture, bio, and other details.
++ Follow other users to see their posts on your feed.
++ Share your thoughts by creating posts and see posts from users you follow.
++ Seamlessly communicate with other users in real-time using Socket.io.
++ Receive notifications for new likes and comments.
++ Find other users easily with the search feature.
++ Enjoy Connect on various devices with its responsive UI.
