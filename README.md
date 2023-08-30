@@ -35,8 +35,9 @@ Welcome to the Connect project repository! Connect is a dynamic social media app
 ## Configuration
 1. Create a .env file in the api directory for backend configuration.
 2. Add the following environment variables:
-   ```
-    MONGODB_URI=your-mongodb-connection-string
-    JWT_SECRET=your-jwt-secret
-   ```
+
+```
+MONGODB_URI=your-mongodb-connection-string
+JWT_SECRET=your-jwt-secret
+```
 
