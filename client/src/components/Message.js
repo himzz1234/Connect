@@ -1,6 +1,6 @@
 import React from "react";
-import { format } from "timeago.js";
 import { motion } from "framer-motion";
+import moment from "moment";
 
 function Message({ message, currentChat }) {
   return (
@@ -11,9 +11,9 @@ function Message({ message, currentChat }) {
     >
       <div
         className={`p-2 ${
-          message.sender !== currentChat.user._id
-            ? "bg-inputFields rounded-l-sm border-l-[#6A0DAD] border-l-2 rounded-br-sm"
-            : "bg-inputFields rounded-r-sm border-r-[#1DA1F2] border-r-2 rounded-bl-sm"
+          message.sender !== currentChat.friend._id
+            ? "bg-bodySecondary rounded-l-sm border-l-[#6A0DAD] border-l-2 rounded-br-sm"
+            : "bg-bodySecondary rounded-r-sm border-r-[#1DA1F2] border-r-2 rounded-bl-sm"
         }`}
       >
         {message.type == "text" ? (
@@ -22,7 +22,9 @@ function Message({ message, currentChat }) {
           <img src={message.url} className="w-full" />
         )}
       </div>
-      <p className="text-xs mt-2">{format(message.createdAt)}</p>
+      <p className="text-xs mt-2 text-[#73899a]">
+        {moment(message.createdAt).format("MMMM Do YYYY, h:mm a")}
+      </p>
     </motion.div>
   );
 }

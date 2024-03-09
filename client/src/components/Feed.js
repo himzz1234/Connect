@@ -129,9 +129,9 @@ function Feed() {
       ref={scrollRef}
       className="order-3 lg:order-2 w-full lg:w-6/12 lg:h-[85vh] overflow-y-auto scrollbar scrollbar-w-0"
     >
-      <div className="bg-bodySecondary px-5 md:px-6 py-5 rounded-md">
+      <div className="bg-bodyPrimary px-5 md:px-6 py-5 rounded-md">
         <div
-          className={`flex items-center space-x-3 md:space-x-4 ${
+          className={`flex items-start space-x-3 md:space-x-4 ${
             loading ? "pointer-events-none opacity-50" : "pointer-events-auto"
           }`}
         >
@@ -139,69 +139,74 @@ function Feed() {
             style={{ backgroundImage: `url(${user?.profilePicture})` }}
             className={`w-8 h-8 md:w-[44px] md:h-[44px] bg-cover rounded-full -ml-2`}
           ></div>
-          <form onSubmit={submitHandler} className={`flex-1`}>
-            <div className="bg-inputFields flex flex-1 items-center px-3 py-2 rounded-md space-x-3">
-              <input
-                type="text"
-                ref={desc}
-                readOnly={loading}
-                placeholder={`What's on your mind ${user?.username}?`}
-                className={`bg-transparent text-[12px] sm:text-[13px] md:text-[16px] flex-1 rounded-md outline-none placeholder-[#A9A9A9]`}
-              />
-
-              <label htmlFor="addAPhoto" className="">
-                <RiAttachment2
-                  className="cursor-pointer text-[16px] sm:text-xl"
-                  color="#c7d6e5"
+          <div className="flex-1">
+            <form onSubmit={submitHandler} className={`flex-1`}>
+              <div className="bg-bodySecondary flex items-center px-3 py-2 rounded-md space-x-3">
+                <input
+                  type="text"
+                  ref={desc}
+                  readOnly={loading}
+                  placeholder={`What's on your mind ${user?.username}?`}
+                  className={`bg-transparent text-[12px] sm:text-[13px] md:text-[16px] flex-1 rounded-md outline-none placeholder-[#A9A9A9]`}
                 />
-              </label>
-              <input
-                type="file"
-                id="addAPhoto"
-                name="addAPhoto"
-                accept="image/png, image/jpg, image/jpeg"
-                className="hidden"
-                onChange={(e) => setMediaFile(e.target.files[0])}
-              />
 
-              <button type="submit">
-                <BsSendFill
-                  color="#1da1f2"
-                  className="text-[12px] sm:text-base"
+                <label htmlFor="addAPhoto" className="">
+                  <RiAttachment2
+                    className="cursor-pointer text-[16px] sm:text-xl"
+                    color="#b8b8b8"
+                  />
+                </label>
+                <input
+                  type="file"
+                  id="addAPhoto"
+                  name="addAPhoto"
+                  accept="image/png, image/jpg, image/jpeg"
+                  className="hidden"
+                  onChange={(e) => setMediaFile(e.target.files[0])}
                 />
-              </button>
+
+                <button type="submit">
+                  <BsSendFill
+                    color="#1da1f2"
+                    className="text-[12px] sm:text-base"
+                  />
+                </button>
+              </div>
+            </form>
+            <div
+              className={`mt-5 ${
+                loading
+                  ? "pointer-events-none opacity-50"
+                  : "pointer-events-auto"
+              } relative flex items-center justify-center ${
+                imageToSend ? "block" : "hidden"
+              }`}
+            >
+              <div
+                onClick={() => {
+                  setImageToSend(null);
+                  imageRef.current.src = "#";
+                }}
+                className="absolute border-4 border-bodySecondary -top-2 -right-2 bg-[#1da1f2] w-7 h-7 cursor-pointer rounded-full grid place-content-center"
+              >
+                <IoIosClose color="white" className="text-xl " />
+              </div>
+              <div className="bg-bodySecondary h-[300px] w-full">
+                <img
+                  ref={imageRef}
+                  src="#"
+                  alt="preview image"
+                  className="object-contain h-full w-full"
+                />
+              </div>
             </div>
-          </form>
-        </div>
-
-        <div
-          className={`mt-10 ${
-            loading ? "pointer-events-none opacity-50" : "pointer-events-auto"
-          } relative flex items-center justify-center ${
-            imageToSend ? "block" : "hidden"
-          }`}
-        >
-          <div
-            onClick={() => {
-              setImageToSend(null);
-              imageRef.current.src = "#";
-            }}
-            className="absolute -top-3 -right-3  bg-[#1da1f2] w-6 h-6 cursor-pointer rounded-full grid place-content-center"
-          >
-            <IoIosClose color="white" className="text-xl " />
           </div>
-          <img
-            ref={imageRef}
-            src="#"
-            alt="preview image"
-            className="max-h-[400px] object-contain"
-          />
         </div>
       </div>
 
       {loading && (
         <div className="flex items-center justify-center mt-5 bg-bodySecondary py-2 rounded-sm">
-          <ReactLoading type="spin" color="white" height={24} width={24} />
+          <ReactLoading type="spin" color="#1da1f2" height={24} width={24} />
         </div>
       )}
 

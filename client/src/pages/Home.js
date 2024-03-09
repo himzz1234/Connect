@@ -24,7 +24,7 @@ function Home() {
   return (
     <div className="relative">
       <Topbar setOnlineUsers={setOnlineUsers} />
-      <section className="mb-5 lg:mb-0 space-y-5 scrollbar scrollbar-none flex flex-col lg:flex-row items-start text-textColor lg:space-x-4 lg:space-y-0 max-w-[600px] px-2 md:max-w-[1000px] lg:max-w-[1600px] mx-auto">
+      <section className="space-y-5 scrollbar scrollbar-none flex flex-col lg:flex-row items-start text-textColor lg:space-x-4 lg:space-y-0 max-w-[600px] px-2 py-2 md:max-w-[1000px] lg:max-w-[1600px] mx-auto">
         <Profile />
         <Feed />
         <Sidebar onlineUsers={onlineUsers} />

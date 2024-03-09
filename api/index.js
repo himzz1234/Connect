@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 const server = require("http").createServer(app);
 const cloudinary = require("cloudinary").v2;
+const passport = require("passport");
+const cookieParser = require("cookie-parser");
 
 const io = require("socket.io")(server, {
   perMessageDeflate: false,
@@ -18,6 +20,7 @@ const userRoutes = require("./routes/users");
 const authRoutes = require("./routes/auth");
 const postRoutes = require("./routes/post");
 const convRoutes = require("./routes/conversations");
+const notifRoutes = require("./routes/notifications");
 const messageRoutes = require("./routes/message");
 const commentRoutes = require("./routes/comment");
 
@@ -34,14 +37,23 @@ mongoose.connect(process.env.MONGO_URL, {
   useUnifiedTopology: true,
 });
 
-// middleware
-app.use(cors());
+// middlewares
+app.use(passport.initialize());
+
+require("./passport");
+app.use(passport.session());
+
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    methods: "GET, POST, PUT, DELETE",
+    credentials: true,
+  })
+);
+
 app.use(express.json());
 app.use(helmet());
-
-app.get("/", (req, res) => {
-  res.json("kokofekfe");
-});
+app.use(cookieParser());
 
 let users = [];
 
@@ -105,5 +117,6 @@ app.use("/api/post", postRoutes);
 app.use("/api/comment", commentRoutes);
 app.use("/api/message", messageRoutes);
 app.use("/api/conversation", convRoutes);
+app.use("/api/notification", notifRoutes);
 
 server.listen(8800, () => console.log("Server up and running⚡"));

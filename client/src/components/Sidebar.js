@@ -25,8 +25,8 @@ function Sidebar({ onlineUsers }) {
   }, []);
 
   return (
-    <div className="order-2 lg:order-3 lg:relative w-full lg:w-3/12 lg:h-[85vh] flex flex-col bg-bodySecondary py-5 px-5 rounded-md">
-      <div className="space-y-5 flex-1">
+    <div className="order-2 lg:order-3 lg:relative w-full lg:w-3/12 lg:h-[85vh] flex flex-col bg-bodyPrimary py-2 px-2 rounded-md">
+      <div className="space-y-2 flex-1">
         {conversations.map((c) => (
           <Conversation
             conversation={c}

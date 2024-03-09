@@ -4,13 +4,7 @@ import Comment from "./Comment";
 
 function Comments({ comments, setComments }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, height: 0, y: -30 }}
-      animate={{ opacity: 1, height: "fit-content", y: 0 }}
-      transition={{ duration: 0.3, type: "tween" }}
-      exit={{ opacity: 0, height: 0, y: -30 }}
-      className="px-3"
-    >
+    <motion.div className="pl-3">
       {comments.map((c, index) => (
         <Comment
           key={index}

@@ -1,10 +1,10 @@
 import React, { useContext, useState } from "react";
-import { format } from "timeago.js";
-import { BiDotsVerticalRounded } from "react-icons/bi";
+import { BiDotsHorizontalRounded } from "react-icons/bi";
 import { AnimatePresence, motion } from "framer-motion";
 import { AuthContext } from "../context/AuthContext";
 import { FaTrash } from "react-icons/fa";
 import axios from "../axios";
+import moment from "moment";
 
 function Comment({ comment, index, setComments, comments }) {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -26,12 +26,8 @@ function Comment({ comment, index, setComments, comments }) {
   return (
     <AnimatePresence>
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.1, type: "tween" }}
-        exit={{ opacity: 0 }}
         className={`${
-          index != 0 && "border-t-2 border-[#28343e]"
+          index != 0 && "border-t-2"
         } flex items-start space-x-4 py-3`}
       >
         <div
@@ -45,7 +41,7 @@ function Comment({ comment, index, setComments, comments }) {
             </h2>
 
             <p className="text-[12px] text-[#73899a]">
-              {format(comment?.createdAt)}
+              {moment(comment.createdAt).format("MMMM Do YYYY, h:mm a")}
             </p>
           </div>
 
@@ -55,7 +51,7 @@ function Comment({ comment, index, setComments, comments }) {
           onClick={() => setShowDropdown(!showDropdown)}
           className="relative cursor-pointer"
         >
-          <BiDotsVerticalRounded color="white" />
+          <BiDotsHorizontalRounded color="#b9b9b9" size={20} />
           <AnimatePresence>
             {showDropdown && comment.userId._id == currentUser._id && (
               <motion.div
@@ -63,7 +59,7 @@ function Comment({ comment, index, setComments, comments }) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.2, type: "tween" }}
                 exit={{ opacity: 0, y: -15 }}
-                className="text-white absolute w-36 right-0 -bottom-12 bg-bodyPrimary py-2 px-3 rounded-md shadow-2xl border-2 border-bodySecondary"
+                className="text-black absolute w-36 right-0 -bottom-12 bg-bodyPrimary py-2 px-3 rounded-sm shadow-2xl border-2 border-bodySecondary"
               >
                 <div
                   onClick={() => deleteAComment(comment?._id)}

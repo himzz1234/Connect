@@ -1,7 +1,7 @@
 const router = require("express").Router();
-const Post = require("../models/Post");
-const User = require("../models/User");
-const Comment = require("../models/Comment");
+const Post = require("../models/post.model");
+const User = require("../models/user.model");
+const Comment = require("../models/comment.model");
 const cloudinary = require("cloudinary").v2;
 
 // create a post

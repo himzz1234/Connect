@@ -1,13 +1,10 @@
-import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
-import { MdOpenInNew } from "react-icons/md";
-import { GrEmoji } from "react-icons/gr";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { IoMdCloseCircle } from "react-icons/io";
 import { BsSendFill } from "react-icons/bs";
 import { AiOutlineGif } from "react-icons/ai";
 import axios from "../axios";
 import { AuthContext } from "../context/AuthContext";
 import { SocketContext } from "../context/SocketContext";
-import data from "@emoji-mart/data";
-import Picker from "@emoji-mart/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { GiphyFetch } from "@giphy/js-fetch-api";
 import Message from "./Message";
@@ -17,6 +14,7 @@ import ReactLoading from "react-loading";
 const giphyFetch = new GiphyFetch("CXF6IIaPBwHC4p3hBfz1HUpUTEZNFiHm");
 
 function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
+  console.log(currentChat);
   const scrollRef = useRef();
   const [gifs, setGifs] = useState("");
   const [input, setInput] = useState("");
@@ -25,7 +23,6 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
   const { socket } = useContext(SocketContext);
   const [messages, setMessages] = useState([]);
   const [showGifs, setShowGifs] = useState(false);
-  const [showEmojis, setShowEmojis] = useState(false);
   const [loadingGifs, setLoadingGifs] = useState(false);
   const [arrivalMessage, setArrivalMessage] = useState(null);
 
@@ -112,7 +109,6 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
     if (input !== "") {
       try {
         setMessages((prev) => [...prev, message]);
-        setShowEmojis(false);
 
         const message = {
           conversationId: currentChat.conversation._id,
@@ -120,6 +116,8 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
           text: input,
           type: "text",
           url: "",
+          status: "Sent",
+          img: "",
         };
 
         setInput("");
@@ -166,26 +164,29 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
     scrollRef?.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  console.log(messages);
+
   return (
-    <div className="h-screen z-[99999] flex flex-col fixed lg:absolute top-0 lg:top-auto lg:bottom-0 right-0 w-full lg:w-[500px] lg:h-96 rounded-tl-md lg:border-t-2 lg:border-l-2 border-divider shadow-2xl bg-bodySecondary">
-      <div className="flex items-center px-3 py-3 relative space-x-3 border-b-2 border-divider">
+    <div className="h-screen z-[99999] flex flex-col fixed lg:absolute top-0 lg:top-auto lg:bottom-0 right-0 w-full lg:w-[500px] lg:h-96 rounded-md lg:border-t-2 lg:border-l-2 shadow-md bg-bodyPrimary">
+      <div className="flex items-center px-3 py-3 relative space-x-3 border-b-2">
         <div className="relative">
           <div
             className={`absolute -right-0.5 -top-1 ${
-              onlineUsers.includes(currentChat.user?._id)
+              onlineUsers.includes(currentChat.friend?._id)
                 ? "bg-[#20da97] border-[2px] border-bodyPrimary"
                 : "bg-transparent"
             } w-3 h-3 rounded-full `}
           ></div>
           <div
             style={{
-              backgroundImage: `url(${currentChat.user?.profilePicture})`,
+              backgroundImage: `url(${currentChat.friend?.profilePicture})`,
             }}
             className="w-8 h-8 bg-cover rounded-full"
           ></div>
         </div>
-        <p className="flex-1">{currentChat.user?.username}</p>
-        <MdOpenInNew
+        <p className="flex-1">{currentChat.friend?.username}</p>
+        <IoMdCloseCircle
+          size={24}
           className="text-xl cursor-pointer"
           color="#1da1f2"
           onClick={() => setCurrentChat(null)}
@@ -198,7 +199,7 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
             key={index}
             ref={scrollRef}
             className={`space-y-2 w-48 ${
-              message.sender !== currentChat.user._id && "self-end"
+              message.sender !== currentChat?.friend._id && "self-end"
             }`}
           >
             <Message
@@ -212,7 +213,7 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
 
       <form
         onSubmit={sendMessage}
-        className="bg-inputFields p-2 flex items-center rounded-md m-3 relative space-x-3"
+        className="bg-bodySecondary p-2 flex items-center rounded-md m-3 relative space-x-3"
       >
         <input
           value={input}
@@ -228,18 +229,7 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
         >
           <AiOutlineGif
             className="text-2xl cursor-pointer"
-            color={!showGifs ? "#c7d6e5" : "#1da1f2"}
-          />
-        </div>
-
-        <div
-          onClick={() => {
-            !showGifs && setShowEmojis(!showEmojis);
-          }}
-        >
-          <GrEmoji
-            className="text-xl cursor-pointer"
-            color={!showEmojis ? "#c7d6e5" : "#1da1f2"}
+            color={!showGifs ? "#b8b8b8" : "#1da1f2"}
           />
         </div>
 
@@ -247,26 +237,7 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
           <BsSendFill color="#1da1f2" />
         </button>
       </form>
-      <AnimatePresence>
-        {showEmojis && (
-          <motion.div
-            initial={{ opacity: 1, y: 400 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, type: "tween" }}
-            exit={{ opacity: 1, y: 400 }}
-            className="rounded-sm relative h-[45vh] overflow-y-auto scrollbar-0 scrollbar"
-          >
-            <Picker
-              data={data}
-              onEmojiSelect={(e) => setInput(input + e.native)}
-              emojiSize={20}
-              dynamicWidth={true}
-              previewPosition="none"
-              searchPosition="none"
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
+
       <AnimatePresence>
         {showGifs && (
           <motion.div

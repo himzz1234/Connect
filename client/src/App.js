@@ -7,6 +7,7 @@ import axios from "./axios";
 import Loading from "./components/Loading";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Cookies from "js-cookie";
 
 const Home = lazy(() => import("./pages/Home"));
 const Login = lazy(() => import("./pages/Login"));
@@ -18,43 +19,39 @@ function App() {
 
   useEffect(() => {
     async function fetchUser() {
-      if (localStorage.getItem("userToken")) {
-        dispatch({ type: "LOGIN_START" });
+      dispatch({ type: "LOGIN_START" });
 
-        try {
-          const res = await axios.get("/auth/getauth", {
-            headers: {
-              "x-access-token": localStorage.getItem("userToken"),
-            },
+      try {
+        const res = await axios.get("/auth/getauth", {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        });
+
+        if (res.data.user) {
+          dispatch({ type: "LOGIN_SUCCESS", payload: res.data.user });
+          setLoading(false);
+        } else {
+          dispatch({
+            type: "LOGIN_FAILURE",
+            payload: "Something went wrong!",
           });
-
-          if (res.data.user) {
-            dispatch({ type: "LOGIN_SUCCESS", payload: res.data.user });
-            setLoading(false);
-          } else {
-            dispatch({
-              type: "LOGIN_FAILURE",
-              payload: "Something went wrong!",
-            });
-            setLoading(false);
-          }
-        } catch (err) {
-          toast.error("An error occurred!", {
-            position: "bottom-center",
-            autoClose: 1000,
-            hideProgressBar: true,
-            closeOnClick: false,
-            pauseOnHover: false,
-            draggable: false,
-            progress: undefined,
-            theme: "dark",
-          });
-
-          dispatch({ type: "LOGIN_FAILURE", payload: "Something went wrong!" });
           setLoading(false);
         }
-      } else {
-        dispatch({ type: "LOGIN_FAILURE", payload: "error" });
+      } catch (err) {
+        toast.error("An error occurred!", {
+          position: "bottom-center",
+          autoClose: 1000,
+          hideProgressBar: true,
+          closeOnClick: false,
+          pauseOnHover: false,
+          draggable: false,
+          progress: undefined,
+          theme: "dark",
+        });
+
+        dispatch({ type: "LOGIN_FAILURE", payload: "Something went wrong!" });
         setLoading(false);
       }
     }
@@ -63,7 +60,7 @@ function App() {
   }, []);
 
   return (
-    <div className="outer-section font-lato bg-bodyPrimary text-textColor w-full h-screen lg:overflow-y-hidden overflow-x-hidden scrollbar scrollbar-none">
+    <div className="outer-section font-roboto bg-bodySecondary text-textColor w-full h-screen lg:overflow-y-hidden overflow-x-hidden scrollbar scrollbar-none">
       {loading ? (
         <Loading />
       ) : (

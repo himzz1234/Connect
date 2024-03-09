@@ -1,7 +1,8 @@
-const User = require("../models/User");
+const User = require("../models/user.model");
 const router = require("express").Router();
 const bcrypt = require("bcrypt");
 const cloudinary = require("cloudinary").v2;
+const { client } = require("../db/redis");
 
 // get all users
 router.post("/", async (req, res) => {
@@ -77,10 +78,18 @@ router.delete("/:id", async (req, res) => {
 
 // get a user
 router.get("/:id", async (req, res) => {
+  const { id } = req.params;
   try {
-    const user = await User.findById(req.params.id);
+    const cacheValue = await client.get(`user:${id}`);
+    if (cacheValue) {
+      return res.status(200).json(JSON.parse(cacheValue));
+    }
+
+    const user = await User.findById(id);
     const { password, updatedAt, ...other } = user._doc;
-    res.status(200).json(other);
+
+    await client.set(`user:${id}`, JSON.stringify(other));
+    return res.status(200).json(other);
   } catch (err) {
     res.status(500).json(err);
   }

@@ -1,7 +1,8 @@
 const router = require("express").Router();
-const User = require("../models/User");
+const User = require("../models/user.model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const passport = require("passport");
 
 // GENERATE TOKEN
 const generateToken = (id, username) => {
@@ -14,9 +15,18 @@ const generateToken = (id, username) => {
   return token;
 };
 
+const generateCookie = (id, username, res) => {
+  const token = `Bearer ${generateToken(id, username)}`;
+
+  res.cookie("access_token", token, {
+    httpOnly: true,
+    expires: new Date(Date.now() + 14 * 24 * 3600 * 1000),
+  });
+};
+
 // VERIFY TOKEN
 const verifyJWT = (req, res, next) => {
-  const token = req.headers["x-access-token"]?.split(" ")[1];
+  const token = req.cookies.access_token?.split(" ")[1];
 
   if (token) {
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
@@ -34,6 +44,24 @@ const verifyJWT = (req, res, next) => {
   }
 };
 
+// GOOGLE SIGN IN
+router.get(
+  "/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
+
+router.get(
+  "/google/callback",
+  passport.authenticate("google", {
+    failureRedirect: "http://localhost:3000",
+    session: false,
+  }),
+  (req, res) => {
+    generateCookie(req.user._id, req.user.username, res);
+    res.redirect("http://localhost:3000");
+  }
+);
+
 // REGISTER
 router.post("/register", async (req, res) => {
   try {
@@ -46,15 +74,16 @@ router.post("/register", async (req, res) => {
       const hashedPassword = await bcrypt.hash(password, salt);
 
       // create a new user
-      const newUser = new User({
+      const newUser = User.create({
         username,
         email,
         password: hashedPassword,
       });
 
-      // save user and send respond
-      const user = await newUser.save();
-      res.status(200).json({ message: "Successfully registered!", user: user });
+      generateCookie(newUser._id, newUser.username, res);
+      res
+        .status(200)
+        .json({ message: "Successfully registered!", user: newUser });
     } else {
       res.status(403).json({ message: "User already exists!" });
     }
@@ -74,13 +103,12 @@ router.post("/login", async (req, res) => {
         }
 
         if (data) {
-          res
-            .status(200)
-            .json({
-              message: "Login Successfull!",
-              user: user,
-              token: `Bearer ${generateToken(user._id, user.username)}`,
-            });
+          generateCookie(user._id, user.username, res);
+
+          res.status(200).json({
+            message: "Login Successfull!",
+            user: user,
+          });
         } else {
           res.status(403).json({ message: "Password doesn't match!" });
         }
@@ -91,6 +119,14 @@ router.post("/login", async (req, res) => {
   } catch (err) {
     res.status(500).json(err);
   }
+});
+
+router.get("/logout", async (req, res) => {
+  res.clearCookie("access_token");
+
+  res.status(200).json({
+    message: "Logout Successfull!",
+  });
 });
 
 // GET USER

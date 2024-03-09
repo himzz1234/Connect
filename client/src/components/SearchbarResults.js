@@ -9,9 +9,10 @@ function SearchbarResults({ u, index, user }) {
   const [loading, setLoading] = useState(false);
 
   const followUser = async (id) => {
+    console.log(user.following);
     setLoading(true);
     try {
-      const res = await axios.post(`/conversation`, {
+      await axios.post(`/conversation`, {
         senderId: user?._id,
         receiverId: id,
       });
@@ -41,10 +42,7 @@ function SearchbarResults({ u, index, user }) {
   return (
     <div
       key={u._id}
-      className={`relative flex flex-col md:flex-row md:space-x-3 md:items-center ${
-        index > 0 &&
-        "before:absolute before:w-full before:h-[1px] before:bg-[#28343e] before:-top-0"
-      }`}
+      className="relative flex flex-col md:flex-row md:space-x-3 md:items-center"
     >
       <div className="flex flex-1 items-center space-x-3 py-3 pl-3">
         <div
@@ -55,28 +53,28 @@ function SearchbarResults({ u, index, user }) {
           <small className="text-[12px] text-[#73899a]">
             @{u.email?.split("@")[0]}
           </small>
-          <p className="flex items-center space-x-[0.5px] text-[13px] sm:text-[14px] font-medium">
+          <p className="flex items-center space-x-[0.5px] text-[13px] text-black sm:text-[14px] font-medium">
             {u.username}
           </p>
         </div>
       </div>
       {loading ? (
         <div className="flex mb-2 md:mb-0 md:items-center md:justify-center px-3 md:px-5">
-          <ReactLoading type="spin" color="white" height={18} width={18} />
+          <ReactLoading type="spin" color="#3c37fe" height={18} width={18} />
         </div>
       ) : (
         <div className="mb-2 md:mb-0">
           {status == "Unfollow" ? (
             <button
               onClick={() => unfollowUser(u._id)}
-              className="text-[#1da1f2] text-xs px-3 py-1 rounded-sm"
+              className="text-red-500 text-xs px-3 py-1 font-medium rounded-sm"
             >
               Unfollow
             </button>
           ) : (
             <button
               onClick={() => followUser(u._id)}
-              className="text-[#1da1f2] text-xs px-3 py-1 rounded-sm"
+              className="text-[#1da1f2] text-xs px-3 py-1 font-medium rounded-sm"
             >
               Follow
             </button>

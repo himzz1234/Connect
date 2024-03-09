@@ -1,37 +1,61 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
+import ProfileWindow from "./ProfileWindow";
 
 function Conversation({ conversation, setCurrentChat, onlineUsers }) {
-  const [user, setUser] = useState(null);
+  const timeoutRef = useRef(null);
+  const [friend, setFriend] = useState(null);
   const { user: currentUser } = useContext(AuthContext);
+  const [showProfile, setShowProfile] = useState(false);
 
   useEffect(() => {
     const friend =
       conversation.sender._id != currentUser._id
         ? conversation.sender
         : conversation.receiver;
-    setUser(friend);
+
+    setFriend(friend);
   }, []);
+
+  const handleMouseOver = () => {
+    if (timeoutRef.current !== null) {
+      return;
+    }
+
+    timeoutRef.current = setTimeout(() => {
+      setShowProfile(true);
+    }, 2000);
+  };
+
+  const handleMouseOut = () => {
+    // If there's an active timeout, clear it
+    if (timeoutRef.current !== null) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+
+    // Hide the profile
+    setShowProfile(false);
+  };
 
   return (
     <div
-      onClick={() => setCurrentChat({ conversation, user })}
-      className="flex items-center cursor-pointer space-x-3"
+      onMouseOut={handleMouseOut}
+      onMouseOver={handleMouseOver}
+      onClick={() => setCurrentChat({ conversation, friend })}
+      className="flex items-center cursor-pointer relative w-full hover:bg-bodySecondary py-2 rounded-md transition-all duration-150 px-2"
     >
+      {showProfile && <ProfileWindow id={friend._id} />}
       <div className="relative">
         <div
-          className={`absolute -right-0.5 -top-1 ${
-            onlineUsers.includes(user?._id)
-              ? "bg-[#20da97] border-[2px] border-bodyPrimary"
-              : "bg-transparent"
-          } w-3 h-3 rounded-full`}
-        ></div>
-        <div
-          style={{ backgroundImage: `url(${user?.profilePicture})` }}
-          className="w-8 h-8 bg-cover rounded-full -ml-2"
+          style={{ backgroundImage: `url(${friend?.profilePicture})` }}
+          className="w-9 h-9 bg-cover rounded-full"
         ></div>
       </div>
-      <p className="text-[15px] ml-2 font-medium">{user?.username}</p>
+      <p className="text-[15px] ml-3 font-medium flex-1">{friend?.username}</p>
+      {onlineUsers.includes(friend?._id) && (
+        <div className="w-2 h-2 rounded-full bg-[#32a852]"></div>
+      )}
     </div>
   );
 }

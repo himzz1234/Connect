@@ -5,7 +5,7 @@ import CoverPicture from "./CoverPicture";
 import ProfilePicture from "./ProfilePicture";
 import { FaPen, FaCheck } from "react-icons/fa";
 
-function Lsidebar() {
+function Profile() {
   const { user } = useContext(AuthContext);
   const [friends, setFriends] = useState([]);
   const [canEdit, setCanEdit] = useState(false);
@@ -41,23 +41,25 @@ function Lsidebar() {
   };
 
   return (
-    <div className="order-1 lg:order-1 w-full lg:w-3/12 bg-bodySecondary rounded-md px-5 py-6 lg:h-[85vh]">
+    <div className="order-1 lg:order-1 w-full lg:w-3/12 bg-bodyPrimary rounded-md px-5 py-6 lg:h-[85vh]">
       <div className="">
         <div className="relative">
           <CoverPicture />
           <ProfilePicture />
         </div>
 
-        <div className="mt-9 flex items-center flex-col space-y-1">
+        <div className="mt-9 flex items-center flex-col">
           <h2 className="font-normal font-lato text-[15px] md:text-[17px]">
             {user?.username}
           </h2>
-          <p className="text-[12.5px] text-[#73899a]">{user?.city}</p>
+          <p className="text-[12px]">{`@${user.email.split("@")[0]}`}</p>
         </div>
 
         <div className="flex flex-col mt-5">
-          <div className="flex items-center justify-between border-t-2 border-b-2 border-divider py-2">
-            <p className="text-[13px] text-[#6b7985]">Intro</p>
+          <div className="flex items-center justify-between py-2 border-b-2 border-t-2">
+            <p className="text-[13px] uppercase font-semibold text-[#b8b8b8]">
+              Bio
+            </p>
             {canEdit ? (
               <FaCheck
                 onClick={changeDescription}
@@ -68,7 +70,7 @@ function Lsidebar() {
               <FaPen
                 onClick={() => setCanEdit(true)}
                 className="text-xs cursor-pointer"
-                color="#BAA8FF"
+                color="#1da1f2"
               />
             )}
           </div>
@@ -83,7 +85,7 @@ function Lsidebar() {
 
           <small
             className={`text-right ${
-              count > 50 ? "text-red-400" : "text-textColor"
+              count > 50 ? "text-red-400" : "text-[#b8b8b8]"
             }`}
           >
             {count ? count : 0}/50
@@ -91,15 +93,17 @@ function Lsidebar() {
         </div>
 
         <div className="hidden lg:flex flex-col mt-5">
-          <div className="flex items-center border-t-2 border-b-2 border-divider py-2">
-            <p className="flex-1 text-[13px] text-[#6b7985]">Friends</p>
+          <div className="flex items-center justify-between py-2 border-b-2 border-t-2">
+            <p className="flex-1 text-[13px] font-semibold uppercase text-[#b8b8b8]">
+              Connections
+            </p>
           </div>
-          <div className="space-x-3 mt-6 flex items-center justify-center">
+          <div className="space-x-3 mt-6 flex items-center">
             {friends.map((friend) => (
               <div
                 key={friend._id}
                 style={{ backgroundImage: `url(${friend?.profilePicture})` }}
-                className="w-8 h-8 rounded-full bg-cover"
+                className="w-9 h-9 rounded-full bg-cover"
               ></div>
             ))}
           </div>
@@ -109,4 +113,4 @@ function Lsidebar() {
   );
 }
 
-export default React.memo(Lsidebar);
+export default Profile;

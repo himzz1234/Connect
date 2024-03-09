@@ -17,7 +17,6 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: true,
       min: 6,
     },
     profilePicture: {
@@ -28,7 +27,10 @@ const userSchema = new mongoose.Schema(
     coverPicture: {
       type: String,
       default:
-        "https://res.cloudinary.com/dzcein87k/image/upload/v1682271488/zbmcf5cmlkpw47hqmr41.jpg",
+        "https://img.freepik.com/free-photo/gray-wall-textures-background_74190-4389.jpg",
+    },
+    googleId: {
+      type: String,
     },
     followers: {
       type: Array,
