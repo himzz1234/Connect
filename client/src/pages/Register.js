@@ -69,7 +69,7 @@ function Register() {
 
   const signInGoogle = async () => {
     window.open(
-      "https://connectsocialmedia.onrender.com/api/auth/google",
+      "https://mernsocialmedia.onrender.com/api/auth/google",
       "_self"
     );
   };
