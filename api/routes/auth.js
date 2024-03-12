@@ -19,9 +19,10 @@ const generateCookie = (id, username, res) => {
   const token = `Bearer ${generateToken(id, username)}`;
 
   res.cookie("access_token", token, {
-    // httpOnly: true,
+    httpOnly: true,
     expires: new Date(Date.now() + 14 * 24 * 3600 * 1000),
     secure: true,
+    domain: "https://connectsocialmedia.onrender.com/",
   });
 };
 
