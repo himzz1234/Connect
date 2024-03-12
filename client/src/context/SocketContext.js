@@ -14,7 +14,7 @@ export const SocketContextProvider = ({ children }) => {
 
   // https://connectsocialapp.onrender.com
   useMemo(() => {
-    setSocket(io("http://localhost:8800"));
+    setSocket(io("https://connectsocialapp.onrender.com"));
   }, [user]);
 
   return (
