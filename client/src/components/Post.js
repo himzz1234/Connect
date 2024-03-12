@@ -45,24 +45,17 @@ function Post({ post, setPosts, posts }) {
       await axios.put(`/post/${post._id}/like`, {
         userId: currentUser._id,
       });
-
-      await axios.post("/notification", {
-        receiver: post.userId,
-        sender: currentUser._id,
-        type: "Like",
-        post: post._id,
-        isread: false,
-      });
     } catch (err) {
       console.log(err);
     }
 
     if (!isLiked && post.userId._id != currentUser._id) {
-      socket.emit("sendNotification", {
-        sender: currentUser,
-        receiver: post.userId,
-        text: "",
-        type: 1,
+      await axios.post("/notification", {
+        receiver: post.userId._id,
+        sender: currentUser._id,
+        type: "Like",
+        post: post._id,
+        isread: false,
       });
     }
   };

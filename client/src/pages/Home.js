@@ -11,6 +11,8 @@ function Home() {
   const { socket } = useContext(SocketContext);
   const [onlineUsers, setOnlineUsers] = useState([]);
 
+  console.log(user);
+
   useEffect(() => {
     if (socket) {
       socket.emit("addUser", user._id);

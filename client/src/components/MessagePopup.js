@@ -7,14 +7,12 @@ import { AuthContext } from "../context/AuthContext";
 import { SocketContext } from "../context/SocketContext";
 import { AnimatePresence, motion } from "framer-motion";
 import { GiphyFetch } from "@giphy/js-fetch-api";
-import Message from "./Message";
 import useDebounce from "../hooks/useDebounce";
 import ReactLoading from "react-loading";
+import Message from "./Message";
 
 const giphyFetch = new GiphyFetch("CXF6IIaPBwHC4p3hBfz1HUpUTEZNFiHm");
-
 function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
-  console.log(currentChat);
   const scrollRef = useRef();
   const [gifs, setGifs] = useState("");
   const [input, setInput] = useState("");
@@ -27,19 +25,18 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
   const [arrivalMessage, setArrivalMessage] = useState(null);
 
   const debounceSearchTerm = useDebounce(gifInput, 500);
-
   useEffect(() => {
     socket.on("getMessage", (data) => {
       if (data.type == "text") {
         setArrivalMessage({
-          sender: data.senderId,
+          sender: data.sender,
           text: data.text,
           type: "text",
           createdAt: Date.now(),
         });
       } else {
         setArrivalMessage({
-          sender: data.senderId,
+          sender: data.sender,
           url: data.url,
           type: "gif",
           createdAt: Date.now(),
@@ -94,18 +91,6 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
   const sendMessage = async (e) => {
     e.preventDefault();
 
-    const receiverId =
-      currentChat.conversation.sender._id != user._id
-        ? currentChat.conversation.sender._id
-        : currentChat.conversation.receiver._id;
-
-    socket.emit("sendMessage", {
-      senderId: user._id,
-      receiverId,
-      text: input,
-      type: "text",
-    });
-
     if (input !== "") {
       try {
         setMessages((prev) => [...prev, message]);
@@ -129,18 +114,6 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
   };
 
   const sendGif = async (url) => {
-    const receiverId =
-      currentChat.conversation.sender._id != user._id
-        ? currentChat.conversation.sender._id
-        : currentChat.conversation.receiver._id;
-    socket.emit("sendMessage", {
-      senderId: user._id,
-      receiverId,
-      text: "",
-      type: "gif",
-      url,
-    });
-
     if (url) {
       try {
         setMessages((prev) => [...prev, message]);
@@ -163,8 +136,6 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
   useEffect(() => {
     scrollRef?.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
-
-  console.log(messages);
 
   return (
     <div className="h-screen z-[99999] flex flex-col fixed lg:absolute top-0 lg:top-auto lg:bottom-0 right-0 w-full lg:w-[500px] lg:h-96 rounded-md lg:border-t-2 lg:border-l-2 shadow-md bg-bodyPrimary">
@@ -224,7 +195,7 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
         />
         <div
           onClick={() => {
-            !showEmojis && setShowGifs(!showGifs);
+            setShowGifs(!showGifs);
           }}
         >
           <AiOutlineGif
@@ -245,13 +216,13 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, type: "tween" }}
             exit={{ opacity: 1, y: 400 }}
-            className="border-[#2f3c47] flex flex-col h-[45vh] overflow-y-auto scrollbar scrollbar-0"
+            className="border-l-[10px] border-r-[10px] border-bodyPrimary bg-bodySecondary flex flex-col h-[45vh] overflow-y-auto scrollbar scrollbar-0"
           >
             <input
               value={gifInput}
               onChange={(e) => setGifInput(e.target.value)}
               placeholder="Search GIFs"
-              className="m-1 rounded-sm placeholder-[#A9A9A9] px-2 py-1 text-sm w-60 bg-inputFields outline-none"
+              className="m-1 rounded-sm placeholder-[#A9A9A9] px-2 py-1  text-sm w-60 bg-bodyPrimary outline-none"
             />
             {loadingGifs ? (
               <div className="flex flex-col space-y-2 items-center justify-center mt-5">
@@ -264,7 +235,7 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
                 <p className="text-[14px]">GIF's are loading...</p>
               </div>
             ) : (
-              <div className="flex items-center flex-wrap flex-1">
+              <div className="flex items-center flex-wrap flex-1 px-1">
                 {gifs.map((gif) => {
                   const url = gif.images.downsized_medium.url;
                   return (
@@ -275,7 +246,7 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
                     >
                       <img
                         src={url}
-                        className="max-h-[80px] md:max-h-[100px] lg:max-h-[80px] lg:w-[152px] md:w-[216px] sm:w-[128px] w-[90px] rounded-sm m-1 object-cover"
+                        className="max-h-[80px] md:max-h-[100px] lg:max-h-[80px] lg:flex-1 md:w-[216px] sm:w-[128px] w-[90px] rounded-sm m-1 object-cover"
                       />
                     </div>
                   );

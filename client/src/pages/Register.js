@@ -58,8 +58,8 @@ function Register() {
         const res = await axios.post("/auth/register", user, {
           withCredentials: true,
         });
-        notify(res.data.message, "success");
 
+        notify(res.data.message, "success");
         navigate("/login");
       } catch (err) {
         notify(err.response.data.message, "error");
@@ -73,8 +73,8 @@ function Register() {
 
   return (
     <div className="h-full flex flex-col bg-white">
-      <div className="h-full flex flex-1 lg:flex-row text-black p-2 gap-20">
-        <div className="bg-[#f2f4f8] h-full w-[500px] rounded-md">
+      <div className="h-full flex flex-1 flex-col md:flex-row text-black p-2 gap-8 md:gap-10 lg:gap-20">
+        <div className="bg-white md:bg-[#f2f4f8] h-20 md:h-full md:w-[400px] lg:w-[500px] rounded-md">
           <div className="flex items-center">
             <img
               src="/assets/socialLogo.png"
@@ -86,11 +86,11 @@ function Register() {
           </div>
           <img
             src="/assets/home-illustration-3.svg"
-            className="h-full w-full"
+            className="h-full w-full hidden md:block"
           />
         </div>
 
-        <div className="flex flex-1 items-center">
+        <div className="flex flex-1 md:items-center justify-center md:justify-start">
           <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-2 w-96">
               <h1 className="text-4xl font-semibold">Create an account</h1>

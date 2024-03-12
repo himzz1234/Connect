@@ -1,15 +1,15 @@
+import axios from "../axios";
+import Searchbar from "./Searchbar";
 import { CgEnter } from "react-icons/cg";
 import { IoMdNotificationsOutline } from "react-icons/io";
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
-import axios from "../axios";
 import { AnimatePresence, motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { SocketContext } from "../context/SocketContext";
-import Searchbar from "./Searchbar";
 import Notification from "./Notification";
 
-function Topbar({ setOnlineUsers }) {
+function Topbar() {
   const navigate = useNavigate();
   const { socket } = useContext(SocketContext);
   const { user, dispatch } = useContext(AuthContext);
@@ -17,12 +17,12 @@ function Topbar({ setOnlineUsers }) {
   const [showDropdown, setShowDropdown] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
 
-  // useEffect(() => {
-  //   socket.on("getNotification", (data) => {
-  //     console.log(data);
-  //     setNotifications((prev) => [...prev, data]);
-  //   });
-  // }, []);
+  useEffect(() => {
+    socket.on("getNotification", (data) => {
+      console.log(data);
+      setNotifications((prev) => [data, ...prev]);
+    });
+  }, []);
 
   useEffect(() => {
     const fetchNotifications = async () => {
@@ -38,14 +38,13 @@ function Topbar({ setOnlineUsers }) {
   }, []);
 
   const logout = async () => {
-    const res = await axios.get("/auth/logout", { withCredentials: true });
+    await axios.get("/auth/logout", { withCredentials: true });
     dispatch({ type: "LOGOUT" });
     socket.disconnect();
 
-    // socket.on("getUsers", (users) => {
-    //   setOnlineUsers(users.map((user) => user.userId));
-    // });
-
+    socket.on("getUsers", (users) => {
+      setOnlineUsers(users.map((user) => user.userId));
+    });
     navigate("/");
   };
 
@@ -92,8 +91,8 @@ function Topbar({ setOnlineUsers }) {
           <AnimatePresence>
             {showNotifications && notifications.length > 0 && (
               <motion.div className="absolute scrollbar-none top-8 bg-bodyPrimary shadow-xl border-2 border-bodySecondary right-0 w-[40vh] lg:w-[360px] h-64 overflow-y-scroll rounded-sm">
-                {notifications?.map((notification, index) => (
-                  <Notification key={index} {...{ notification }} />
+                {notifications?.map((notification) => (
+                  <Notification key={notification?._id} {...{ notification }} />
                 ))}
               </motion.div>
             )}
@@ -114,8 +113,8 @@ function Topbar({ setOnlineUsers }) {
               <motion.div
                 initial={{ opacity: 0, y: -15 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.1, stiffness: 100, type: "spring" }}
                 exit={{ opacity: 0, y: -15 }}
+                transition={{ duration: 0.1, stiffness: 100, type: "spring" }}
                 className="text-black absolute w-32 right-0 -bottom-12 bg-bodyPrimary py-2 px-2 rounded-sm shadow-lg border-2"
               >
                 <div

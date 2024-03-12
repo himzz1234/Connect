@@ -32,11 +32,11 @@ function Searchbar({ user }) {
 
   return (
     <>
-      <div className="flex-1 flex relative ml-4">
+      <div className="flex-1 flex relative md:ml-4 mr-5">
         <div
           className={`bg-bodySecondary ${
             users.length > 0 ? "rounded-t-md" : "rounded-md"
-          } flex items-center lg:px-3 py-2 px-2 w-full md:w-[400px] lg:w-[500px]`}
+          } flex items-center lg:px-3 py-2 px-2 w-full  md:w-[400px] lg:w-[500px]`}
         >
           <FiSearch color="#707e8b" className="lg:block hidden" />
           <input

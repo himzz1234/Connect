@@ -1,10 +1,25 @@
 const Notification = require("../models/notification.model");
+const { getConnectedUsers } = require("../utils/socket");
 const router = require("express").Router();
-const { client } = require("../db/redis");
 
 router.post("/", async (req, res) => {
+  const io = req.app.get("io");
+  const receiverSocketId = getConnectedUsers().find(
+    (user) => user.userId === req.body.receiver
+  ).socketId;
+
   try {
     const newNotification = await Notification.create(req.body);
+
+    const populatedNotification = await Notification.populate(newNotification, [
+      { path: "sender", select: ["username", "profilePicture"] },
+      { path: "post", select: ["desc", "img"] },
+      { path: "comment", select: "text" },
+    ]);
+
+    console.log(newNotification, populatedNotification);
+    io.to(receiverSocketId).emit("getNotification", populatedNotification);
+
     res.status(200).json(newNotification);
   } catch (error) {
     res.status(400).json({ message: error.message });

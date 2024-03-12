@@ -7,7 +7,6 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "../axios";
 import { FcGoogle } from "react-icons/fc";
-import { SocketContext } from "../context/SocketContext";
 
 function Login() {
   const email = useRef();
@@ -41,8 +40,6 @@ function Login() {
   };
 
   const { isFetching, dispatch } = useContext(AuthContext);
-  const { socket } = useContext(SocketContext);
-
   const handleClick = async (e) => {
     e.preventDefault();
 
@@ -58,7 +55,6 @@ function Login() {
       );
 
       dispatch({ type: "LOGIN_SUCCESS", payload: res.data.user });
-      socket.connect();
       notify(res.data.message, "success");
     } catch (err) {
       dispatch({ type: "LOGIN_FAILURE", payload: err });
@@ -72,9 +68,9 @@ function Login() {
 
   return (
     <div className="h-full flex flex-col bg-white">
-      <div className="h-full flex flex-1 lg:flex-row text-black p-2 gap-20">
-        <div className="bg-[#f2f4f8] h-full w-[500px] rounded-md">
-          <div className="flex items-center">
+      <div className="h-full flex flex-1 flex-col md:flex-row text-black p-2 gap-8 md:gap-10 lg:gap-20">
+        <div className="bg-white md:bg-[#f2f4f8] h-20 md:h-full md:w-[400px] lg:w-[500px] rounded-md">
+          <div className="flex items-center md:ml-0">
             <img
               src="/assets/socialLogo.png"
               width={100}
@@ -85,11 +81,11 @@ function Login() {
           </div>
           <img
             src="/assets/home-illustration-3.svg"
-            className="h-full w-full"
+            className="h-full w-full hidden md:block"
           />
         </div>
 
-        <div className="flex flex-1 items-center">
+        <div className="flex flex-1 md:items-center justify-center md:justify-start">
           <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-2 w-96">
               <h1 className="text-4xl font-semibold">Welcome Back</h1>

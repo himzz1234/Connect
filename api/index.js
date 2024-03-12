@@ -23,6 +23,7 @@ const convRoutes = require("./routes/conversations");
 const notifRoutes = require("./routes/notifications");
 const messageRoutes = require("./routes/message");
 const commentRoutes = require("./routes/comment");
+const { initializeSocket } = require("./utils/socket");
 
 dotenv.config();
 
@@ -55,61 +56,8 @@ app.use(express.json());
 app.use(helmet());
 app.use(cookieParser());
 
-let users = [];
-
-const addUser = (userId, socketId) => {
-  !users.some((user) => user.userId === userId) &&
-    users.push({ userId, socketId });
-};
-
-const removeUser = (socketId) => {
-  users = users.filter((user) => user.socketId !== socketId);
-};
-
-const getUser = (userId) => {
-  return users.find((user) => user.userId === userId);
-};
-
-io.on("connection", (socket) => {
-  socket.on("addUser", (userId) => {
-    addUser(userId, socket.id);
-
-    io.emit("getUsers", users);
-  });
-
-  // receive Notification
-  socket.on("sendNotification", ({ sender, receiver, text, type }) => {
-    const user = getUser(receiver._id);
-
-    if (user) {
-      io.to(user.socketId).emit("getNotification", {
-        sender,
-        text,
-        type,
-      });
-    }
-  });
-
-  // send and get message
-  socket.on("sendMessage", ({ senderId, receiverId, text, type, url }) => {
-    const user = getUser(receiverId);
-
-    if (user) {
-      io.to(user.socketId).emit("getMessage", {
-        senderId,
-        text,
-        type,
-        url,
-      });
-    }
-  });
-
-  socket.on("disconnect", () => {
-    removeUser(socket.id);
-
-    io.emit("getUsers", users);
-  });
-});
+initializeSocket(io);
+app.set("io", io);
 
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
