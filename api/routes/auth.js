@@ -22,7 +22,7 @@ const generateCookie = (id, username, res) => {
     httpOnly: true,
     expires: new Date(Date.now() + 14 * 24 * 3600 * 1000),
     secure: true,
-    domain: "https://connectsocialmedia.onrender.com/",
+    sameSite: "lax",
   });
 };
 
