@@ -53,12 +53,12 @@ router.get(
 router.get(
   "/google/callback",
   passport.authenticate("google", {
-    failureRedirect: "http://localhost:3000",
+    failureRedirect: "https://connectsocialmedia.onrender.com",
     session: false,
   }),
   (req, res) => {
     generateCookie(req.user._id, req.user.username, res);
-    res.redirect("http://localhost:3000");
+    res.redirect("https://connectsocialmedia.onrender.com");
   }
 );
 

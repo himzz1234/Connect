@@ -14,7 +14,7 @@ export const SocketContextProvider = ({ children }) => {
 
   // https://connectsocialapp.onrender.com
   useMemo(() => {
-    setSocket(io("https://connectsocialapp.onrender.com"));
+    setSocket(io("https://mernsocialmedia.onrender.com"));
   }, [user]);
 
   return (
