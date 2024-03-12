@@ -21,6 +21,7 @@ const generateCookie = (id, username, res) => {
   res.cookie("access_token", token, {
     httpOnly: true,
     expires: new Date(Date.now() + 14 * 24 * 3600 * 1000),
+    secure: true,
   });
 };
 
@@ -133,6 +134,7 @@ router.get("/logout", async (req, res) => {
 router.get("/getauth", verifyJWT, async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
+    console.log(user);
     res.status(200).json({ user: user });
   } catch (err) {
     res.status(500).json(err);
