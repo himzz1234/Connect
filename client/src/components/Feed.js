@@ -127,7 +127,7 @@ function Feed() {
   return (
     <div
       ref={scrollRef}
-      className="order-3 lg:order-2 w-full lg:w-6/12 lg:h-[85vh] overflow-y-auto scrollbar scrollbar-w-0"
+      className="order-3 lg:order-2 w-full lg:w-6/12 lg:h-full overflow-y-auto scrollbar scrollbar-w-0"
     >
       <div className="bg-bodyPrimary px-5 md:px-6 py-5 rounded-md">
         <div

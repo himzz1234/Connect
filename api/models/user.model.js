@@ -22,12 +22,12 @@ const userSchema = new mongoose.Schema(
     profilePicture: {
       type: String,
       default:
-        "https://cdn.charitocracy.org/wp-content/plugins/charitocracy-plugin/images/default.png?iv=941",
+        "https://res.cloudinary.com/dzcein87k/image/upload/v1710528180/wf3bchcnelg6eo8wfhlm.png",
     },
     coverPicture: {
       type: String,
       default:
-        "https://img.freepik.com/free-photo/gray-wall-textures-background_74190-4389.jpg",
+        "https://res.cloudinary.com/dzcein87k/image/upload/v1710605368/dckcdvwkl18cbl67zlwm.jpg",
     },
     googleId: {
       type: String,

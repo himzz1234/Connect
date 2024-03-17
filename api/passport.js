@@ -11,8 +11,7 @@ passport.use(
     {
       clientID: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,
-      callbackURL:
-        "https://mernsocialmedia.onrender.com/api/auth/google/callback",
+      callbackURL: "http://localhost:8800/api/auth/google/callback",
     },
     async function (accessToken, refreshToken, profile, done) {
       const { sub, name, picture, email } = profile._json;

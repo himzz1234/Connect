@@ -35,3 +35,7 @@ em-emoji-picker {
 em-emoji-picker input[type="search"] {
   border-radius: 2px;
 }
+
+.primary-btn {
+  @apply w-full bg-[#1da1f2] flex items-center justify-center py-3 rounded-md text-[14px] text-white active:scale-95 transition-all duration-150;
+}

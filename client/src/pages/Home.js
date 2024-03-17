@@ -11,8 +11,6 @@ function Home() {
   const { socket } = useContext(SocketContext);
   const [onlineUsers, setOnlineUsers] = useState([]);
 
-  console.log(user);
-
   useEffect(() => {
     if (socket) {
       socket.emit("addUser", user._id);
@@ -24,9 +22,9 @@ function Home() {
   }, []);
 
   return (
-    <div className="relative">
+    <div className="flex flex-col h-full">
       <Topbar setOnlineUsers={setOnlineUsers} />
-      <section className="space-y-5 scrollbar scrollbar-none flex flex-col lg:flex-row items-start text-textColor lg:space-x-4 lg:space-y-0 max-w-[600px] px-2 py-2 md:max-w-[1000px] lg:max-w-[1600px] mx-auto">
+      <section className="flex-1 space-y-5 scrollbar scrollbar-none flex flex-col lg:flex-row items-start text-textColor lg:space-x-4 lg:space-y-0 px-2 py-2 w-full">
         <Profile />
         <Feed />
         <Sidebar onlineUsers={onlineUsers} />

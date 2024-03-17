@@ -1,13 +1,12 @@
 import { lazy } from "react";
-import { toast } from "react-toastify";
 import { Route, Routes, Navigate } from "react-router-dom";
 import { Suspense, useContext, useEffect, useState } from "react";
 import { AuthContext } from "./context/AuthContext";
 import axios from "./axios";
 import Loading from "./components/Loading";
-import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Cookies from "js-cookie";
+import ResetPassword from "./pages/ResetPassword";
+import { Toaster } from "react-hot-toast";
 
 const Home = lazy(() => import("./pages/Home"));
 const Login = lazy(() => import("./pages/Login"));
@@ -40,16 +39,7 @@ function App() {
           setLoading(false);
         }
       } catch (err) {
-        toast.error("An error occurred!", {
-          position: "bottom-center",
-          autoClose: 1000,
-          hideProgressBar: true,
-          closeOnClick: false,
-          pauseOnHover: false,
-          draggable: false,
-          progress: undefined,
-          theme: "dark",
-        });
+        console.log(err.message);
 
         dispatch({ type: "LOGIN_FAILURE", payload: "Something went wrong!" });
         setLoading(false);
@@ -75,11 +65,15 @@ function App() {
               path="/register"
               element={user ? <Navigate to="/" replace /> : <Register />}
             />
+            <Route
+              path="/resetpassword/:token"
+              element={user ? <Navigate to="/" replace /> : <ResetPassword />}
+            />
           </Routes>
         </Suspense>
       )}
 
-      <ToastContainer toastStyle={{ backgroundColor: "hsl(206,28%,15%)" }} />
+      <Toaster position="top-center" reverseOrder={false} />
     </div>
   );
 }

@@ -66,7 +66,7 @@ function Topbar() {
   };
 
   return (
-    <div className="sticky flex items-center top-0 left-0 py-2 z-30 h-[70px] bg-bodyPrimary max-w-[600px] md:max-w-[1000px] lg:max-w-[1580px] mx-auto px-6">
+    <div className="sticky flex items-center top-0 left-0 py-2 z-30 h-[70px] bg-bodyPrimary w-full px-6">
       <div className="flex items-center w-full">
         <img
           src="/assets/socialLogo.png"
