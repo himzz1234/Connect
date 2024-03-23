@@ -24,7 +24,8 @@ router.get(
     session: false,
   }),
   (req, res) => {
-    generateCookie(req.user._id, req.user.username, res);
+    const rememberMe = false;
+    generateCookie(req.user._id, req.user.username, rememberMe, res);
     res.redirect("https://connectsocialmedia.onrender.com");
   }
 );
