@@ -54,7 +54,10 @@ function Register() {
   };
 
   const signInGoogle = async () => {
-    window.open("http://localhost:8800/api/auth/google", "_self");
+    window.open(
+      "https://mernsocialmedia.onrender.com/api/auth/google",
+      "_self"
+    );
   };
 
   return (
