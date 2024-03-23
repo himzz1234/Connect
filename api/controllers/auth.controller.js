@@ -86,7 +86,7 @@ const sendResetMail = async (req, res) => {
 
   const user = await User.findOne({ email: emailId });
   const url =
-    "httpS://mernsocialmedia.onrender.com/resetpassword/" +
+    "https://connectsocialmedia.onrender.com/resetpassword/" +
     generateToken(user._id, user.username, "10m");
 
   const body = `<div>
