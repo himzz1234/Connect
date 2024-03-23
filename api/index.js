@@ -36,16 +36,17 @@ app.use(passport.initialize());
 require("./passport");
 app.use(passport.session());
 
-app.use(
-  cors({
-    origin: [
-      "http://localhost:3000",
-      "https://connectsocialmedia.onrender.com",
-    ],
-    credentials: true,
-  })
-);
+const corsOptions = {
+  credentials: true,
+};
 
+if (process.env.NODE_ENV === "development") {
+  corsOptions.origin = "http://localhost:3000";
+} else if (process.env.NODE_ENV === "production") {
+  corsOptions.origin = "https://connectsocialmedia.onrender.com";
+}
+
+app.use(cors(corsOptions));
 app.set("trust proxy", 1);
 
 app.use(express.json());
