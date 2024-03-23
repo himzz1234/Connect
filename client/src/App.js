@@ -28,8 +28,6 @@ function App() {
           withCredentials: true,
         });
 
-        console.log(res.data.user, "it runs");
-
         if (res.data.user) {
           dispatch({ type: "LOGIN_SUCCESS", payload: res.data.user });
           setLoading(false);
