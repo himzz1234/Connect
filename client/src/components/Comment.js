@@ -22,7 +22,7 @@ function Comment({ comment, deleteAComment }) {
           </p>
         </div>
 
-        <p className="text-[13px]">{comment.text}</p>
+        <p className="text-[14px]">{comment.text}</p>
       </div>
       {comment.userId._id == currentUser._id && (
         <p

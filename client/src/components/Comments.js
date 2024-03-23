@@ -1,9 +1,9 @@
-import React, { useRef, useContext, useState, useEffect } from "react";
+import React, { useRef, useContext, useState } from "react";
 import Comment from "./Comment";
 import { BsSendFill } from "react-icons/bs";
 import axios from "../axios";
 import { AuthContext } from "../context/AuthContext";
-import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
 function Comments({ comments, setComments, post }) {
   const commentRef = useRef();
@@ -20,16 +20,21 @@ function Comments({ comments, setComments, post }) {
     };
 
     try {
-      await addComment(newComment);
+      const res = await axios.post("/comment", newComment);
+      setComments((prev) => [...prev, res.data]);
+
+      await axios.post("/notification", {
+        receiver: post.userId._id,
+        sender: currentUser._id,
+        type: "Comment",
+        post: post._id,
+        isread: false,
+      });
+
+      commentRef.current.value = "";
     } catch (err) {
       console.log(err);
     }
-  };
-
-  const addComment = async (newComment) => {
-    const res = await axios.post("/comment", newComment);
-    setComments((prev) => [...prev, res.data]);
-    commentRef.current.value = "";
   };
 
   const deleteAComment = async (id) => {
