@@ -30,7 +30,7 @@ const updateUser = async (req, res) => {
 
         const match = req.body.profilePicture.match(regex);
         if (match) {
-          url = cloudinary.url(match[1], { quality: "auto:eco" });
+          url = cloudinary.url(match[1], { quality: "auto:eco", secure: true });
           req.body.profilePicture = url;
         }
       }
@@ -40,7 +40,11 @@ const updateUser = async (req, res) => {
 
         const match = req.body.coverPicture.match(regex);
         if (match) {
-          url = cloudinary.url(match[1], { height: 400, quality: "auto:best" });
+          url = cloudinary.url(match[1], {
+            height: 400,
+            quality: "auto:best",
+            secure: true,
+          });
           req.body.coverPicture = url;
         }
       }

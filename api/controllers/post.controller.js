@@ -9,7 +9,7 @@ const createPost = async (req, res) => {
 
     const match = req.body.img.match(regex);
     if (match) {
-      url = cloudinary.url(match[1], { quality: "auto:best" });
+      url = cloudinary.url(match[1], { quality: "auto:best", secure: true });
       req.body.img = url;
     }
   }
