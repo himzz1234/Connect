@@ -3,7 +3,7 @@ import React from "react";
 function InputContainer({ name, type, formData, setFormData, children }) {
   return (
     <div className="gap-2 flex flex-col">
-      <label className="text-[#85929f] font-medium text-[15px]">
+      <label className="text-[#85929f] text-[15px]">
         {name.charAt(0).toUpperCase()}
         {name.slice(1)}
       </label>

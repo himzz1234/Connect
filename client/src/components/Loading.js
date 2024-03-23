@@ -3,7 +3,7 @@ import ReactLoading from "react-loading";
 
 function Loading() {
   return (
-    <div className="w-full flex items-center justify-center h-screen fixed top-0 left-0 z-40 text-white bg-bodyPrimary">
+    <div className="w-full flex items-center justify-center h-screen fixed top-0 left-0 z-40 text-white bg-primary">
       <div className="flex flex-col items-center justify-center">
         <img
           src="/assets/socialLogo.png"

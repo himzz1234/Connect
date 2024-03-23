@@ -65,36 +65,38 @@ function Login() {
   };
 
   return (
-    <div className="h-full flex flex-col bg-white">
-      <div className="h-full flex flex-1 flex-col md:flex-row text-black p-2 gap-8 md:gap-10 lg:gap-20">
-        <div className="bg-white md:bg-[#f2f4f8] h-20 md:h-full md:w-[400px] lg:w-[500px] rounded-md">
-          <div
-            onClick={() => navigate("/")}
-            className="flex items-center cursor-pointer"
-          >
-            <img
-              src="/assets/socialLogo.png"
-              width={100}
-              height={100}
-              className="-mr-4"
-            />
-            <h1 className="font-bold text-[30px] font-oswald">connect</h1>
-          </div>
+    <div className="h-full flex flex-col bg-background">
+      <div className="h-full flex flex-1 flex-col md:flex-row text-black p-2 gap-8 md:gap-0">
+        <div className="bg-background md:bg-[#f2f4f8] h-20 md:h-full md:w-[400px] lg:w-[580px] rounded-md">
           <img
             src="/assets/home-illustration-3.svg"
             className="h-full w-full hidden md:block"
           />
         </div>
 
-        <div className="flex flex-1 md:items-center justify-center md:justify-start">
+        <div className="flex flex-1 md:items-center justify-center">
+          <div
+            onClick={() => navigate("/")}
+            className="flex items-center cursor-pointer absolute top-2 left-2"
+          >
+            <img
+              src="/assets/socialLogo.png"
+              width={80}
+              height={80}
+              className="-mr-3.5"
+            />
+            <h1 className="font-bold text-[22px] font-oswald mt-2">connect</h1>
+          </div>
           {forgotPassword ? (
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-6 items-center">
               <div className="flex flex-col gap-2 w-96">
-                <h1 className="text-4xl font-semibold">Forgot Password?</h1>
-                <p className="leading-[26px] text-[15px]">
+                <h1 className="text-3xl text-center font-semibold">
+                  Forgot Password?
+                </h1>
+                {/* <p className="leading-[26px] text-[15px]">
                   No problem. Just enter your email address and we will tell you
                   what to do next.
-                </p>
+                </p> */}
               </div>
 
               <div className="w-full max-w-[450px] lg:w-[450px] space-y-4 self-center">
@@ -115,12 +117,11 @@ function Login() {
               </div>
             </div>
           ) : (
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-6 items-center">
               <div className="flex flex-col gap-2 w-96">
-                <h1 className="text-4xl font-semibold">Welcome Back</h1>
-                <p className="leading-[26px] text-[15px]">
-                  Ready to Reconnect? Log In Here.
-                </p>
+                <h1 className="text-3xl font-semibold text-center">
+                  Sign in to Connect
+                </h1>
               </div>
               <div className="w-full max-w-[450px] lg:w-[450px] space-y-4 self-center">
                 <form
@@ -162,7 +163,7 @@ function Login() {
                       </div>
                       <p
                         onClick={recoverPassword}
-                        className="text-[13px] text-[#1da1f2] hover:underline md:text-sm cursor-pointer"
+                        className="text-[13px] text-accent hover:underline md:text-sm cursor-pointer"
                       >
                         Forgot Password?
                       </p>
@@ -178,21 +179,24 @@ function Login() {
                         width={20}
                       />
                     ) : (
-                      "Log In"
+                      <p className="text-[15px]">Log In</p>
                     )}
                   </button>
                 </form>
+                <p className="text-gray_dark text-sm relative text-center after:absolute after:w-1/3 after:h-0.5 after:top-1/2 after:left-10 w-full after:bg-gray-200 before:absolute before:w-1/3 before:h-0.5 before:bg-gray-200 before:top-1/2 before:right-10">
+                  or
+                </p>
                 <button
                   onClick={signInGoogle}
                   className="border-2 border-[#e8ebf3] w-full py-3 rounded-md text-[14px] flex items-center gap-2 justify-center"
                 >
                   <FcGoogle size={18} />
-                  <p>Sign in with google</p>
+                  <p className="text-[15px]">Sign in with google</p>
                 </button>
-                <p className="text-[14px]">
+                <p className="text-[15px] text-gray_dark">
                   Don't have an account?{" "}
                   <Link to="/register">
-                    <span className="w-full py-2 rounded-md text-[#1da1f2] font-medium">
+                    <span className="w-full py-2 rounded-md text-accent font-medium hover:underline">
                       Register
                     </span>
                   </Link>

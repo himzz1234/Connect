@@ -1,5 +1,5 @@
 const Message = require("../models/message.model");
-const { getConnectedUsers } = require("../utils/socket");
+const { getConnectedUsers } = require("../utils/socketapi");
 const Conversation = require("../models/conversation.model");
 
 const postMessage = async (req, res) => {
@@ -17,17 +17,21 @@ const postMessage = async (req, res) => {
         ? conversation.sender.toString()
         : conversation.receiver.toString();
 
-    const receiverSocketId = getConnectedUsers().find(
+    const receiverSocket = getConnectedUsers().find(
       (user) => user.userId === receiverId
-    ).socketId;
+    );
 
     const { sender, type, text, url } = savedMessage;
-    io.to(receiverSocketId).emit("getMessage", {
-      sender,
-      text,
-      type,
-      url,
-    });
+
+    if (receiverSocket) {
+      io.to(receiverSocket.socketId).emit("getMessage", {
+        sender,
+        text,
+        type,
+        url,
+      });
+    }
+
     res.status(200).json({ message: savedMessage });
   } catch (err) {
     res.status(500).json(err);

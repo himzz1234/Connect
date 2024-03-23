@@ -7,14 +7,17 @@ import { AuthContext } from "../context/AuthContext";
 import { SocketContext } from "../context/SocketContext";
 import Message from "./Message";
 import GIFContainer from "./GIFContainer";
+import { motion } from "framer-motion";
 
 function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
   const scrollRef = useRef();
+  const timeoutRef = useRef(null);
   const [input, setInput] = useState("");
   const { user } = useContext(AuthContext);
   const { socket } = useContext(SocketContext);
   const [messages, setMessages] = useState([]);
   const [showGifs, setShowGifs] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
   const [arrivalMessage, setArrivalMessage] = useState(null);
 
   useEffect(() => {
@@ -48,7 +51,6 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
     const getMessages = async () => {
       try {
         const res = await axios.get(`/message/${currentChat.conversation._id}`);
-
         setMessages(res.data);
       } catch (err) {
         console.log(err);
@@ -65,14 +67,18 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
       try {
         setMessages((prev) => [...prev, message]);
 
+        clearTimeout(timeoutRef.current);
+        setIsTyping(false);
+        socket.emit("typing", {
+          receiver: currentChat.friend._id,
+          typing: false,
+        });
+
         const message = {
           conversationId: currentChat.conversation._id,
           sender: user._id,
           text: input,
           type: "text",
-          url: "",
-          status: "Sent",
-          img: "",
         };
 
         setInput("");
@@ -103,18 +109,58 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
     }
   };
 
+  const handleKeyDown = (e) => {
+    if (e.keyCode != 13) {
+      socket.emit("typing", {
+        receiver: currentChat.friend._id,
+        typing: true,
+      });
+
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = setTimeout(() => {
+        setIsTyping(false);
+        socket.emit("typing", {
+          receiver: currentChat.friend._id,
+          typing: false,
+        });
+      }, 3000);
+    }
+  };
+
+  useEffect(() => {
+    socket.on("display", (data) => {
+      if (data.typing) {
+        setIsTyping(true);
+      } else setIsTyping(false);
+    });
+  }, []);
+
+  const displayStatus = () => {
+    if (isTyping && onlineUsers.includes(currentChat.friend?._id)) {
+      return "is typing...";
+    } else if (onlineUsers.includes(currentChat.friend?._id)) {
+      return "online";
+    } else return "offline";
+  };
+
   useEffect(() => {
     scrollRef?.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   return (
-    <div className="h-screen z-[99999] flex flex-col fixed lg:absolute top-0 lg:top-auto lg:bottom-1 right-0 w-full lg:w-[500px] lg:h-[500px] rounded-md lg:border-t-2 lg:border-l-2 shadow-md bg-bodyPrimary">
+    <motion.div
+      exit={{ opacity: 0 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5, type: "tween" }}
+      className="h-screen z-[99999] flex flex-col fixed lg:absolute top-0 lg:top-auto lg:bottom-1 right-0 w-full lg:w-[600px] lg:h-[480px] rounded-md lg:border-t-2 lg:border-l-2 shadow-md bg-primary"
+    >
       <div className="flex items-center px-3 py-3 relative space-x-3 border-b-2">
         <div className="relative">
           <div
             className={`absolute -right-0.5 -top-1 ${
               onlineUsers.includes(currentChat.friend?._id)
-                ? "bg-[#20da97] border-[2px] border-bodyPrimary"
+                ? "bg-[#20da97] border-[2px] border-primary"
                 : "bg-transparent"
             } w-3 h-3 rounded-full `}
           ></div>
@@ -122,19 +168,24 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
             style={{
               backgroundImage: `url(${currentChat.friend?.profilePicture})`,
             }}
-            className="w-8 h-8 bg-cover rounded-full"
+            className="w-9 h-9 bg-cover rounded-full"
           ></div>
         </div>
-        <p className="flex-1">{currentChat.friend?.username}</p>
+        <div className="flex-1">
+          <p className="font-medium">{currentChat.friend?.username}</p>
+          <p className={`text-[12.25px] -mt-0.5 text-gray_dark`}>
+            {displayStatus()}
+          </p>
+        </div>
         <IoMdCloseCircle
           size={24}
-          className="text-xl cursor-pointer"
           color="#1da1f2"
+          className="text-xl cursor-pointer"
           onClick={() => setCurrentChat(null)}
         />
       </div>
 
-      <div className="flex-1 flex flex-col py-5 px-3 space-y-4 overflow-auto scrollbar scrollbar-w-0">
+      <div className="flex-1 flex flex-col py-5 px-3 space-y-3 overflow-auto scrollbar scrollbar-w-0">
         {messages.map((message, index) => (
           <div
             key={index}
@@ -143,25 +194,22 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
               message.sender !== currentChat?.friend._id && "self-end"
             }`}
           >
-            <Message
-              message={message}
-              index={index}
-              currentChat={currentChat}
-            />
+            <Message {...{ message, currentChat }} />
           </div>
         ))}
       </div>
 
       <form
         onSubmit={sendMessage}
-        className="bg-bodySecondary p-2 flex items-center rounded-md m-3 relative space-x-3"
+        className="bg-secondary p-2 flex items-center rounded-md mx-3 mb-3 relative space-x-3"
       >
         <input
+          type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          type="text"
           placeholder="Type a message..."
           className="text-[15px] flex-1 bg-transparent outline-none placeholder-[#A9A9A9]"
+          onKeyDown={handleKeyDown}
         />
         <div
           onClick={() => {
@@ -180,7 +228,7 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
       </form>
 
       <GIFContainer {...{ sendGif, showGifs }} />
-    </div>
+    </motion.div>
   );
 }
 

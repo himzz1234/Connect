@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import ProfileWindow from "./ProfileWindow";
+import { AnimatePresence, motion } from "framer-motion";
 
 function Conversation({ conversation, setCurrentChat, onlineUsers }) {
   const timeoutRef = useRef(null);
@@ -28,13 +29,11 @@ function Conversation({ conversation, setCurrentChat, onlineUsers }) {
   };
 
   const handleMouseOut = () => {
-    // If there's an active timeout, clear it
     if (timeoutRef.current !== null) {
       clearTimeout(timeoutRef.current);
       timeoutRef.current = null;
     }
 
-    // Hide the profile
     setShowProfile(false);
   };
 
@@ -43,15 +42,15 @@ function Conversation({ conversation, setCurrentChat, onlineUsers }) {
       onMouseOut={handleMouseOut}
       onMouseOver={handleMouseOver}
       onClick={() => setCurrentChat({ conversation, friend })}
-      className="flex items-center cursor-pointer relative w-full hover:bg-bodySecondary py-2 rounded-md transition-all duration-150 px-2"
+      className="flex items-center relative cursor-pointer w-full hover:bg-secondary py-2 rounded-md transition-all duration-150 px-2"
     >
-      {showProfile && <ProfileWindow id={friend._id} />}
-      <div className="relative">
-        <div
-          style={{ backgroundImage: `url(${friend?.profilePicture})` }}
-          className="w-9 h-9 bg-cover rounded-full"
-        ></div>
-      </div>
+      <AnimatePresence>
+        {showProfile && <ProfileWindow id={friend._id} />}
+      </AnimatePresence>
+      <div
+        style={{ backgroundImage: `url(${friend?.profilePicture})` }}
+        className="w-9 h-9 bg-cover rounded-full"
+      ></div>
       <p className="text-[15px] ml-3 font-medium flex-1">{friend?.username}</p>
       {onlineUsers.includes(friend?._id) && (
         <div className="w-2 h-2 rounded-full bg-[#32a852]"></div>

@@ -3,7 +3,7 @@ import { AuthContext } from "../context/AuthContext";
 import axios from "../axios";
 import MessagePopup from "./MessagePopup";
 import Conversation from "./Conversation";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 
 function Sidebar({ onlineUsers }) {
   const { user } = useContext(AuthContext);
@@ -25,32 +25,19 @@ function Sidebar({ onlineUsers }) {
   }, []);
 
   return (
-    <div className="order-2 lg:order-3 lg:relative w-full lg:w-3/12 h-full flex flex-col bg-bodyPrimary py-2 px-2 rounded-md">
+    <div className="order-2 lg:order-3 lg:relative w-full lg:w-3/12 h-full flex flex-col bg-primary py-2 px-2 rounded-md">
       <div className="space-y-2 flex-1">
-        {conversations.map((c) => (
+        {conversations.map((conversation) => (
           <Conversation
-            conversation={c}
-            key={c._id}
-            setCurrentChat={setCurrentChat}
-            onlineUsers={onlineUsers}
+            key={conversation._id}
+            {...{ conversation, setCurrentChat, onlineUsers }}
           />
         ))}
       </div>
 
       <AnimatePresence>
         {currentChat && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.3, type: "tween" }}
-            exit={{ opacity: 0 }}
-          >
-            <MessagePopup
-              currentChat={currentChat}
-              setCurrentChat={setCurrentChat}
-              onlineUsers={onlineUsers}
-            />
-          </motion.div>
+          <MessagePopup {...{ currentChat, setCurrentChat, onlineUsers }} />
         )}
       </AnimatePresence>
     </div>

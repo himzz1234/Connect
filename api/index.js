@@ -1,16 +1,8 @@
 const express = require("express");
 const app = express();
-const server = require("http").createServer(app);
 const cloudinary = require("cloudinary").v2;
 const passport = require("passport");
 const cookieParser = require("cookie-parser");
-
-const io = require("socket.io")(server, {
-  perMessageDeflate: false,
-  cors: {
-    origin: "*",
-  },
-});
 
 const cors = require("cors");
 const mongoose = require("mongoose");
@@ -23,7 +15,7 @@ const convRoutes = require("./routes/conversations");
 const notifRoutes = require("./routes/notifications");
 const messageRoutes = require("./routes/message");
 const commentRoutes = require("./routes/comment");
-const { initializeSocket } = require("./utils/socket");
+const { initializeSocket } = require("./utils/socketapi");
 
 dotenv.config();
 
@@ -60,9 +52,6 @@ app.use(express.json());
 app.use(helmet());
 app.use(cookieParser());
 
-initializeSocket(io);
-app.set("io", io);
-
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/post", postRoutes);
@@ -71,4 +60,15 @@ app.use("/api/message", messageRoutes);
 app.use("/api/conversation", convRoutes);
 app.use("/api/notification", notifRoutes);
 
-server.listen(8800, () => console.log("Server up and running⚡"));
+const server = app.listen(8800, () => {
+  console.log("Server is up and running!");
+  const io = require("socket.io")(server, {
+    perMessageDeflate: false,
+    cors: {
+      origin: "*",
+    },
+  });
+
+  initializeSocket(io);
+  app.set("io", io);
+});

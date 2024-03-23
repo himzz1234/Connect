@@ -91,6 +91,7 @@ const fetchPost = async (req, res) => {
 
 const fetchTimelinePosts = async (req, res) => {
   const pageNumber = parseInt(req.query.pageNumber) || 1;
+
   const postsPerPage = 3;
   const skipCount = (pageNumber - 1) * postsPerPage;
 
@@ -99,10 +100,10 @@ const fetchTimelinePosts = async (req, res) => {
     const allUsers = [currentUser._id.toString(), ...currentUser.following];
 
     const feedPosts = await Post.find({ userId: { $in: allUsers } })
-      .sort({ createdAt: -1 })
-      .populate("userId")
       .skip(skipCount)
-      .limit(postsPerPage);
+      .limit(postsPerPage)
+      .sort({ createdAt: -1 })
+      .populate("userId");
 
     const totalCount = await Post.find({
       userId: { $in: allUsers },

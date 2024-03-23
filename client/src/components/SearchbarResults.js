@@ -9,7 +9,6 @@ function SearchbarResults({ u, index, user }) {
   const [loading, setLoading] = useState(false);
 
   const followUser = async (id) => {
-    console.log(user.following);
     setLoading(true);
     try {
       await axios.post(`/conversation`, {
@@ -53,14 +52,14 @@ function SearchbarResults({ u, index, user }) {
           <small className="text-[12px] text-[#73899a]">
             @{u.email?.split("@")[0]}
           </small>
-          <p className="flex items-center space-x-[0.5px] text-[13px] text-black sm:text-[14px] font-medium">
+          <p className="flex items-center space-x-[0.5px] text-[13px] sm:text-[14px] font-medium">
             {u.username}
           </p>
         </div>
       </div>
       {loading ? (
         <div className="flex mb-2 md:mb-0 md:items-center md:justify-center px-3 md:px-5">
-          <ReactLoading type="spin" color="#3c37fe" height={18} width={18} />
+          <ReactLoading type="spin" color="#1da1f2" height={18} width={18} />
         </div>
       ) : (
         <div className="mb-2 md:mb-0">
@@ -74,7 +73,7 @@ function SearchbarResults({ u, index, user }) {
           ) : (
             <button
               onClick={() => followUser(u._id)}
-              className="text-[#1da1f2] text-xs px-3 py-1 font-medium rounded-sm"
+              className="text-accent text-xs px-3 py-1 font-medium rounded-sm"
             >
               Follow
             </button>

@@ -117,9 +117,10 @@ const sendResetMail = async (req, res) => {
   const body = `<div>
     <h2><a href="http://localhost:3000">Connect</a></h2>
     <p>Hi,</p>
-    <p>you have requested to reset the password of your connect account</p>
-    <p>Please click the link to reset your password</p>
+    <p>you have requested to reset the password of your connect account.</p>
+    <p>Please click the link to reset your password.</p>
     <a href=${url}>Reset Password</a>
+    <h3>Note: The link will expire in 10 minutes.</h3>
   </div>`;
 
   try {

@@ -1,24 +1,16 @@
-import React, { useRef, useContext } from "react";
+import React, { useRef, useContext, useState, useEffect } from "react";
 import Comment from "./Comment";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
 import { BsSendFill } from "react-icons/bs";
 import axios from "../axios";
 import { AuthContext } from "../context/AuthContext";
+import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 
-function Comments({ comments, setComments, showComments, post }) {
+function Comments({ comments, setComments, post }) {
   const commentRef = useRef();
-  const containerRef = useRef();
   const { user: currentUser } = useContext(AuthContext);
+  const [showComments, setShowComments] = useState(false);
 
-  useGSAP(
-    () => {
-      gsap.to(".comments", { height: "auto", duration: 0.5 });
-    },
-    { scope: containerRef }
-  );
-
-  const postComment = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (commentRef.current.value === "") return;
     const newComment = {
@@ -28,58 +20,76 @@ function Comments({ comments, setComments, showComments, post }) {
     };
 
     try {
-      const result = await axios.post("/comment", newComment);
-      setComments((prev) => [...prev, result.data]);
+      await addComment(newComment);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-      commentRef.current.value = "";
-      if (post.userId._id != currentUser._id) {
-        await axios.post("/notification", {
-          receiver: post.userId._id,
-          sender: currentUser._id,
-          type: "Comment",
-          post: post._id,
-          comment: result.data._id,
-          isread: false,
-        });
-      }
+  const addComment = async (newComment) => {
+    const res = await axios.post("/comment", newComment);
+    setComments((prev) => [...prev, res.data]);
+    commentRef.current.value = "";
+  };
+
+  const deleteAComment = async (id) => {
+    try {
+      setComments(comments.filter((c) => c._id != id));
+      await axios.delete(`/comment/${id}`, {
+        data: {
+          userId: currentUser?._id,
+        },
+      });
     } catch (err) {
       console.log(err);
     }
   };
 
   return (
-    <div ref={containerRef}>
-      <div className="mt-4 md:mt-6 border-t-2 pt-4">
-        <form
-          onSubmit={postComment}
-          className="flex bg-bodySecondary items-center rounded-md px-2 py-2"
+    <motion.div>
+      {comments?.length >= 1 && (
+        <p
+          onClick={() => setShowComments((prev) => !prev)}
+          className="text-sm mt-3 hover:underline cursor-pointer text-gray_dark w-fit"
         >
-          <input
-            ref={commentRef}
-            type="text"
-            placeholder="Add a comment"
-            className="w-full bg-transparent flex-1 text-[14px] text-black outline-none placeholder-[#A9A9A9]"
-          />
+          {!showComments
+            ? `View all ${comments.length} comments`
+            : "Hide all comments"}
+        </p>
+      )}
 
-          <button type="submit">
-            <BsSendFill color="#1da1f2" />
-          </button>
-        </form>
-      </div>
-      <div
-        className={`comments pl-3 ${!showComments ? "hidden h-0" : "block"}`}
+      {showComments && (
+        <AnimatePresence>
+          {comments?.map((comment) => (
+            <motion.div
+              key={comment._id}
+              exit={{ opacity: 0 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3, type: "tween" }}
+            >
+              <Comment {...{ comment, deleteAComment }} />
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      )}
+
+      <form
+        onSubmit={handleSubmit}
+        className="flex mt-3 bg-secondary items-center rounded-md px-2 py-2"
       >
-        {comments?.map((c, index) => (
-          <Comment
-            key={index}
-            comment={c}
-            index={index}
-            setComments={setComments}
-            comments={comments}
-          />
-        ))}
-      </div>
-    </div>
+        <input
+          ref={commentRef}
+          type="text"
+          placeholder="Add a comment"
+          className="w-full bg-transparent flex-1 text-[14px] outline-none placeholder-[#A9A9A9]"
+        />
+
+        <button type="submit">
+          <BsSendFill color="#1da1f2" />
+        </button>
+      </form>
+    </motion.div>
   );
 }
 

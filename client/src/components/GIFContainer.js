@@ -40,13 +40,13 @@ function GIFContainer({ sendGif, showGifs }) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, type: "tween" }}
           exit={{ opacity: 1, y: 400 }}
-          className="border-l-[10px] border-r-[10px] border-bodyPrimary bg-bodySecondary flex flex-col h-[45vh] overflow-y-auto scrollbar scrollbar-0"
+          className="border-l-[10px] border-r-[10px] border-primary bg-secondary flex flex-col h-[45vh] overflow-y-auto scrollbar scrollbar-0"
         >
           <input
             value={gifInput}
             onChange={(e) => setGifInput(e.target.value)}
             placeholder="Search GIFs"
-            className="m-1 rounded-sm placeholder-[#A9A9A9] px-2 py-1  text-sm w-60 bg-bodyPrimary outline-none"
+            className="m-1 rounded-sm placeholder-[#A9A9A9] px-2 py-1  text-sm w-60 bg-primary outline-none"
           />
           {loadingGifs ? (
             <div className="flex flex-col space-y-2 items-center justify-center mt-5">

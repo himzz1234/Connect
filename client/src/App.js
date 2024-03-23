@@ -1,16 +1,16 @@
 import { lazy } from "react";
-import { Route, Routes, Navigate } from "react-router-dom";
 import { Suspense, useContext, useEffect, useState } from "react";
+import { Route, Routes, Navigate } from "react-router-dom";
 import { AuthContext } from "./context/AuthContext";
 import axios from "./axios";
 import Loading from "./components/Loading";
-import "react-toastify/dist/ReactToastify.css";
 import ResetPassword from "./pages/ResetPassword";
 import { Toaster } from "react-hot-toast";
 
 const Home = lazy(() => import("./pages/Home"));
 const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
+const ErrorPage = lazy(() => import("./pages/ErrorPage"));
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -27,6 +27,8 @@ function App() {
           },
           withCredentials: true,
         });
+
+        console.log(res.data.user, "it runs");
 
         if (res.data.user) {
           dispatch({ type: "LOGIN_SUCCESS", payload: res.data.user });
@@ -50,13 +52,16 @@ function App() {
   }, []);
 
   return (
-    <div className="outer-section font-roboto bg-bodySecondary text-textColor w-full h-screen lg:overflow-y-hidden overflow-x-hidden scrollbar scrollbar-none">
+    <div className="outer-section font-sans bg-secondary w-full h-screen lg:overflow-y-hidden overflow-x-hidden scrollbar scrollbar-none">
       {loading ? (
         <Loading />
       ) : (
         <Suspense fallback={<Loading />}>
           <Routes>
-            <Route path="/" element={user ? <Home /> : <Register />} />
+            <Route
+              path="/"
+              element={user ? <Home /> : <Navigate to="/register" replace />}
+            />
             <Route
               path="/login"
               element={user ? <Navigate replace to="/" /> : <Login />}
@@ -69,6 +74,7 @@ function App() {
               path="/resetpassword/:token"
               element={user ? <Navigate to="/" replace /> : <ResetPassword />}
             />
+            <Route path="*" element={<ErrorPage />} />
           </Routes>
         </Suspense>
       )}

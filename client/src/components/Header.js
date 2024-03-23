@@ -4,12 +4,12 @@ import { CgEnter } from "react-icons/cg";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { AnimatePresence, motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { SocketContext } from "../context/SocketContext";
 import Notification from "./Notification";
+import { AnimatePresence, motion } from "framer-motion";
 
-function Topbar() {
+function Header() {
   const navigate = useNavigate();
   const { socket } = useContext(SocketContext);
   const { user, dispatch } = useContext(AuthContext);
@@ -19,7 +19,6 @@ function Topbar() {
 
   useEffect(() => {
     socket.on("getNotification", (data) => {
-      console.log(data);
       setNotifications((prev) => [data, ...prev]);
     });
   }, []);
@@ -40,16 +39,16 @@ function Topbar() {
   const logout = async () => {
     await axios.get("/auth/logout", { withCredentials: true });
     dispatch({ type: "LOGOUT" });
-    socket.disconnect();
 
+    socket.disconnect();
     socket.on("getUsers", (users) => {
       setOnlineUsers(users.map((user) => user.userId));
     });
-    navigate("/");
+
+    navigate("/login");
   };
 
   const unread = notifications.filter((notification) => !notification.isread);
-
   const displayNotifications = async () => {
     if (showNotifications) {
       const unreadIds = notifications.map((notif) => {
@@ -66,7 +65,7 @@ function Topbar() {
   };
 
   return (
-    <div className="sticky flex items-center top-0 left-0 py-2 z-30 h-[70px] bg-bodyPrimary w-full px-6">
+    <div className="flex items-center py-2 z-30 h-[70px] bg-primary w-full px-6">
       <div className="flex items-center w-full">
         <img
           src="/assets/socialLogo.png"
@@ -77,10 +76,10 @@ function Topbar() {
 
         <Searchbar {...{ user }} />
 
-        <div className="relative flex items-center space-x-4 sm:space-x-6 lg:space-x-8 text-black lg:ml-14">
+        <div className="relative lg:ml-14">
           <div className="relative">
             {unread.length > 0 && (
-              <div className="absolute text-[8px] grid place-content-center -right-2 -top-3 bg-[#fb2f55] text-white border-[3px] border-bodySecondary w-5 h-5 rounded-full">
+              <div className="absolute text-[8px] grid place-content-center -right-2 -top-3 bg-[#fb2f55] text-white border-[3px] border-secondary w-5 h-5 rounded-full">
                 <p>{unread.length}</p>
               </div>
             )}
@@ -90,7 +89,13 @@ function Topbar() {
           </div>
           <AnimatePresence>
             {showNotifications && notifications.length > 0 && (
-              <motion.div className="absolute scrollbar-none top-8 bg-bodyPrimary shadow-xl border-2 border-bodySecondary right-0 w-[40vh] lg:w-[360px] h-64 overflow-y-scroll rounded-sm">
+              <motion.div
+                exit={{ opacity: 0 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3, type: "tween" }}
+                className="absolute scrollbar-none top-8 bg-primary shadow-lg border-2 border-secondary right-0 w-[40vh] lg:w-[360px] h-64 overflow-y-scroll rounded-sm"
+              >
                 {notifications?.map((notification) => (
                   <Notification key={notification?._id} {...{ notification }} />
                 ))}
@@ -108,29 +113,21 @@ function Topbar() {
             className="w-9 h-9 bg-cover rounded-full"
           ></div>
 
-          <AnimatePresence>
-            {showDropdown && (
-              <motion.div
-                initial={{ opacity: 0, y: -15 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -15 }}
-                transition={{ duration: 0.1, stiffness: 100, type: "spring" }}
-                className="text-black absolute w-32 right-0 -bottom-12 bg-bodyPrimary py-2 px-2 rounded-sm shadow-lg border-2"
+          {showDropdown && (
+            <div className="absolute w-32 right-0 -bottom-12 bg-primary py-2 px-2 rounded-sm shadow-lg border-2">
+              <div
+                onClick={logout}
+                className="flex items-center justify-between"
               >
-                <div
-                  onClick={logout}
-                  className="flex items-center justify-between"
-                >
-                  <p className="text-sm">Logout</p>
-                  <CgEnter className="text-red-500" />
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+                <p className="text-sm">Logout</p>
+                <CgEnter className="text-red-500" />
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
   );
 }
 
-export default Topbar;
+export default Header;

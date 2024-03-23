@@ -2,7 +2,7 @@ import { useContext, useState, useEffect } from "react";
 import Feed from "../components/Feed";
 import Profile from "../components/Profile";
 import Sidebar from "../components/Sidebar";
-import Topbar from "../components/Topbar";
+import Header from "../components/Header";
 import { SocketContext } from "../context/SocketContext";
 import { AuthContext } from "../context/AuthContext";
 
@@ -23,8 +23,8 @@ function Home() {
 
   return (
     <div className="flex flex-col h-full">
-      <Topbar setOnlineUsers={setOnlineUsers} />
-      <section className="flex-1 space-y-5 scrollbar scrollbar-none flex flex-col lg:flex-row items-start text-textColor lg:space-x-4 lg:space-y-0 px-2 py-2 w-full">
+      <Header setOnlineUsers={setOnlineUsers} />
+      <section className="flex-1 space-y-5 scrollbar scrollbar-none flex flex-col lg:flex-row items-start lg:space-x-4 lg:space-y-0 px-2 py-2 w-full">
         <Profile />
         <Feed />
         <Sidebar onlineUsers={onlineUsers} />

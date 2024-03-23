@@ -7,7 +7,7 @@ function Notification({ notification }) {
         return (
           <div className="flex-1 flex items-center">
             <div className="flex-1">
-              <p className="text-[13px] font-normal">
+              <p className="text-[13.5px] font-normal">
                 <span className="font-semibold">
                   {notification.sender.username}
                 </span>{" "}
@@ -31,7 +31,7 @@ function Notification({ notification }) {
         return (
           <div className="flex-1 flex items-center">
             <div className="flex-1">
-              <p className="text-[13px] font-normal">
+              <p className="text-[13.5px] font-normal">
                 <span className="font-semibold">
                   {notification.sender.username}
                 </span>{" "}
@@ -57,7 +57,7 @@ function Notification({ notification }) {
       case "Follow": {
         <div className="flex-1 flex items-center">
           <div className="flex-1">
-            <p className="text-[13px] font-normal">
+            <p className="text-[13.5px] font-normal">
               <span className="font-semibold">
                 {notification.sender.username}
               </span>{" "}
@@ -71,13 +71,13 @@ function Notification({ notification }) {
 
   return (
     <div
-      className={`flex items-center space-x-2 border-t-2 px-2 py-3 ${
+      className={`flex items-center space-x-2 px-2 py-3 ${
         !notification.isread && "bg-gray-200"
       }`}
     >
       <img
         src={notification.sender.profilePicture}
-        className="object-cover bg-red-500 h-8 w-8 rounded-full"
+        className="object-cover bg-red-500 h-9 w-9 rounded-full"
       />
 
       {displayNotificationContent()}

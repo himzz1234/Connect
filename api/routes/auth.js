@@ -1,5 +1,4 @@
 const router = require("express").Router();
-const jwt = require("jsonwebtoken");
 const passport = require("passport");
 const {
   resetPassword,
@@ -9,26 +8,7 @@ const {
   login,
   register,
 } = require("../controllers/auth.controller");
-
-// VERIFY TOKEN
-const verifyJWT = (req, res, next) => {
-  const token = req.cookies.access_token || req.headers.access_token;
-
-  if (token) {
-    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-      if (err) {
-        res.status(401).json({ message: "Unauthorized access!" });
-      }
-
-      req.user = {};
-      req.user.id = decoded.id;
-      req.user.username = decoded.username;
-      next();
-    });
-  } else {
-    res.status(401).json({ message: "Unauthorized access!" });
-  }
-};
+const verifyJWT = require("../middleware/userAuth");
 
 // GOOGLE SIGN IN
 router.get(

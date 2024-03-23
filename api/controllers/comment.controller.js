@@ -26,9 +26,9 @@ const deleteComment = async (req, res) => {
 
 const fetchPostComments = async (req, res) => {
   try {
-    const comments = await Comment.find({ postId: req.params.postId })
-      .sort({ createdAt: -1 })
-      .populate("userId");
+    const comments = await Comment.find({ postId: req.params.postId }).populate(
+      "userId"
+    );
 
     res.status(200).json(comments);
   } catch (err) {

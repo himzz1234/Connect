@@ -8,7 +8,7 @@ const fetchAllUsers = async (req, res) => {
     const users = await User.find({});
     res.status(200).json(users.filter((user) => user._id != req.body.userId));
   } catch (err) {
-    res.status(500).json(err);
+    res.status(400).json(err);
   }
 };
 
@@ -84,6 +84,7 @@ const fetchUser = async (req, res) => {
     const { password, updatedAt, ...other } = user._doc;
 
     await client.set(`user:${id}`, JSON.stringify(other));
+    await client.expire(`user:${id}`, 5000);
     return res.status(200).json(other);
   } catch (err) {
     res.status(500).json(err);
@@ -134,27 +135,25 @@ const followUser = async (req, res) => {
 };
 
 const unfollowUser = async (req, res) => {
-  async (req, res) => {
-    if (req.body.userId !== req.params.id) {
-      try {
-        const user = await User.findById(req.params.id);
-        const currentUser = await User.findById(req.body.userId);
-        if (user.followers.includes(req.body.userId)) {
-          await user.updateOne({ $pull: { followers: req.body.userId } });
-          await currentUser.updateOne({
-            $pull: { following: req.params.id },
-          });
-          res.status(200).json("User has been unfollowed!");
-        } else {
-          res.status(403).json("You don't follow this user");
-        }
-      } catch (err) {
-        res.status(500).json(err);
+  if (req.body.userId !== req.params.id) {
+    try {
+      const user = await User.findById(req.params.id);
+      const currentUser = await User.findById(req.body.userId);
+      if (user.followers.includes(req.body.userId)) {
+        await user.updateOne({ $pull: { followers: req.body.userId } });
+        await currentUser.updateOne({
+          $pull: { following: req.params.id },
+        });
+        res.status(200).json("User has been unfollowed!");
+      } else {
+        res.status(403).json("You don't follow this user");
       }
-    } else {
-      res.status(403).json("You can't unfollow yourself");
+    } catch (err) {
+      res.status(500).json(err);
     }
-  };
+  } else {
+    res.status(403).json("You can't unfollow yourself");
+  }
 };
 
 module.exports = {

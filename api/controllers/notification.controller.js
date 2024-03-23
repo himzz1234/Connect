@@ -1,11 +1,12 @@
-const { getConnectedUsers } = require("../utils/socket");
+const { getConnectedUsers } = require("../utils/socketapi");
 const Notification = require("../models/notification.model");
 
 const createNotification = async (req, res) => {
   const io = req.app.get("io");
-  const receiverSocketId = getConnectedUsers().find(
+
+  const receiver = getConnectedUsers().find(
     (user) => user.userId === req.body.receiver
-  ).socketId;
+  );
 
   try {
     const newNotification = await Notification.create(req.body);
@@ -16,7 +17,9 @@ const createNotification = async (req, res) => {
       { path: "comment", select: "text" },
     ]);
 
-    io.to(receiverSocketId).emit("getNotification", populatedNotification);
+    if (receiver)
+      io.to(receiver.socketId).emit("getNotification", populatedNotification);
+
     res.status(200).json(newNotification);
   } catch (error) {
     res.status(400).json({ message: error.message });
