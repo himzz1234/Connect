@@ -9,6 +9,7 @@ const {
   register,
 } = require("../controllers/auth.controller");
 const verifyJWT = require("../middleware/userAuth");
+const { generateCookie } = require("../utils/auth");
 
 // GOOGLE SIGN IN
 router.get(
