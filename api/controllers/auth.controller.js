@@ -2,6 +2,7 @@ const User = require("../models/user.model");
 const bcrypt = require("bcrypt");
 const sendMail = require("../utils/nodemailer");
 const { generateCookie, generateToken } = require("../utils/auth");
+const { client } = require("../db/redis");
 
 // REGISTER
 const register = async (req, res) => {
@@ -11,7 +12,7 @@ const register = async (req, res) => {
     const userExists = await User.findOne({ email });
     if (!userExists) {
       // generate new password
-      const salt = await bcrypt.genSalt(10); // a salt is random data that is used as an additional input to a one-way function that hashes data
+      const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(password, salt);
 
       // create a new user
@@ -22,9 +23,8 @@ const register = async (req, res) => {
       });
 
       generateCookie(newUser._id, newUser.username, res);
-      res
-        .status(201)
-        .json({ message: "Successfully registered!", user: newUser });
+
+      res.status(201).json({ message: "Successfully registered!", user: data });
     } else {
       res.status(409).json({ message: "User already exists!" });
     }
@@ -36,32 +36,39 @@ const register = async (req, res) => {
 // LOGIN
 const login = async (req, res) => {
   try {
-    const user = await User.findOne({ email: req.body.email });
-    if (user) {
-      bcrypt.compare(req.body.password, user.password, (err, data) => {
-        if (err) {
-          res.status(401).json({ message: err.message });
-        }
+    const user = await User.findOne({ email: req.body.email }).select(
+      "-createdAt -updatedAt"
+    );
 
-        if (data) {
-          generateCookie(user._id, user.username, req.body.rememberMe, res);
-
-          res.status(200).json({
-            message: "Login Successfull!",
-            user: user,
-          });
-        } else {
-          res.status(401).json({ message: "Password doesn't match!" });
-        }
-      });
-    } else {
-      res.status(401).json({ message: "User not found!" });
+    if (!user) {
+      return res.status(401).json({ message: "User not found!" });
     }
+
+    bcrypt.compare(req.body.password, user.password, async (err, data) => {
+      if (err) {
+        return res.status(401).json({ message: err.message });
+      }
+
+      if (data) {
+        generateCookie(user._id, user.username, req.body.rememberMe, res);
+
+        await client.set(`user:${user._id}`, JSON.stringify(user));
+        await client.expire(`user:${user._id}`, 300);
+
+        return res.status(200).json({
+          message: "Login Successful!",
+          user: user,
+        });
+      } else {
+        return res.status(401).json({ message: "Password doesn't match!" });
+      }
+    });
   } catch (err) {
-    res.status(500).json(err);
+    return res.status(500).json(err);
   }
 };
 
+// LOGOUT
 const logout = async (req, res) => {
   res.clearCookie("access_token");
 
@@ -70,10 +77,13 @@ const logout = async (req, res) => {
   });
 };
 
-// GET USER
+// GET USER AUTH
 const getAuth = async (req, res) => {
   try {
-    const user = await User.findById(req.user.id);
+    const user = await User.findById(req.user.id).select(
+      "-password -createdAt -updatedAt"
+    );
+
     res.status(200).json({ user: user });
   } catch (err) {
     res.status(401).json(err);
@@ -82,11 +92,9 @@ const getAuth = async (req, res) => {
 
 // FORGOT PASSWORD
 const sendResetMail = async (req, res) => {
-  const { emailId } = req.body;
-
-  const user = await User.findOne({ email: emailId });
+  const user = await User.findOne({ _id: req.user.id });
   const url =
-    "https://connectsocialmedia.onrender.com/resetpassword/" +
+    "https://connectsocialmedia.onrender.com" +
     generateToken(user._id, user.username, "10m");
 
   const body = `<div>

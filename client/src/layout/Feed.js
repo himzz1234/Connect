@@ -1,19 +1,16 @@
-import React, { useState, useContext, useRef, useEffect } from "react";
+import React, { useState, useContext, useRef } from "react";
 import axios from "../axios";
 import { RiAttachment2 } from "react-icons/ri";
 import { IoIosClose } from "react-icons/io";
 import { BsSendFill } from "react-icons/bs";
 import { AuthContext } from "../context/AuthContext";
 import ReactLoading from "react-loading";
-import Posts from "./Posts";
+import Posts from "../components/Posts";
 import useCloudinaryUpload from "../hooks/useCloudinaryUpload";
-import { motion } from "framer-motion";
 
 function Feed() {
   const desc = useRef();
   const imageRef = useRef(null);
-  const containerRef = useRef(null);
-  const [page, setPage] = useState(1);
   const { user } = useContext(AuthContext);
   const [newPost, setNewPost] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -25,53 +22,9 @@ function Feed() {
     imageRef.current.src = URL.createObjectURL(e.target.files[0]);
   };
 
-  const handleScroll = () => {
-    const container = containerRef?.current;
-    if (window.innerWidth >= 1024) {
-      if (
-        container.scrollHeight - container.scrollTop <=
-        container.clientHeight + 10
-      ) {
-        setPage((prev) => prev + 1);
-      }
-    } else {
-      if (
-        document.querySelector(".outer-section").scrollHeight -
-          document.querySelector(".outer-section").scrollTop <=
-        window.innerHeight + 10
-      ) {
-        setPage((prev) => prev + 1);
-      }
-    }
-  };
-
-  useEffect(() => {
-    const container = containerRef.current;
-    container.addEventListener("scroll", handleScroll);
-    document
-      .querySelector(".outer-section")
-      .addEventListener("scroll", handleScroll);
-
-    return () => {
-      container.removeEventListener("scroll", handleScroll);
-      document
-        .querySelector(".outer-section")
-        .removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
-  const addAPost = async (newPost) => {
-    const res = await axios.post("/post", newPost);
-
-    setNewPost(res.data);
-    setIsLoading(false);
-
-    desc.current.value = "";
-    setImageToSend("");
-  };
-
   const submitHandler = async (e) => {
     e.preventDefault();
+
     if (imageToSend || desc.current.value) {
       setIsLoading(true);
     } else return;
@@ -88,18 +41,21 @@ function Feed() {
     };
 
     try {
-      await addAPost(newPost);
+      const res = await axios.post("/post", newPost, { withCredentials: true });
+      setNewPost(res.data);
+
+      setIsLoading(false);
+
+      desc.current.value = "";
+      setImageToSend("");
     } catch (err) {
       setIsLoading(false);
     }
   };
 
   return (
-    <div
-      ref={containerRef}
-      className="feed order-3 lg:order-2 w-full lg:w-6/12 lg:h-full overflow-y-auto scrollbar scrollbar-w-0"
-    >
-      <div className="bg-primary px-5 md:px-6 py-5 rounded-md">
+    <>
+      <div className="bg-primary md:px-5 px-2 py-2 md:py-5 rounded-sm sm:rounded-md">
         <div
           className={`flex items-start space-x-3 md:space-x-4 ${
             isLoading ? "pointer-events-none opacity-50" : "pointer-events-auto"
@@ -107,16 +63,16 @@ function Feed() {
         >
           <div
             style={{ backgroundImage: `url(${user?.profilePicture})` }}
-            className="w-8 h-8 md:w-[44px] md:h-[44px] bg-cover rounded-full -ml-2"
+            className="w-9 h-9 md:w-[44px] md:h-[44px] bg-cover rounded-full md:-ml-2"
           ></div>
           <div className="flex-1">
             <form onSubmit={submitHandler} className="flex-1">
-              <div className="bg-secondary flex items-center px-3 py-2 rounded-md space-x-3">
+              <div className="bg-secondary flex items-center px-2 py-2 md:px-3 md:py-2 rounded-md space-x-2 md:space-x-3">
                 <input
                   ref={desc}
                   type="text"
                   placeholder={`What's on your mind ${user?.username}?`}
-                  className="bg-transparent text-[12px] sm:text-[13px] md:text-[16px] flex-1 outline-none placeholder-[#A9A9A9]"
+                  className="bg-transparent text-[13px] sm:text-[14px] md:text-[16px] lg:text-[15px] flex-1 outline-none placeholder-[#A9A9A9]"
                 />
 
                 <label htmlFor="addAPhoto">
@@ -128,7 +84,6 @@ function Feed() {
                 <input
                   type="file"
                   id="addAPhoto"
-                  name="addAPhoto"
                   className="hidden"
                   onChange={setMediaFile}
                   accept="image/png, image/jpg, image/jpeg"
@@ -179,10 +134,10 @@ function Feed() {
         </div>
       )}
 
-      <div className="mt-6">
-        <Posts {...{ page, setPage, newPost }} />
+      <div className="mt-4 sm:mt-6">
+        <Posts {...{ newPost }} />
       </div>
-    </div>
+    </>
   );
 }
 

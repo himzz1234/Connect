@@ -29,6 +29,10 @@ const notificationSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    expiresAfter: {
+      type: Date,
+      default: new Date().setMonth(new Date().getMonth() + 1).toString(),
+    },
   },
   { timestamps: true }
 );

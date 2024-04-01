@@ -7,7 +7,6 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
-const helmet = require("helmet");
 const userRoutes = require("./routes/users");
 const authRoutes = require("./routes/auth");
 const postRoutes = require("./routes/post");
@@ -16,6 +15,7 @@ const notifRoutes = require("./routes/notifications");
 const messageRoutes = require("./routes/message");
 const commentRoutes = require("./routes/comment");
 const { initializeSocket } = require("./utils/socketapi");
+const verifyJWT = require("./middleware/userAuth");
 
 dotenv.config();
 
@@ -32,29 +32,26 @@ mongoose.connect(process.env.MONGO_URL, {
 
 // middlewares
 app.use(passport.initialize());
-
 require("./passport");
 app.use(passport.session());
 
-const corsOptions = {
-  credentials: true,
-};
-
-if (process.env.NODE_ENV === "development") {
-  corsOptions.origin = "http://localhost:3000";
-} else if (process.env.NODE_ENV === "production") {
-  corsOptions.origin = "https://connectsocialmedia.onrender.com";
-}
-
-app.use(cors(corsOptions));
-app.set("trust proxy", 1);
+app.use(
+  cors({
+    origin: [
+      "https://connectsocialmedia.onrender.com",
+      "http://localhost:3000",
+    ],
+    credentials: true,
+  })
+);
 
 app.use(express.json());
-app.use(helmet());
 app.use(cookieParser());
 
-app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
+
+app.use(verifyJWT);
+app.use("/api/users", userRoutes);
 app.use("/api/post", postRoutes);
 app.use("/api/comment", commentRoutes);
 app.use("/api/message", messageRoutes);

@@ -2,9 +2,8 @@ const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const User = require("./models/user.model");
 
-const GOOGLE_CLIENT_ID =
-  "139040244411-o11687g5s7a80g2t52lputcbf8dmfav6.apps.googleusercontent.com";
-const GOOGLE_CLIENT_SECRET = "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";
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 
 passport.use(
   new GoogleStrategy(
@@ -14,7 +13,7 @@ passport.use(
       callbackURL:
         "https://mernsocialmedia.onrender.com/api/auth/google/callback",
     },
-    async function (accessToken, refreshToken, profile, done) {
+    async function (profile, done) {
       const { sub, name, picture, email } = profile._json;
 
       let user = await User.findOne({ email: email });

@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import axios from "../axios";
-import MessagePopup from "./MessagePopup";
-import Conversation from "./Conversation";
+import MessagePopup from "../components/MessagePopup";
+import Conversation from "../components/Conversation";
 import { AnimatePresence } from "framer-motion";
 
 function Sidebar({ onlineUsers }) {
@@ -13,7 +13,9 @@ function Sidebar({ onlineUsers }) {
   useEffect(() => {
     const getConversations = async () => {
       try {
-        const res = await axios.get(`/conversation/${user._id}`);
+        const res = await axios.get(`/conversation/${user._id}`, {
+          withCredentials: true,
+        });
 
         setConversations(res.data);
       } catch (err) {
@@ -25,8 +27,8 @@ function Sidebar({ onlineUsers }) {
   }, []);
 
   return (
-    <div className="order-2 lg:order-3 lg:relative w-full lg:w-3/12 h-full flex flex-col bg-primary py-2 px-2 rounded-md">
-      <div className="space-y-2 flex-1">
+    <>
+      <div className="space-y-1 sm:space-y-2 flex-1">
         {conversations.map((conversation) => (
           <Conversation
             key={conversation._id}
@@ -40,7 +42,7 @@ function Sidebar({ onlineUsers }) {
           <MessagePopup {...{ currentChat, setCurrentChat, onlineUsers }} />
         )}
       </AnimatePresence>
-    </div>
+    </>
   );
 }
 

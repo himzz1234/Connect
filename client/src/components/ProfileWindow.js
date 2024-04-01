@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import axios from "../axios";
 import ReactLoading from "react-loading";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 
-function ProfileWindow({ id }) {
+function ProfileWindow({ id, showProfile }) {
   const [profile, setProfile] = useState({});
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchProfileDetails = async () => {
       try {
-        const res = await axios.get(`/users/${id}`);
+        const res = await axios.get(`/users/${id}`, { withCredentials: true });
         setProfile(res.data);
 
         if (res.status === 200) setIsLoading(false);
@@ -24,11 +24,13 @@ function ProfileWindow({ id }) {
 
   return (
     <motion.div
-      exit={{ opacity: 0 }}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.25, type: "tween" }}
-      className="bg-secondary h-80 w-72 absolute -left-[320px] top-0 shadow-lg rounded-md px-2 py-2"
+      initial={{ opacity: 0, scaleX: 0.5 }}
+      animate={{ opacity: 1, scaleX: 1 }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
+      className="bg-secondary h-80 w-72 hidden lg:block absolute -left-[320px] top-0 shadow-lg rounded-md px-2 py-2"
+      style={{
+        transformOrigin: showProfile ? "right" : "100%", // Setting the transform origin to right
+      }}
     >
       {isLoading ? (
         <div className="flex items-center justify-center h-full">

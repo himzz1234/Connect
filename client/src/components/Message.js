@@ -3,18 +3,27 @@ import moment from "moment";
 
 function Message({ message, currentChat }) {
   return (
-    <div>
+    <div
+      className={`w-48 py-3 flex flex-col ${
+        message.sender !== currentChat?.friend._id ? "ml-auto" : "mr-auto"
+      }`}
+    >
       <div
-        className={`p-2 bg-secondary ${
+        className={`p-2 space-y-2  ${
           message.sender !== currentChat.friend._id
-            ? "rounded-l-sm border-l-[#6A0DAD] border-l-2 rounded-br-sm"
-            : "rounded-r-sm border-r-accent border-r-2 rounded-bl-sm"
+            ? "rounded-t-md rounded-l-md bg-accent text-white"
+            : "rounded-t-md rounded-r-md bg-secondary"
         }`}
       >
-        {message.type == "text" ? (
+        {message.url && (
+          <img
+            src={message.url}
+            alt="gif"
+            className=" w-full object-contain rounded-sm"
+          />
+        )}
+        {message.text && (
           <p className="text-[14px] break-words">{message.text}</p>
-        ) : (
-          <img src={message.url} className="w-full" />
         )}
       </div>
       <p className="text-xs mt-2 text-[#73899a]">

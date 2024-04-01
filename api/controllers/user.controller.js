@@ -1,28 +1,25 @@
 const User = require("../models/user.model");
 const cloudinary = require("cloudinary").v2;
-const bcrypt = require("bcrypt");
 const { client } = require("../db/redis");
 
+// FETCH USERS
 const fetchAllUsers = async (req, res) => {
+  const searchTerm = req.query.searchTerm || "";
   try {
-    const users = await User.find({});
-    res.status(200).json(users.filter((user) => user._id != req.body.userId));
+    const users = await User.find({
+      _id: { $ne: req.body.userId },
+      username: { $regex: searchTerm, $options: "i" },
+    });
+
+    res.status(200).json(users);
   } catch (err) {
     res.status(400).json(err);
   }
 };
 
+// UPDATE USER DETAILS
 const updateUser = async (req, res) => {
-  if (req.body.userId === req.params.id || req.body.isAdmin) {
-    if (req.body.password) {
-      try {
-        const salt = await bcrypt.genSalt(10);
-        req.body.password = await bcrypt.hash(req.body.password, salt);
-      } catch (err) {
-        return res.status(500).json(err);
-      }
-    }
-
+  if (req.body.userId === req.params.id) {
     let url = "";
     try {
       if (req.body.profilePicture) {
@@ -45,15 +42,20 @@ const updateUser = async (req, res) => {
             quality: "auto:best",
             secure: true,
           });
+
           req.body.coverPicture = url;
         }
       }
 
-      await User.findByIdAndUpdate(req.params.id, {
+      const updatedUser = await User.findByIdAndUpdate(req.params.id, {
         $set: req.body,
       });
 
-      console.log("updated");
+      const { password, updatedAt, ...other } = updatedUser._doc;
+
+      await client.set(`user:${updatedUser._id}`, JSON.stringify(other));
+      await client.expire(`user:${updatedUser._id}`, 300);
+
       res.status(200).json("Account has been updated!");
     } catch (err) {
       res.status(500).json(err);
@@ -63,8 +65,9 @@ const updateUser = async (req, res) => {
   }
 };
 
+// DELETE A USER
 const deleteUser = async (req, res) => {
-  if (req.body.userId === req.params.id || req.body.isAdmin) {
+  if (req.body.userId === req.params.id) {
     try {
       await User.findByIdAndDelete(req.params.id);
       return res.status(200).json("Account has been deleted!");
@@ -72,10 +75,11 @@ const deleteUser = async (req, res) => {
       return res.status(500).json(err);
     }
   } else {
-    return res.status(403).json("You can update only your userID");
+    return res.status(401).json("You can only delete your account!");
   }
 };
 
+// FETCH USER DETAILS
 const fetchUser = async (req, res) => {
   const { id } = req.params;
   try {
@@ -88,34 +92,39 @@ const fetchUser = async (req, res) => {
     const { password, updatedAt, ...other } = user._doc;
 
     await client.set(`user:${id}`, JSON.stringify(other));
-    await client.expire(`user:${id}`, 5000);
+    await client.expire(`user:${id}`, 300);
     return res.status(200).json(other);
   } catch (err) {
     res.status(500).json(err);
   }
 };
 
+// FETCH A USER'S CONNECTIONS
 const fetchConnections = async (req, res) => {
   try {
     const user = await User.findById(req.params.userId);
-    const friends = await Promise.all(
-      user.following.map(async (fId) => {
-        return User.findById(fId);
+
+    const commonUserIds = user.following.reduce((common, user_id) => {
+      if (user.followers.includes(user_id)) {
+        common.push(user_id);
+      }
+
+      return common;
+    }, []);
+
+    const connections = await Promise.all(
+      commonUserIds.map(async (id) => {
+        return User.findById(id).select("_id username profilePicture");
       })
     );
 
-    let friendsList = [];
-    friends.map((friend) => {
-      const { _id, username, profilePicture } = friend;
-      friendsList.push({ _id, username, profilePicture });
-    });
-
-    res.status(200).json(friendsList);
+    res.status(200).json(connections);
   } catch (err) {
     res.status(500).json(err);
   }
 };
 
+// FOLLOW A USER
 const followUser = async (req, res) => {
   if (req.body.userId !== req.params.id) {
     try {
@@ -138,6 +147,7 @@ const followUser = async (req, res) => {
   }
 };
 
+// UNFOLLOW A USER
 const unfollowUser = async (req, res) => {
   if (req.body.userId !== req.params.id) {
     try {

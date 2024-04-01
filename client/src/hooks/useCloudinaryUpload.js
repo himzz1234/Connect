@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "../axios";
+import axios from "axios";
 
 function useCloudinaryUpload() {
   const [loading, setLoading] = useState(false);
@@ -7,6 +7,7 @@ function useCloudinaryUpload() {
   const uploadToCloudinary = async (image) => {
     if (!image) return;
     setLoading(true);
+
     const data = new FormData();
     data.append("file", image);
     data.append("upload_preset", "social-media");

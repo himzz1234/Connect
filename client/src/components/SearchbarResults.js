@@ -2,26 +2,34 @@ import React, { useState } from "react";
 import axios from "../axios";
 import ReactLoading from "react-loading";
 
-function SearchbarResults({ u, index, user }) {
+function SearchbarResults({ u, user }) {
   const [status, setStatus] = useState(
     user?.following.findIndex((f) => f === u._id) > -1 ? "Unfollow" : "Follow"
   );
-  const [loading, setLoading] = useState(false);
 
+  const [loading, setLoading] = useState(false);
   const followUser = async (id) => {
     setLoading(true);
     try {
-      await axios.post(`/conversation`, {
-        senderId: user?._id,
-        receiverId: id,
-      });
+      await axios.post(
+        `/conversation`,
+        {
+          senderId: user?._id,
+          receiverId: id,
+        },
+        { withCredentials: true }
+      );
     } catch (error) {
       console.log(error);
     }
 
-    await axios.put(`/users/follow/${id}`, {
-      userId: user?._id,
-    });
+    await axios.put(
+      `/users/follow/${id}`,
+      {
+        userId: user?._id,
+      },
+      { withCredentials: true }
+    );
 
     setLoading(false);
     setStatus("Unfollow");
@@ -30,19 +38,20 @@ function SearchbarResults({ u, index, user }) {
   const unfollowUser = async (id) => {
     setLoading(true);
 
-    await axios.put(`/users/unfollow/${id}`, {
-      userId: user?._id,
-    });
+    await axios.put(
+      `/users/unfollow/${id}`,
+      {
+        userId: user?._id,
+      },
+      { withCredentials: true }
+    );
 
     setLoading(false);
     setStatus("Follow");
   };
 
   return (
-    <div
-      key={u._id}
-      className="relative flex flex-col md:flex-row md:space-x-3 md:items-center"
-    >
+    <div className="flex flex-col md:flex-row md:space-x-3 md:items-center">
       <div className="flex flex-1 items-center space-x-3 py-3 pl-3">
         <div
           style={{ backgroundImage: `url(${u?.profilePicture})` }}

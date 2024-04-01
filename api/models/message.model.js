@@ -7,17 +7,12 @@ const messageSchema = new mongoose.Schema(
     },
     sender: {
       type: String,
-    },
-    type: {
-      type: String,
+      required: true,
     },
     url: {
       type: String,
     },
     text: {
-      type: String,
-    },
-    img: {
       type: String,
     },
   },

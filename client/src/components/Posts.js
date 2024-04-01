@@ -1,15 +1,38 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import Post from "./Post";
 import axios from "../axios";
 import { AuthContext } from "../context/AuthContext";
 import ReactLoading from "react-loading";
 import { AnimatePresence, motion } from "framer-motion";
 
-function Posts({ page, setPage, newPost }) {
+function Posts({ newPost }) {
+  const [page, setPage] = useState(1);
+  const elementRef = useRef(null);
   const [posts, setPosts] = useState([]);
-  const [loadingPosts, setLoadingPosts] = useState(false);
   const { user } = useContext(AuthContext);
   const [hasMoreData, setHasMoreData] = useState(true);
+
+  function onIntersection(entries) {
+    const firstEntry = entries[0];
+
+    if (firstEntry.isIntersecting && hasMoreData) {
+      fetchPosts();
+    }
+  }
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(onIntersection);
+
+    if (observer && elementRef.current) {
+      observer.observe(elementRef.current);
+    }
+
+    return () => {
+      if (observer) {
+        observer.disconnect();
+      }
+    };
+  }, [posts]);
 
   useEffect(() => {
     if (newPost) {
@@ -18,28 +41,43 @@ function Posts({ page, setPage, newPost }) {
   }, [newPost]);
 
   const fetchPosts = async () => {
-    setLoadingPosts(true);
+    try {
+      const res = await axios.get(
+        `/post/timeline/${user?._id}?pageNumber=${page}`,
+        { withCredentials: true }
+      );
 
-    const res = await axios.get(
-      `/post/timeline/${user?._id}?pageNumber=${page}`
-    );
-
-    if (res.data.posts.length == 0) {
-      setHasMoreData(false);
-    } else {
-      setPosts((prevPosts) => [...prevPosts, ...res.data.posts]);
+      if (res.data.posts.length == 0) {
+        setHasMoreData(false);
+      } else {
+        setPosts((prevPosts) => [...prevPosts, ...res.data.posts]);
+        setPage((prev) => prev + 1);
+      }
+    } catch (error) {
+      console.log(error);
     }
-    setLoadingPosts(false);
   };
 
-  useEffect(() => {
-    if (hasMoreData) {
-      fetchPosts();
+  const deleteAPost = async (id) => {
+    try {
+      await axios.delete(
+        `/post/${id}`,
+        { withCredentials: true },
+        {
+          data: {
+            userId: user._id,
+          },
+        }
+      );
+
+      setPosts((prevPosts) => prevPosts.filter((p) => p._id !== id));
+    } catch (err) {
+      console.log(err);
     }
-  }, [page, hasMoreData]);
+  };
 
   return (
-    <div className="space-y-5 posts">
+    <div className="space-y-5">
       <AnimatePresence>
         {posts.map((post) => {
           return (
@@ -49,19 +87,18 @@ function Posts({ page, setPage, newPost }) {
               exit={{ opacity: 0 }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, type: "tween" }}
+              transition={{ duration: 0.5 }}
             >
-              <Post {...{ post, setPosts, setPage }} />
+              <Post {...{ post, deleteAPost }} />
             </motion.div>
           );
         })}
+        {hasMoreData && (
+          <div ref={elementRef} className="flex items-center justify-center">
+            <ReactLoading type="spin" color="#1da1f2" height={20} width={20} />
+          </div>
+        )}
       </AnimatePresence>
-
-      {loadingPosts && hasMoreData && (
-        <div className="flex items-center justify-center mt-5 py-2">
-          <ReactLoading type="spin" color="#1da1f2" height={24} width={24} />
-        </div>
-      )}
     </div>
   );
 }

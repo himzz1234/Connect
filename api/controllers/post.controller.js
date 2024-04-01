@@ -2,7 +2,9 @@ const cloudinary = require("cloudinary").v2;
 const Post = require("../models/post.model");
 const User = require("../models/user.model");
 const Comment = require("../models/comment.model");
+const Notification = require("../models/notification.model");
 
+// CREATE A NEW POST
 const createPost = async (req, res) => {
   if (req.body.img) {
     const regex = /\/([^\/]+)$/;
@@ -14,16 +16,16 @@ const createPost = async (req, res) => {
     }
   }
 
-  const newPost = new Post(req.body);
   try {
-    const savedPost = await newPost.save();
-    await savedPost.populate("userId");
-    res.status(200).json(savedPost);
+    const newpost = await Post.create(req.body);
+    await newpost.populate("userId");
+    res.status(200).json(newpost);
   } catch (err) {
     res.status(500).json(err);
   }
 };
 
+// UPDATE A POST
 const updatePost = async (req, res) => {
   try {
     const post = Post.findById(req.params.id);
@@ -39,6 +41,7 @@ const updatePost = async (req, res) => {
   }
 };
 
+// DELETE A POST
 const deletePost = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
@@ -56,6 +59,8 @@ const deletePost = async (req, res) => {
 
       await post.deleteOne();
       await Comment.deleteMany({ postId: req.params.id });
+      await Notification.deleteMany({ post: req.params.id });
+
       res.status(200).json("The post has been deleted!");
     } else {
       res.status(403).json("You can delete only your post");
@@ -65,6 +70,7 @@ const deletePost = async (req, res) => {
   }
 };
 
+// LIKE/DISLIKE A POST
 const likePost = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
@@ -80,6 +86,7 @@ const likePost = async (req, res) => {
   }
 };
 
+// FETCH A POST
 const fetchPost = async (req, res) => {
   try {
     const post = Post.findById(req.params.id).populate("userId");
@@ -89,9 +96,9 @@ const fetchPost = async (req, res) => {
   }
 };
 
+// FETCH TIMELINE POSTS
 const fetchTimelinePosts = async (req, res) => {
   const pageNumber = parseInt(req.query.pageNumber) || 1;
-
   const postsPerPage = 3;
   const skipCount = (pageNumber - 1) * postsPerPage;
 
@@ -105,11 +112,7 @@ const fetchTimelinePosts = async (req, res) => {
       .sort({ createdAt: -1 })
       .populate("userId");
 
-    const totalCount = await Post.find({
-      userId: { $in: allUsers },
-    }).countDocuments();
-
-    res.status(200).json({ posts: [...feedPosts], length: totalCount });
+    res.status(200).json({ posts: [...feedPosts] });
   } catch (err) {
     res.status(500).json(err);
   }

@@ -10,7 +10,6 @@ import { Toaster } from "react-hot-toast";
 const Home = lazy(() => import("./pages/Home"));
 const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
-const ErrorPage = lazy(() => import("./pages/ErrorPage"));
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -50,7 +49,7 @@ function App() {
   }, []);
 
   return (
-    <div className="outer-section font-sans bg-secondary w-full h-screen lg:overflow-y-hidden overflow-x-hidden scrollbar scrollbar-none">
+    <div className="outer-section font-sans bg-secondary w-full lg:h-screen lg:overflow-y-hidden overflow-x-hidden scrollbar scrollbar-none">
       {loading ? (
         <Loading />
       ) : (
@@ -72,7 +71,6 @@ function App() {
               path="/resetpassword/:token"
               element={user ? <Navigate to="/" replace /> : <ResetPassword />}
             />
-            <Route path="*" element={<ErrorPage />} />
           </Routes>
         </Suspense>
       )}

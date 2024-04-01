@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState } from "react";
 import { MdAddAPhoto } from "react-icons/md";
 import ReactLoading from "react-loading";
 import { AuthContext } from "../context/AuthContext";
@@ -16,10 +16,14 @@ function CoverPicture() {
 
     try {
       const url = await uploadToCloudinary(image);
-      await axios.put(`/users/${user._id}`, {
-        userId: user._id,
-        coverPicture: url,
-      });
+      await axios.put(
+        `/users/${user._id}`,
+        {
+          userId: user._id,
+          coverPicture: url,
+        },
+        { withCredentials: true }
+      );
 
       setCoverPicture(url);
     } catch (err) {
@@ -29,7 +33,7 @@ function CoverPicture() {
 
   return (
     <div
-      className="relative z-10"
+      className={`relative z-10 ${loading && "pointer-events-none"}`}
       onMouseEnter={() => {
         !loading && setIsCoverShown(true);
       }}
@@ -51,7 +55,6 @@ function CoverPicture() {
           <input
             type="file"
             id="cover"
-            name="cover"
             className="hidden"
             accept="image/png, image/jpg, image/jpeg"
             onChange={(e) => updateCoverPicture(e.target.files[0])}

@@ -12,6 +12,12 @@ module.exports = {
         background: "white",
         gray_dark: "rgb(107, 114, 128)",
       },
+      screens: {
+        sm: "600px",
+        md: "768px",
+        lg: "992px",
+        xl: "1200px",
+      },
     },
   },
   plugins: [require("tailwind-scrollbar")({ nocompatible: true })],

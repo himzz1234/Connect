@@ -16,10 +16,14 @@ function ProfilePicture() {
 
     try {
       const url = await uploadToCloudinary(image);
-      await axios.put(`/users/${user._id}`, {
-        userId: user._id,
-        profilePicture: url,
-      });
+      await axios.put(
+        `/users/${user._id}`,
+        {
+          userId: user._id,
+          profilePicture: url,
+        },
+        { withCredentials: true }
+      );
 
       setProfilePicture(url);
     } catch (err) {
@@ -28,7 +32,11 @@ function ProfilePicture() {
   };
 
   return (
-    <div className="absolute bottom-0 right-1/2 translate-x-1/2 translate-y-1/2 w-14 h-14 rounded-full border-2 cursor-pointer z-20 bg-background">
+    <div
+      className={`absolute cursor-pointer bottom-0 right-1/2 translate-x-1/2 translate-y-1/2 w-14 h-14 rounded-full border-2 z-20 bg-background ${
+        loading && "pointer-events-none"
+      }`}
+    >
       <div
         onMouseEnter={() => {
           !loading && setIsProfileShown(true);
@@ -61,7 +69,6 @@ function ProfilePicture() {
             <input
               type="file"
               id="profile"
-              name="profile"
               accept="image/png, image/jpg, image/jpeg"
               className="hidden"
               onChange={(e) => updateProfilePicture(e.target.files[0])}

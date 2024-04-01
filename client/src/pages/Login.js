@@ -69,40 +69,53 @@ function Login() {
 
   return (
     <div className="h-full flex flex-col bg-background">
-      <div className="h-full flex flex-1 flex-col md:flex-row text-black p-2 gap-8 md:gap-0">
-        <div className="bg-background md:bg-[#f2f4f8] h-20 md:h-full md:w-[400px] lg:w-[580px] rounded-md">
+      <div className="h-full flex flex-1 flex-col lg:flex-row sm:p-2 gap-4 md:gap-8 lg:gap-0">
+        <div className="bg-background lg:bg-[#f2f4f8] h-20 lg:h-full lg:w-[400px] xl:w-[580px] rounded-md">
           <img
             src="/assets/home-illustration-3.svg"
-            className="h-full w-full hidden md:block"
+            className="h-full w-full hidden lg:block"
           />
         </div>
 
-        <div className="flex flex-1 md:items-center justify-center">
+        <div className="flex flex-1 lg:items-center justify-center">
           <div
             onClick={() => navigate("/")}
-            className="flex items-center cursor-pointer absolute top-2 left-2"
+            className="flex items-center cursor-pointer absolute left-1/2 -translate-x-1/2 lg:translate-x-0 top-2 lg:left-2"
           >
-            <img
-              src="/assets/socialLogo.png"
-              width={80}
-              height={80}
-              className="-mr-3.5"
-            />
-            <h1 className="font-bold text-[22px] font-oswald mt-2">connect</h1>
+            <picture className="lg:-mr-4">
+              <source
+                media="(min-width: 992px)"
+                srcSet="/assets/socialLogo.png"
+                width={100}
+                height={100}
+              ></source>
+              <source
+                media="(min-width: 768px)"
+                srcSet="/assets/socialLogo.png"
+                width={120}
+                height={120}
+              ></source>
+              <source
+                media="(min-width: 600px)"
+                srcSet="/assets/socialLogo.png"
+                width={110}
+                height={110}
+              ></source>
+              <img src="/assets/socialLogo.png" width={100} height={100} />
+            </picture>
+            <h1 className="font-bold lg:text-[22px] hidden lg:block lg:mt-3">
+              connect
+            </h1>
           </div>
           {forgotPassword ? (
             <div className="flex flex-col gap-6 items-center">
               <div className="flex flex-col gap-2 w-96">
-                <h1 className="text-3xl text-center font-semibold">
+                <h1 className="text-lg sm:text-2xl md:text-3xl font-semibold text-center">
                   Forgot Password?
                 </h1>
-                {/* <p className="leading-[26px] text-[15px]">
-                  No problem. Just enter your email address and we will tell you
-                  what to do next.
-                </p> */}
               </div>
 
-              <div className="w-full max-w-[450px] lg:w-[450px] space-y-4 self-center">
+              <div className="w-full px-5 sm:px-0 sm:max-w-[450px] sm:w-[450px] self-center">
                 <form
                   onSubmit={recoverPassword}
                   className="w-full md:h-fit flex flex-col rounded-md space-y-2 lg:space-y-5"
@@ -115,18 +128,22 @@ function Login() {
                     ></InputContainer>
                   </div>
 
-                  <button className="primary-btn">Recover Password</button>
+                  <button className="primary-btn">
+                    <p className="text-[14px] sm:text-[15px]">
+                      Recover Password
+                    </p>
+                  </button>
                 </form>
               </div>
             </div>
           ) : (
             <div className="flex flex-col gap-6 items-center">
               <div className="flex flex-col gap-2 w-96">
-                <h1 className="text-3xl font-semibold text-center">
+                <h1 className="text-lg sm:text-2xl md:text-3xl font-semibold text-center">
                   Sign in to Connect
                 </h1>
               </div>
-              <div className="w-full max-w-[450px] lg:w-[450px] space-y-4 self-center">
+              <div className="w-full px-5 sm:px-0 sm:max-w-[450px] sm:w-[450px] md:space-y-4 sm:space-y-3 space-y-2 self-center">
                 <form
                   onSubmit={handleClick}
                   className="w-full md:h-fit flex flex-col rounded-md space-y-2 lg:space-y-5"
@@ -162,11 +179,13 @@ function Login() {
                           type="checkbox"
                           onChange={(e) => setRememberMe(e.target.checked)}
                         />
-                        <p className="text-[13px] md:text-sm">Remember me</p>
+                        <p className="text-[13px] sm:text-sm md:text-[15px]">
+                          Remember me
+                        </p>
                       </div>
                       <p
                         onClick={recoverPassword}
-                        className="text-[13px] text-accent hover:underline md:text-sm cursor-pointer"
+                        className="text-[13px] sm:text-sm md:text-[15px] text-accent hover:underline md:text-sm cursor-pointer"
                       >
                         Forgot Password?
                       </p>
@@ -182,7 +201,7 @@ function Login() {
                         width={20}
                       />
                     ) : (
-                      <p className="text-[15px]">Log In</p>
+                      <p className="text-[13px] sm:text-[15px]">Log In</p>
                     )}
                   </button>
                 </form>
@@ -191,12 +210,14 @@ function Login() {
                 </p>
                 <button
                   onClick={signInGoogle}
-                  className="border-2 border-[#e8ebf3] w-full py-3 rounded-md text-[14px] flex items-center gap-2 justify-center"
+                  className="border-2 border-[#e8ebf3] w-full py-2 sm:py-3 rounded-md flex items-center gap-2 justify-center"
                 >
                   <FcGoogle size={18} />
-                  <p className="text-[15px]">Sign in with google</p>
+                  <p className="text-[13px] sm:text-[15px]">
+                    Sign in with google
+                  </p>
                 </button>
-                <p className="text-[15px] text-gray_dark">
+                <p className="text-[13px] sm:text-[15px] text-gray_dark">
                   Don't have an account?{" "}
                   <Link to="/register">
                     <span className="w-full py-2 rounded-md text-accent font-medium hover:underline">

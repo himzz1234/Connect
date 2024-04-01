@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useContext, useMemo, useState } from "react";
 import { io } from "socket.io-client";
 import { AuthContext } from "./AuthContext";
 
@@ -12,9 +12,8 @@ export const SocketContextProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
   const { user } = useContext(AuthContext);
 
-  // https://connectsocialapp.onrender.com
   useMemo(() => {
-    setSocket(io("https://mernsocialmedia.onrender.com"));
+    setSocket(io(process.env.REACT_APP_API_ENDPOINT));
   }, [user]);
 
   return (

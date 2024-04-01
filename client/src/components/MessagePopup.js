@@ -7,50 +7,48 @@ import { AuthContext } from "../context/AuthContext";
 import { SocketContext } from "../context/SocketContext";
 import Message from "./Message";
 import GIFContainer from "./GIFContainer";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { IoIosClose } from "react-icons/io";
 
 function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
   const scrollRef = useRef();
+  const inputRef = useRef(null);
   const timeoutRef = useRef(null);
-  const [input, setInput] = useState("");
   const { user } = useContext(AuthContext);
   const { socket } = useContext(SocketContext);
   const [messages, setMessages] = useState([]);
   const [showGifs, setShowGifs] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const [arrivalMessage, setArrivalMessage] = useState(null);
+  const [giphytosend, setGiphyToSend] = useState("");
 
   useEffect(() => {
-    socket.on("getMessage", (data) => {
-      if (data.type == "text") {
-        setArrivalMessage({
-          sender: data.sender,
-          text: data.text,
-          type: "text",
-          createdAt: Date.now(),
-        });
-      } else {
-        setArrivalMessage({
-          sender: data.sender,
-          url: data.url,
-          type: "gif",
-          createdAt: Date.now(),
-        });
-      }
+    socket.on("sendMessage", (data) => {
+      setArrivalMessage({
+        sender: data.sender,
+        url: data.url,
+        text: data.text,
+        createdAt: Date.now(),
+      });
     });
   }, []);
 
   useEffect(() => {
+    const { _id: senderId } = currentChat?.conversation.sender,
+      { _id: receiverId } = currentChat?.conversation.receiver;
+
     arrivalMessage &&
-      (currentChat?.conversation.sender._id == arrivalMessage.sender ||
-        currentChat?.conversation.receiver._id == arrivalMessage.sender) &&
+      [senderId, receiverId].includes(arrivalMessage.sender) &&
       setMessages((prev) => [...prev, arrivalMessage]);
   }, [arrivalMessage, currentChat.conversation]);
 
   useEffect(() => {
     const getMessages = async () => {
       try {
-        const res = await axios.get(`/message/${currentChat.conversation._id}`);
+        const res = await axios.get(
+          `/message/${currentChat.conversation._id}`,
+          { withCredentials: true }
+        );
         setMessages(res.data);
       } catch (err) {
         console.log(err);
@@ -63,10 +61,8 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
   const sendMessage = async (e) => {
     e.preventDefault();
 
-    if (input !== "") {
+    if (inputRef.current?.value || giphytosend) {
       try {
-        setMessages((prev) => [...prev, message]);
-
         clearTimeout(timeoutRef.current);
         setIsTyping(false);
         socket.emit("typing", {
@@ -77,32 +73,19 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
         const message = {
           conversationId: currentChat.conversation._id,
           sender: user._id,
-          text: input,
-          type: "text",
+          text: inputRef.current.value,
+          url: giphytosend,
         };
 
-        setInput("");
-        await axios.post(`/message`, message);
-      } catch (err) {
-        console.log(err);
-      }
-    }
-  };
+        const res = await axios.post(`/message`, message, {
+          withCredentials: true,
+        });
 
-  const sendGif = async (url) => {
-    if (url) {
-      try {
-        setMessages((prev) => [...prev, message]);
+        setMessages((prev) => [...prev, res.data]);
+
         setShowGifs(false);
-        const message = {
-          conversationId: currentChat.conversation._id,
-          sender: user._id,
-          url: url,
-          type: "gif",
-        };
-
-        await axios.post(`/message`, message);
-        setInput("");
+        setGiphyToSend("");
+        inputRef.current.value = "";
       } catch (err) {
         console.log(err);
       }
@@ -110,7 +93,7 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
   };
 
   const handleKeyDown = (e) => {
-    if (e.keyCode != 13) {
+    if (e.keyCode !== 13) {
       socket.emit("typing", {
         receiver: currentChat.friend._id,
         typing: true,
@@ -124,6 +107,8 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
           typing: false,
         });
       }, 3000);
+    } else if (e.keyCode === 13 && !e.shiftKey) {
+      sendMessage(e);
     }
   };
 
@@ -135,27 +120,19 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
     });
   }, []);
 
-  const displayStatus = () => {
-    if (isTyping && onlineUsers.includes(currentChat.friend?._id)) {
-      return "is typing...";
-    } else if (onlineUsers.includes(currentChat.friend?._id)) {
-      return "online";
-    } else return "offline";
-  };
-
   useEffect(() => {
     scrollRef?.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  }, [messages, isTyping]);
 
   return (
     <motion.div
-      exit={{ opacity: 0 }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.5, type: "tween" }}
-      className="h-screen z-[99999] flex flex-col fixed lg:absolute top-0 lg:top-auto lg:bottom-1 right-0 w-full lg:w-[600px] lg:h-[480px] rounded-md lg:border-t-2 lg:border-l-2 shadow-md bg-primary"
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.4, ease: "easeInOut" }}
+      className="h-screen z-[99999] flex flex-col fixed lg:absolute top-0 lg:top-auto lg:bottom-1 right-0 w-full lg:w-[600px] lg:h-[480px] rounded-md lg:border-t-2 lg:border-l-2 shadow-lg bg-primary"
     >
-      <div className="flex items-center px-3 py-3 relative space-x-3 border-b-2">
+      <div className="flex items-center px-3 py-3 space-x-3 border-b-2">
         <div className="relative">
           <div
             className={`absolute -right-0.5 -top-1 ${
@@ -171,12 +148,7 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
             className="w-9 h-9 bg-cover rounded-full"
           ></div>
         </div>
-        <div className="flex-1">
-          <p className="font-medium">{currentChat.friend?.username}</p>
-          <p className={`text-[12.25px] -mt-0.5 text-gray_dark`}>
-            {displayStatus()}
-          </p>
-        </div>
+        <p className="font-medium flex-1">{currentChat.friend?.username}</p>
         <IoMdCloseCircle
           size={24}
           color="#1da1f2"
@@ -185,49 +157,88 @@ function MessagePopup({ currentChat, setCurrentChat, onlineUsers }) {
         />
       </div>
 
-      <div className="flex-1 flex flex-col py-5 px-3 space-y-3 overflow-auto scrollbar scrollbar-w-0">
-        {messages.map((message, index) => (
-          <div
-            key={index}
-            ref={scrollRef}
-            className={`space-y-2 w-48 ${
-              message.sender !== currentChat?.friend._id && "self-end"
-            }`}
-          >
-            <Message {...{ message, currentChat }} />
-          </div>
-        ))}
-      </div>
+      <ul className="flex-1 flex flex-col py-5 px-3 overflow-auto scrollbar scrollbar-w-0 w-full">
+        <AnimatePresence initial={false} mode="popLayout">
+          {messages.map((message) => (
+            <motion.li
+              layout
+              key={message._id}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              transition={{
+                opacity: { duration: 0.2 },
+                layout: { type: "spring", bounce: 0.3 },
+              }}
+              style={{
+                originX: message.sender !== currentChat?.friend._id ? 1 : 0,
+              }}
+            >
+              <div>
+                <Message {...{ message, currentChat }} />
+              </div>
+            </motion.li>
+          ))}
+        </AnimatePresence>
+        <div
+          ref={scrollRef}
+          className="w-fit rounded-r-md rounded-t-md bg-secondary"
+        >
+          {isTyping && (
+            <img
+              src="/assets/typingindicator.gif"
+              width={52}
+              height={52}
+              alt="typing-indicator"
+            />
+          )}
+        </div>
+      </ul>
 
       <form
         onSubmit={sendMessage}
-        className="bg-secondary p-2 flex items-center rounded-md mx-3 mb-3 relative space-x-3"
+        className="bg-secondary p-2 flex items-start gap-4 rounded-md mx-3 mb-3"
       >
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
+        {giphytosend && (
+          <div className="relative">
+            <div
+              onClick={() => setGiphyToSend("")}
+              className="absolute border-2 border-secondary -top-2 -right-2 bg-accent w-5 h-5 cursor-pointer rounded-full grid place-content-center"
+            >
+              <IoIosClose color="white" size={20} />
+            </div>
+            <img
+              src={giphytosend}
+              alt="giphy-to-send"
+              className="w-[140px] h-[140px] object-cover"
+            />
+          </div>
+        )}
+        <textarea
+          ref={inputRef}
           placeholder="Type a message..."
-          className="text-[15px] flex-1 bg-transparent outline-none placeholder-[#A9A9A9]"
           onKeyDown={handleKeyDown}
+          className="text-[15px] flex-1 h-full bg-transparent outline-none placeholder-[#A9A9A9] resize-none"
         />
-        <div
-          onClick={() => {
-            setShowGifs(!showGifs);
-          }}
-        >
-          <AiOutlineGif
-            className="text-2xl cursor-pointer"
-            color={!showGifs ? "#b8b8b8" : "#1da1f2"}
-          />
-        </div>
+        <div className="flex items-center gap-3">
+          <div
+            onClick={() => {
+              setShowGifs(!showGifs);
+            }}
+          >
+            <AiOutlineGif
+              className="text-2xl cursor-pointer"
+              color={!showGifs ? "#b8b8b8" : "#1da1f2"}
+            />
+          </div>
 
-        <button type="submit">
-          <BsSendFill color="#1da1f2" />
-        </button>
+          <button type="submit">
+            <BsSendFill color="#1da1f2" />
+          </button>
+        </div>
       </form>
 
-      <GIFContainer {...{ sendGif, showGifs }} />
+      <GIFContainer {...{ setGiphyToSend, showGifs }} />
     </motion.div>
   );
 }

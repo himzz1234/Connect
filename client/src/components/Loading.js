@@ -3,7 +3,7 @@ import ReactLoading from "react-loading";
 
 function Loading() {
   return (
-    <div className="w-full flex items-center justify-center h-screen fixed top-0 left-0 z-40 text-white bg-primary">
+    <div className="w-full flex items-center justify-center h-screen fixed top-0 left-0 z-40 bg-primary">
       <div className="flex flex-col items-center justify-center">
         <img
           src="/assets/socialLogo.png"
@@ -13,7 +13,7 @@ function Loading() {
           className="object-contain"
         />
 
-        {/* <ReactLoading type="spin" color="white" height={28} width={28} /> */}
+        <ReactLoading type="spin" color="#1da1f2" height={28} width={28} />
       </div>
     </div>
   );

@@ -2,6 +2,7 @@ const Message = require("../models/message.model");
 const { getConnectedUsers } = require("../utils/socketapi");
 const Conversation = require("../models/conversation.model");
 
+// SEND A MESSAGE
 const postMessage = async (req, res) => {
   const io = req.app.get("io");
   const newMessage = new Message(req.body);
@@ -21,23 +22,22 @@ const postMessage = async (req, res) => {
       (user) => user.userId === receiverId
     );
 
-    const { sender, type, text, url } = savedMessage;
-
+    const { sender, text, url } = savedMessage;
     if (receiverSocket) {
-      io.to(receiverSocket.socketId).emit("getMessage", {
+      io.to(receiverSocket.socketId).emit("sendMessage", {
         sender,
         text,
-        type,
         url,
       });
     }
 
-    res.status(200).json({ message: savedMessage });
+    res.status(200).json(savedMessage);
   } catch (err) {
     res.status(500).json(err);
   }
 };
 
+// FETCH CONVERSATION MESSAGES
 const fetchMessages = async (req, res) => {
   try {
     const messages = await Message.find({

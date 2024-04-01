@@ -9,25 +9,25 @@ const {
   unfollowUser,
 } = require("../controllers/user.controller");
 
-// get all users
+// GET ALL USERS
 router.post("/", fetchAllUsers);
 
-// update user
+// UPDATE USER DETAILS
 router.put("/:id", updateUser);
 
-// delete user
+// DELETE USER
 router.delete("/:id", deleteUser);
 
-// get a user
+// GET USER DETAILS
 router.get("/:id", fetchUser);
 
-// get friends of a user
+// GET USER CONNECTIONS
 router.get("/friends/:userId", fetchConnections);
 
-// follow a user
+// FOLLOW A USER
 router.put("/follow/:id", followUser);
 
-// unfollow a user
+// UNFOLLOW A USER
 router.put("/unfollow/:id", unfollowUser);
 
 module.exports = router;

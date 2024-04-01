@@ -1,5 +1,6 @@
 const Conversation = require("../models/conversation.model");
 
+// CREATE A NEW CONVERSATION
 const createConversation = async (req, res) => {
   const conversation = await Conversation.find({
     $or: [
@@ -34,13 +35,17 @@ const createConversation = async (req, res) => {
   }
 };
 
+// FETCH USER'S CONVERSATION
 const fetchUserConversations = async (req, res) => {
   try {
     const conversation = await Conversation.find({
       $or: [{ receiver: req.params.userId }, { sender: req.params.userId }],
     })
       .populate("receiver")
-      .populate("sender");
+      .select("profilePicture username")
+      .populate("sender")
+      .select("profilePicture username");
+
     res.status(200).json(conversation);
   } catch (err) {
     res.status(500).json(err);

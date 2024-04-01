@@ -8,22 +8,22 @@ const {
   fetchTimelinePosts,
 } = require("../controllers/post.controller");
 
-// create a post
+// CREATE A POST
 router.post("/", createPost);
 
-// update a post
+// UPDATE A POST
 router.put(":/id", updatePost);
 
-// delete a post
+// DELETE A POST
 router.delete("/:id", deletePost);
 
-// like a post
+// LIKE/DISLIKE A POST
 router.put("/:id/like", likePost);
 
-// get a post
+// GET A POST
 router.get(":/id", fetchPost);
 
-// get timeline posts
+// GET TIMELINE POSTS
 router.get("/timeline/:userId", fetchTimelinePosts);
 
 module.exports = router;

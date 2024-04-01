@@ -18,7 +18,7 @@ const createNotification = async (req, res) => {
     ]);
 
     if (receiver)
-      io.to(receiver.socketId).emit("getNotification", populatedNotification);
+      io.to(receiver.socketId).emit("sendNotiffication", populatedNotification);
 
     res.status(200).json(newNotification);
   } catch (error) {

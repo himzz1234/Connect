@@ -42,16 +42,18 @@ function Conversation({ conversation, setCurrentChat, onlineUsers }) {
       onMouseOut={handleMouseOut}
       onMouseOver={handleMouseOver}
       onClick={() => setCurrentChat({ conversation, friend })}
-      className="flex items-center relative cursor-pointer w-full hover:bg-secondary py-2 rounded-md transition-all duration-150 px-2"
+      className="flex items-center relative cursor-pointer w-full hover:bg-secondary py-1 px-1 sm:py-2 rounded-md transition-all duration-150 sm:px-2"
     >
       <AnimatePresence>
-        {showProfile && <ProfileWindow id={friend._id} />}
+        {showProfile && <ProfileWindow id={friend._id} {...{ showProfile }} />}
       </AnimatePresence>
       <div
         style={{ backgroundImage: `url(${friend?.profilePicture})` }}
         className="w-9 h-9 bg-cover rounded-full"
       ></div>
-      <p className="text-[15px] ml-3 font-medium flex-1">{friend?.username}</p>
+      <p className="text-[14px] sm:text-[15px] ml-3 font-medium flex-1">
+        {friend?.username}
+      </p>
       {onlineUsers.includes(friend?._id) && (
         <div className="w-2 h-2 rounded-full bg-[#32a852]"></div>
       )}

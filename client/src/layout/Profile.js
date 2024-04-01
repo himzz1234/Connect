@@ -1,8 +1,8 @@
 import React, { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
 import axios from "../axios";
-import CoverPicture from "./CoverPicture";
-import ProfilePicture from "./ProfilePicture";
+import CoverPicture from "../components/CoverPicture";
+import ProfilePicture from "../components/ProfilePicture";
 import { FaPen, FaCheck } from "react-icons/fa";
 
 function Profile() {
@@ -15,8 +15,11 @@ function Profile() {
   useEffect(() => {
     const getFriends = async () => {
       try {
-        const friendsList = await axios.get(`/users/friends/${user._id}`);
-        setFriends(friendsList.data);
+        const res = await axios.get(`/users/friends/${user._id}`, {
+          withCredentials: true,
+        });
+
+        setFriends(res.data);
       } catch (err) {
         console.log(err);
       }
@@ -28,10 +31,14 @@ function Profile() {
   const changeDescription = async () => {
     if (count <= 50) {
       try {
-        await axios.put(`/users/${user._id}`, {
-          userId: user._id,
-          desc: descText,
-        });
+        await axios.put(
+          `/users/${user._id}`,
+          {
+            userId: user._id,
+            desc: descText,
+          },
+          { withCredentials: true }
+        );
 
         setCanEdit(false);
       } catch (err) {
@@ -41,7 +48,7 @@ function Profile() {
   };
 
   return (
-    <div className="order-1 lg:order-1 w-full lg:w-3/12 bg-primary rounded-md px-5 py-6 h-full">
+    <>
       <div className="relative">
         <CoverPicture />
         <ProfilePicture />
@@ -77,7 +84,7 @@ function Profile() {
         </div>
         <textarea
           rows="3"
-          className="w-full outline-none mt-4 bg-transparent resize-none text-[12px] md:text-[13.5px]"
+          className="w-full outline-none mt-3 bg-transparent resize-none text-[12px] sm:text-[14.5px]"
           value={descText}
           onChange={(e) => setDescText(e.target.value)}
           onInput={(e) => setCount(e.target.value.length)}
@@ -99,17 +106,22 @@ function Profile() {
             Connections
           </p>
         </div>
-        <div className="space-x-3 mt-6 flex items-center">
-          {friends.map((friend) => (
+        <div className="gap-2 mt-3 flex items-center flex-wrap">
+          {friends.slice(0, 16).map((friend) => (
             <div
               key={friend._id}
               className="w-9 h-9 rounded-full bg-cover"
               style={{ backgroundImage: `url(${friend?.profilePicture})` }}
             ></div>
           ))}
+          {friends.length > 16 && (
+            <div className="bg-secondary rounded-full w-9 h-9 flex items-center border-2 justify-center">
+              <p className="text-sm font-medium">+{friends.length - 20}</p>
+            </div>
+          )}
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { BsEyeFill, BsEyeSlashFill } from "react-icons/bs";
 import axios from "../axios";
 import { useNavigate, useParams } from "react-router-dom";
-import { validatePassword } from "../utils/validation";
+import { validatePassword } from "../helpers/validation";
 import {
   IoIosCheckmarkCircleOutline,
   IoMdCloseCircleOutline,
@@ -46,30 +46,47 @@ function ResetPassword() {
 
   return (
     <div className="h-full flex flex-col bg-background">
-      <div className="h-full flex flex-1 flex-col md:flex-row text-black p-2 gap-8 md:gap-0">
-        <div className="bg-background md:bg-[#f2f4f8] h-20 md:h-full md:w-[400px] lg:w-[580px] rounded-md">
+      <div className="h-full flex flex-1 flex-col lg:flex-row sm:p-2 gap-4 md:gap-8 lg:gap-0">
+        <div className="bg-background lg:bg-[#f2f4f8] h-20 lg:h-full lg:w-[400px] xl:w-[580px] rounded-md">
           <img
             src="/assets/home-illustration-3.svg"
-            className="h-full w-full hidden md:block"
+            className="h-full w-full hidden lg:block"
           />
         </div>
 
         <div className="flex flex-1 md:items-center justify-center">
           <div
             onClick={() => navigate("/")}
-            className="flex items-center cursor-pointer absolute top-2 left-2"
+            className="flex items-center cursor-pointer absolute left-1/2 -translate-x-1/2 lg:translate-x-0 top-2 lg:left-2"
           >
-            <img
-              src="/assets/socialLogo.png"
-              width={80}
-              height={80}
-              className="-mr-3.5"
-            />
-            <h1 className="font-bold text-[22px] mt-2">connect</h1>
+            <picture className="lg:-mr-4">
+              <source
+                media="(min-width: 992px)"
+                srcSet="/assets/socialLogo.png"
+                width={100}
+                height={100}
+              ></source>
+              <source
+                media="(min-width: 768px)"
+                srcSet="/assets/socialLogo.png"
+                width={120}
+                height={120}
+              ></source>
+              <source
+                media="(min-width: 600px)"
+                srcSet="/assets/socialLogo.png"
+                width={110}
+                height={110}
+              ></source>
+              <img src="/assets/socialLogo.png" width={100} height={100} />
+            </picture>
+            <h1 className="font-bold lg:text-[22px] hidden lg:block lg:mt-3">
+              connect
+            </h1>
           </div>
           <div className="flex flex-col gap-6 items-center">
             <div className="flex flex-col gap-2 w-96">
-              <h1 className="text-3xl font-semibold text-center">
+              <h1 className="text-lg sm:text-2xl md:text-3xl font-semibold text-center">
                 Reset Password
               </h1>
             </div>
@@ -109,10 +126,10 @@ function ResetPassword() {
                 </div>
 
                 <button type="submit" className="primary-btn">
-                  Reset Password
+                  <p className="text-[13px] sm:text-[15px]">Reset Password</p>
                 </button>
               </form>
-              <p className="text-[15px] text-gray_dark">
+              <p className="text-[13px] sm:text-[15px] text-gray_dark">
                 Remember your password?{" "}
                 <Link to="/login">
                   <span className="w-full py-2 rounded-md hover:underline text-accent font-medium">

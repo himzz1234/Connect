@@ -17,6 +17,7 @@ router.get(
   passport.authenticate("google", { scope: ["profile", "email"] })
 );
 
+// GOOGLE CALLBACK AFTER SIGNIN
 router.get(
   "/google/callback",
   passport.authenticate("google", {
@@ -37,13 +38,13 @@ router.post("/register", register);
 router.post("/login", login);
 
 // LOGOUT
-router.get("/logout", logout);
+router.post("/logout", verifyJWT, logout);
 
 // GET USER
 router.get("/getauth", verifyJWT, getAuth);
 
 // FORGOT PASSWORD
-router.post("/sendresetmail", sendResetMail);
+router.post("/sendresetmail", verifyJWT, sendResetMail);
 
 // RESET PASSWORD
 router.put("/resetpassword", verifyJWT, resetPassword);

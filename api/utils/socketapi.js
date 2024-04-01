@@ -11,14 +11,15 @@ const handleConnection = (socket) => {
   try {
     socket.on("addUser", (userId) => {
       addUser(userId, socket.id);
-      io.emit("getUsers", connectedUsers);
+      io.emit("onlineUsers", connectedUsers);
     });
 
     socket.on("typing", handleTyping);
 
     socket.on("disconnect", () => {
       removeUser(socket.id);
-      io.emit("getUsers", connectedUsers);
+
+      io.emit("onlineUsers", connectedUsers);
     });
   } catch (error) {
     console.error("Error handling connection:", error);
