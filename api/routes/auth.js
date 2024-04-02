@@ -47,6 +47,6 @@ router.get("/getauth", verifyJWT, getAuth);
 router.post("/sendresetmail", sendResetMail);
 
 // RESET PASSWORD
-router.put("/resetpassword", resetPassword);
+router.put("/resetpassword", verifyJWT, resetPassword);
 
 module.exports = router;
