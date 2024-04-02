@@ -40,7 +40,7 @@ app.use(
     origin: [
       "https://connectsocialmedia.onrender.com",
       "http://localhost:3000",
-      "https://letsconnect3.netlify.app/",
+      "https://letsconnect3.netlify.app",
     ],
     credentials: true,
   })
