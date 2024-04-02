@@ -11,7 +11,7 @@ const transporter = nodemailer.createTransport({
   maxConnections: 1,
 });
 
-const sendMail = (to, subject, body) => {
+const sendMail = async (to, subject, body) => {
   const mailOptions = {
     from: "himanshuhim1230@outlook.com",
     to: to,
@@ -19,9 +19,15 @@ const sendMail = (to, subject, body) => {
     html: body,
   };
 
-  transporter.sendMail(mailOptions, (err, info) => {
-    if (err) return console.log(err);
-    console.log(info);
+  await new Promise((resolve, reject) => {
+    transporter.sendMail(mailOptions, (err, info) => {
+      if (err) {
+        console.log(err);
+        reject(err);
+      } else {
+        resolve(info);
+      }
+    });
   });
 };
 
