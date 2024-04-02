@@ -97,7 +97,9 @@ const getAuth = async (req, res) => {
 
 // FORGOT PASSWORD
 const sendResetMail = async (req, res) => {
-  const user = await User.findOne({ _id: req.user.id });
+  const { emailId } = req.body;
+
+  const user = await User.findOne({ email: emailId });
   const url =
     "https://letsconnect3.netlify.app/" +
     generateToken(user._id, user.username, "10m");
