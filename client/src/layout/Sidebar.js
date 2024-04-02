@@ -29,9 +29,6 @@ function Sidebar({ onlineUsers }) {
   return (
     <>
       <div className="space-y-1 sm:space-y-2 flex-1">
-        <p className="flex-1 text-[13px] font-medium uppercase text-gray_dark">
-          Chat
-        </p>{" "}
         {conversations.map((conversation) => (
           <Conversation
             key={conversation._id}
