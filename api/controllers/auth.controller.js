@@ -7,13 +7,13 @@ const { client } = require("../db/redis");
 // REGISTER
 const register = async (req, res) => {
   try {
-    const { username, email, password } = req.body;
+    const { username, email, password: pass } = req.body;
 
     const userExists = await User.findOne({ email });
     if (!userExists) {
       // generate new password
       const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(password, salt);
+      const hashedPassword = await bcrypt.hash(pass, salt);
 
       // create a new user
       const newUser = User.create({
@@ -22,8 +22,7 @@ const register = async (req, res) => {
         password: hashedPassword,
       });
 
-      generateCookie(newUser._id, newUser.username, res);
-
+      const { password, updatedAt, ...data } = newUser;
       res.status(200).json({ message: "Successfully registered!", user: data });
     } else {
       res.status(409).json({ message: "User already exists!" });

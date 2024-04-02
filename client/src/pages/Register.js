@@ -61,7 +61,7 @@ function Register() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen lg:h-screen flex flex-col bg-background">
       <div className="h-full flex flex-1 flex-col lg:flex-row sm:p-2 gap-4 md:gap-8 lg:gap-0">
         <div className="bg-background lg:bg-[#f2f4f8] h-20 lg:h-full lg:w-[400px] xl:w-[580px] rounded-md">
           <img
@@ -109,7 +109,7 @@ function Register() {
             <div className="w-full px-5 sm:px-0 sm:max-w-[450px] sm:w-[450px] md:space-y-4 sm:space-y-3 space-y-2 self-center">
               <form
                 onSubmit={handleSubmit}
-                className="w-full md:h-fit flex flex-col rounded-md space-y-2 lg:space-y-5"
+                className="w-full md:h-fit flex flex-col rounded-md space-y-3 lg:space-y-5"
               >
                 <div className="space-y-3 flex-1">
                   <InputContainer
@@ -168,7 +168,7 @@ function Register() {
                 </div>
 
                 <button type="submit" className="primary-btn">
-                  <p className="text-[13px] sm:text-[15px]">Sign Up</p>
+                  <p className="text-[14px] sm:text-[15px]">Sign Up</p>
                 </button>
               </form>
               <p className="text-gray_dark text-sm relative text-center after:absolute after:w-1/3 after:h-0.5 after:top-1/2 after:left-10 w-full after:bg-gray-200 before:absolute before:w-1/3 before:h-0.5 before:bg-gray-200 before:top-1/2 before:right-10">
@@ -176,14 +176,14 @@ function Register() {
               </p>
               <button
                 onClick={signInGoogle}
-                className="border-2 border-[#e8ebf3] w-full py-2 sm:py-3 rounded-md text-[14px] flex items-center gap-2 justify-center"
+                className="border-2 border-[#e8ebf3] w-full py-2.5 md:py-3 rounded-md text-[14px] flex items-center gap-2 justify-center"
               >
                 <FcGoogle size={18} />
-                <p className="text-[13px] sm:text-[15px]">
+                <p className="text-[14px] sm:text-[15px]">
                   Sign up with google
                 </p>
               </button>
-              <p className="text-[13px] sm:text-[15px] text-gray_dark">
+              <p className="text-[14px] sm:text-[15px] text-gray_dark">
                 Already have an account?{" "}
                 <Link to="/login">
                   <span className="w-full py-2 rounded-md hover:underline text-accent font-medium">

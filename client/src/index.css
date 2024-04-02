@@ -34,5 +34,5 @@ em-emoji-picker input[type="search"] {
 }
 
 .primary-btn {
-  @apply w-full bg-accent flex items-center justify-center py-2 sm:py-2.5 md:py-3 rounded-sm sm:rounded-md text-white active:scale-95 transition-all duration-150;
+  @apply w-full bg-accent flex items-center justify-center py-2.5 md:py-3 rounded-sm sm:rounded-md text-white active:scale-95 transition-all duration-150;
 }

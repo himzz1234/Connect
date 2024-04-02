@@ -45,7 +45,7 @@ function ResetPassword() {
   };
 
   return (
-    <div className="h-full flex flex-col bg-background">
+    <div className="min-h-screen lg:h-screen flex flex-col bg-background">
       <div className="h-full flex flex-1 flex-col lg:flex-row sm:p-2 gap-4 md:gap-8 lg:gap-0">
         <div className="bg-background lg:bg-[#f2f4f8] h-20 lg:h-full lg:w-[400px] xl:w-[580px] rounded-md">
           <img
@@ -90,12 +90,12 @@ function ResetPassword() {
                 Reset Password
               </h1>
             </div>
-            <div className="w-full max-w-[450px] lg:w-[450px] space-y-4 self-center">
+            <div className="w-full px-5 sm:px-0 max-w-[450px] lg:w-[450px] space-y-4 self-center">
               <form
                 onSubmit={setNewPassword}
-                className="w-full md:h-fit flex flex-col rounded-md space-y-2 lg:space-y-5"
+                className="w-full md:h-fit flex flex-col rounded-md space-y-3 lg:space-y-5"
               >
-                <div className="space-y-5 flex-1">
+                <div className="flex-1">
                   <InputContainer
                     name="password"
                     type={showPassword ? "text" : "password"}
@@ -126,10 +126,10 @@ function ResetPassword() {
                 </div>
 
                 <button type="submit" className="primary-btn">
-                  <p className="text-[13px] sm:text-[15px]">Reset Password</p>
+                  <p className="text-[14px] sm:text-[15px]">Reset Password</p>
                 </button>
               </form>
-              <p className="text-[13px] sm:text-[15px] text-gray_dark">
+              <p className="text-[14px] sm:text-[15px] text-gray_dark">
                 Remember your password?{" "}
                 <Link to="/login">
                   <span className="w-full py-2 rounded-md hover:underline text-accent font-medium">

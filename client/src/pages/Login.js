@@ -68,7 +68,7 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen lg:h-screen flex flex-col bg-background">
       <div className="h-full flex flex-1 flex-col lg:flex-row sm:p-2 gap-4 md:gap-8 lg:gap-0">
         <div className="bg-background lg:bg-[#f2f4f8] h-20 lg:h-full lg:w-[400px] xl:w-[580px] rounded-md">
           <img
@@ -118,9 +118,9 @@ function Login() {
               <div className="w-full px-5 sm:px-0 sm:max-w-[450px] sm:w-[450px] self-center">
                 <form
                   onSubmit={recoverPassword}
-                  className="w-full md:h-fit flex flex-col rounded-md space-y-2 lg:space-y-5"
+                  className="w-full md:h-fit flex flex-col rounded-md space-y-3 lg:space-y-5"
                 >
-                  <div className="space-y-5 flex-1">
+                  <div className="flex-1">
                     <InputContainer
                       name="email"
                       type="email"
@@ -146,7 +146,7 @@ function Login() {
               <div className="w-full px-5 sm:px-0 sm:max-w-[450px] sm:w-[450px] md:space-y-4 sm:space-y-3 space-y-2 self-center">
                 <form
                   onSubmit={handleClick}
-                  className="w-full md:h-fit flex flex-col rounded-md space-y-2 lg:space-y-5"
+                  className="w-full md:h-fit flex flex-col rounded-md space-y-3 lg:space-y-5"
                 >
                   <div className="space-y-5 flex-1">
                     <InputContainer
@@ -201,7 +201,7 @@ function Login() {
                         width={20}
                       />
                     ) : (
-                      <p className="text-[13px] sm:text-[15px]">Log In</p>
+                      <p className="text-[14px] sm:text-[15px]">Log In</p>
                     )}
                   </button>
                 </form>
@@ -210,14 +210,14 @@ function Login() {
                 </p>
                 <button
                   onClick={signInGoogle}
-                  className="border-2 border-[#e8ebf3] w-full py-2 sm:py-3 rounded-md flex items-center gap-2 justify-center"
+                  className="border-2 border-[#e8ebf3] w-full py-2.5 md:py-3 rounded-md flex items-center gap-2 justify-center"
                 >
                   <FcGoogle size={18} />
-                  <p className="text-[13px] sm:text-[15px]">
+                  <p className="text-[14px] sm:text-[15px]">
                     Sign in with google
                   </p>
                 </button>
-                <p className="text-[13px] sm:text-[15px] text-gray_dark">
+                <p className="text-[14px] sm:text-[15px] text-gray_dark">
                   Don't have an account?{" "}
                   <Link to="/register">
                     <span className="w-full py-2 rounded-md text-accent font-medium hover:underline">
