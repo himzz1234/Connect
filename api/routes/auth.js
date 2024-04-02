@@ -38,7 +38,7 @@ router.post("/register", register);
 router.post("/login", login);
 
 // LOGOUT
-router.post("/logout", verifyJWT, logout);
+router.get("/logout", logout);
 
 // GET USER
 router.get("/getauth", verifyJWT, getAuth);
