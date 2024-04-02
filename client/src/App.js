@@ -49,7 +49,7 @@ function App() {
   }, []);
 
   return (
-    <div className="outer-section font-sans bg-secondary w-full lg:h-screen lg:overflow-y-hidden overflow-x-hidden scrollbar scrollbar-none">
+    <div className="font-sans bg-secondary w-full min-h-screen lg:h-screen lg:overflow-y-hidden overflow-x-hidden scrollbar scrollbar-none">
       {loading ? (
         <Loading />
       ) : (

@@ -75,7 +75,7 @@ function Searchbar({ user }) {
   return (
     <div className="flex-1 flex relative md:ml-4 mr-5">
       <Dropdown setIsOpen={setShowResults}>
-        <motion.div className="w-full md:w-[400px] absolute -top-5 left-0 lg:w-[500px]">
+        <motion.div className="w-full md:w-[400px] absolute -top-4 left-0 lg:w-[500px]">
           <div
             className={`bg-secondary ${
               showResults ? "rounded-t-md shadow-lg" : "rounded-md shadow-none"
