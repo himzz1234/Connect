@@ -21,13 +21,13 @@ router.get(
 router.get(
   "/google/callback",
   passport.authenticate("google", {
-    failureRedirect: "https://connectsocialmedia.onrender.com",
+    failureRedirect: "https://letsconnect3.netlify.app",
     session: false,
   }),
   (req, res) => {
     const rememberMe = false;
     generateCookie(req.user._id, req.user.username, rememberMe, res);
-    res.redirect("https://connectsocialmedia.onrender.com");
+    res.redirect("https://letsconnect3.netlify.app");
   }
 );
 

@@ -94,7 +94,7 @@ const getAuth = async (req, res) => {
 const sendResetMail = async (req, res) => {
   const user = await User.findOne({ _id: req.user.id });
   const url =
-    "https://connectsocialmedia.onrender.com" +
+    "https://letsconnect3.netlify.app/" +
     generateToken(user._id, user.username, "10m");
 
   const body = `<div>
