@@ -58,7 +58,7 @@ app.use("/api/message", messageRoutes);
 app.use("/api/conversation", convRoutes);
 app.use("/api/notification", notifRoutes);
 
-const server = app.listen(8800, () => {
+const server = app.listen(8969, () => {
   console.log("Server is up and running!");
   const io = require("socket.io")(server, {
     perMessageDeflate: false,
