@@ -37,7 +37,10 @@ app.use(passport.session());
 
 app.use(
   cors({
-    origin: ["https://connectsocialmedia.onrender.com"],
+    origin: [
+      "https://connectsocialmedia.onrender.com",
+      "http://localhost:3000",
+    ],
     credentials: true,
   })
 );

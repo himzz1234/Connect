@@ -41,7 +41,7 @@ router.post("/login", login);
 router.post("/logout", verifyJWT, logout);
 
 // GET USER
-router.get("/getauth", getAuth);
+router.get("/getauth", verifyJWT, getAuth);
 
 // FORGOT PASSWORD
 router.post("/sendresetmail", verifyJWT, sendResetMail);

@@ -13,7 +13,7 @@ passport.use(
       callbackURL:
         "https://mernsocialmedia.onrender.com/api/auth/google/callback",
     },
-    async function (profile, done) {
+    async function (refreshToken, accessToken, profile, done) {
       const { sub, name, picture, email } = profile._json;
 
       let user = await User.findOne({ email: email });
