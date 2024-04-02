@@ -24,7 +24,7 @@ const register = async (req, res) => {
 
       generateCookie(newUser._id, newUser.username, res);
 
-      res.status(201).json({ message: "Successfully registered!", user: data });
+      res.status(200).json({ message: "Successfully registered!", user: data });
     } else {
       res.status(409).json({ message: "User already exists!" });
     }
