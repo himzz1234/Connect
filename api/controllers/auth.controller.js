@@ -101,7 +101,7 @@ const sendResetMail = async (req, res) => {
 
   const user = await User.findOne({ email: emailId });
   const url =
-    "https://letsconnect3.netlify.app/" +
+    "https://letsconnect3.netlify.app/resetpassword/" +
     generateToken(user._id, user.username, "10m");
 
   const body = `<div>
