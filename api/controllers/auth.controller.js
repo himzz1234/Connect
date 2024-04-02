@@ -70,7 +70,12 @@ const login = async (req, res) => {
 
 // LOGOUT
 const logout = async (req, res) => {
-  res.clearCookie("access_token");
+  console.log(res.cookies);
+  res.clearCookie("access_token", {
+    httpOnly: false,
+    secure: true,
+    sameSite: "None",
+  });
 
   res.status(200).json({
     message: "Logout Successfull!",
