@@ -2,11 +2,11 @@ import React, { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { BsEyeFill, BsEyeSlashFill } from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
-import ReactLoading from "react-loading";
 import axios from "../axios";
 import { FcGoogle } from "react-icons/fc";
 import InputContainer from "../components/InputContainer";
 import toast from "react-hot-toast";
+import Button from "../components/ButtonLoader";
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -19,10 +19,9 @@ function Login() {
   const [forgotPassword, setForgotPassword] = useState(false);
 
   const navigate = useNavigate();
-  const { isFetching, dispatch } = useContext(AuthContext);
-  const handleClick = async (e) => {
-    e.preventDefault();
+  const { dispatch } = useContext(AuthContext);
 
+  const handleClick = async () => {
     dispatch({ type: "LOGIN_START" });
     try {
       const res = await axios.post(
@@ -50,8 +49,7 @@ function Login() {
     );
   };
 
-  const recoverPassword = async (e) => {
-    e.preventDefault();
+  const recoverPassword = async () => {
     setForgotPassword(true);
 
     try {
@@ -116,10 +114,7 @@ function Login() {
               </div>
 
               <div className="w-full px-5 sm:px-0 sm:max-w-[450px] sm:w-[450px] self-center">
-                <form
-                  onSubmit={recoverPassword}
-                  className="w-full md:h-fit flex flex-col rounded-md space-y-3 lg:space-y-5"
-                >
+                <form className="w-full md:h-fit flex flex-col rounded-md space-y-3 lg:space-y-5">
                   <div className="flex-1">
                     <InputContainer
                       name="email"
@@ -127,12 +122,10 @@ function Login() {
                       {...{ formData, setFormData }}
                     ></InputContainer>
                   </div>
-
-                  <button className="primary-btn">
-                    <p className="text-[14px] sm:text-[15px]">
-                      Recover Password
-                    </p>
-                  </button>
+                  <Button
+                    text="Recover Password"
+                    callbackFn={recoverPassword}
+                  />
                 </form>
               </div>
             </div>
@@ -144,10 +137,7 @@ function Login() {
                 </h1>
               </div>
               <div className="w-full px-5 sm:px-0 sm:max-w-[450px] sm:w-[450px] md:space-y-4 sm:space-y-3 space-y-2 self-center">
-                <form
-                  onSubmit={handleClick}
-                  className="w-full md:h-fit flex flex-col rounded-md space-y-3 lg:space-y-5"
-                >
+                <form className="w-full md:h-fit flex flex-col rounded-md space-y-3 lg:space-y-5">
                   <div className="space-y-5 flex-1">
                     <InputContainer
                       name="email"
@@ -192,18 +182,7 @@ function Login() {
                     </div>
                   </div>
 
-                  <button disabled={isFetching} className="primary-btn">
-                    {isFetching ? (
-                      <ReactLoading
-                        type="spin"
-                        color="white"
-                        height={20}
-                        width={20}
-                      />
-                    ) : (
-                      <p className="text-[14px] sm:text-[15px]">Log In</p>
-                    )}
-                  </button>
+                  <Button text="Log In" callbackFn={handleClick} />
                 </form>
                 <p className="text-gray_dark text-sm relative text-center after:absolute after:w-1/3 after:h-0.5 after:top-1/2 after:left-10 w-full after:bg-gray-200 before:absolute before:w-1/3 before:h-0.5 before:bg-gray-200 before:top-1/2 before:right-10">
                   or

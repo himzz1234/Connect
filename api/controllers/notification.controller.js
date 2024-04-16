@@ -1,4 +1,4 @@
-const { getConnectedUsers } = require("../utils/socketapi");
+const { getConnectedUsers } = require("../lib/socket");
 const Notification = require("../models/notification.model");
 
 const createNotification = async (req, res) => {

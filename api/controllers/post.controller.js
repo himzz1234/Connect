@@ -3,9 +3,11 @@ const Post = require("../models/post.model");
 const User = require("../models/user.model");
 const Comment = require("../models/comment.model");
 const Notification = require("../models/notification.model");
+const { getConnectedUsers } = require("../lib/socket");
 
 // CREATE A NEW POST
 const createPost = async (req, res) => {
+  const io = req.app.get("io");
   if (req.body.img) {
     const regex = /\/([^\/]+)$/;
 
@@ -18,6 +20,18 @@ const createPost = async (req, res) => {
 
   try {
     const newpost = await Post.create(req.body);
+
+    const user = await User.findById(newpost.userId);
+    const onlineFollowers = getConnectedUsers().filter((u) =>
+      user.followers.includes(u.userId)
+    );
+
+    onlineFollowers.forEach((follower) => {
+      io.to(follower.socketId).emit("newposts", {
+        message: "New posts added!",
+      });
+    });
+
     await newpost.populate("userId");
     res.status(200).json(newpost);
   } catch (err) {
@@ -43,10 +57,11 @@ const updatePost = async (req, res) => {
 
 // DELETE A POST
 const deletePost = async (req, res) => {
+  const { id } = req.user;
   try {
     const post = await Post.findById(req.params.id);
 
-    if (post.userId == req.body.userId) {
+    if (post.userId == id) {
       if (post.img) {
         const regex = /\/([^\/]+)$/;
 

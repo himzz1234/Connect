@@ -3,7 +3,6 @@ const connectedUsers = [];
 
 const initializeSocket = (socketIO) => {
   io = socketIO;
-
   io.on("connection", handleConnection);
 };
 

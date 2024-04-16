@@ -10,6 +10,7 @@ import {
 import InputContainer from "../components/InputContainer";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
+import Button from "../components/ButtonLoader";
 
 function ResetPassword() {
   const [formData, setFormData] = useState({
@@ -19,9 +20,8 @@ function ResetPassword() {
   const { token } = useParams();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const setNewPassword = async (e) => {
-    e.preventDefault();
 
+  const setNewPassword = async () => {
     if (!validatePassword(formData.password)) {
       return;
     }
@@ -91,10 +91,7 @@ function ResetPassword() {
               </h1>
             </div>
             <div className="w-full px-5 sm:px-0 max-w-[450px] lg:w-[450px] space-y-4 self-center">
-              <form
-                onSubmit={setNewPassword}
-                className="w-full md:h-fit flex flex-col rounded-md space-y-3 lg:space-y-5"
-              >
+              <form className="w-full md:h-fit flex flex-col rounded-md space-y-3 lg:space-y-5">
                 <div className="flex-1">
                   <InputContainer
                     name="password"
@@ -125,9 +122,7 @@ function ResetPassword() {
                   </InputContainer>
                 </div>
 
-                <button type="submit" className="primary-btn">
-                  <p className="text-[14px] sm:text-[15px]">Reset Password</p>
-                </button>
+                <Button text="Reset Password" callbackFn={setNewPassword} />
               </form>
               <p className="text-[14px] sm:text-[15px] text-gray_dark">
                 Remember your password?{" "}

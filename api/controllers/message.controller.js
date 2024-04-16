@@ -1,5 +1,5 @@
 const Message = require("../models/message.model");
-const { getConnectedUsers } = require("../utils/socketapi");
+const { getConnectedUsers } = require("../lib/socket");
 const Conversation = require("../models/conversation.model");
 
 // SEND A MESSAGE

@@ -15,12 +15,13 @@ const postComment = async (req, res) => {
 
 // DELETE A COMMENT
 const deleteComment = async (req, res) => {
+  const { id } = req.user;
   const comment = await Comment.findById(req.params.commentId);
   try {
-    if (req.body.userId == comment.userId) {
+    if (id == comment.userId) {
       await comment.deleteOne();
       res.status(200).json("The comment has been deleted!");
-    } else res.status(401).json("You can delete only your comment");
+    } else res.status(403).json("You can delete only your comment");
   } catch (err) {
     res.status(500).json(err.message);
   }

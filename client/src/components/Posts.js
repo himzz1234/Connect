@@ -4,6 +4,7 @@ import axios from "../axios";
 import { AuthContext } from "../context/AuthContext";
 import ReactLoading from "react-loading";
 import { AnimatePresence, motion } from "framer-motion";
+import { SocketContext } from "../context/SocketContext";
 
 function Posts({ newPost }) {
   const [page, setPage] = useState(1);
@@ -11,6 +12,15 @@ function Posts({ newPost }) {
   const [posts, setPosts] = useState([]);
   const { user } = useContext(AuthContext);
   const [hasMoreData, setHasMoreData] = useState(true);
+  const { socket } = useContext(SocketContext);
+  const [reloadPosts, setReloadPosts] = useState(false);
+  const [loadNewPosts, setLoadNewPosts] = useState(false);
+
+  useEffect(() => {
+    socket.on("newposts", () => {
+      setReloadPosts(true);
+    });
+  }, []);
 
   function onIntersection(entries) {
     const firstEntry = entries[0];
@@ -32,7 +42,7 @@ function Posts({ newPost }) {
         observer.disconnect();
       }
     };
-  }, [posts]);
+  }, [posts, loadNewPosts]);
 
   useEffect(() => {
     if (newPost) {
@@ -60,15 +70,7 @@ function Posts({ newPost }) {
 
   const deleteAPost = async (id) => {
     try {
-      await axios.delete(
-        `/post/${id}`,
-        { withCredentials: true },
-        {
-          data: {
-            userId: user._id,
-          },
-        }
-      );
+      await axios.delete(`/post/${id}`, { withCredentials: true });
 
       setPosts((prevPosts) => prevPosts.filter((p) => p._id !== id));
     } catch (err) {
@@ -78,6 +80,17 @@ function Posts({ newPost }) {
 
   return (
     <div className="space-y-5">
+      {/* {reloadPosts && (
+        <div
+          onClick={() => {
+            setLoadNewPosts(true), setReloadPosts(false);
+          }}
+          className="absolute -top-2 left-1/2 -translate-x-1/2 bg-[#1da1f2] shadow-lg rounded-md px-3 py-1"
+        >
+          <p className="text-sm text-white">New posts</p>
+          <div></div>
+        </div>
+      )} */}
       <AnimatePresence>
         {posts.map((post) => {
           return (

@@ -3,7 +3,7 @@ import React, { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { truncate } from "../helpers";
 
-function Comment({ comment, deleteAComment }) {
+export default function Comment({ comment, deleteAComment }) {
   const { user: currentUser } = useContext(AuthContext);
 
   return (
@@ -36,5 +36,3 @@ function Comment({ comment, deleteAComment }) {
     </div>
   );
 }
-
-export default Comment;

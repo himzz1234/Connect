@@ -1,7 +1,7 @@
 const User = require("../models/user.model");
 const bcrypt = require("bcrypt");
-const sendMail = require("../utils/nodemailer");
-const { generateCookie, generateToken } = require("../utils/auth");
+const sendMail = require("../lib/nodemailer/index");
+const { generateCookie, generateToken } = require("../lib/utils/auth");
 const { client } = require("../db/redis");
 
 // REGISTER

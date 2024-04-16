@@ -1,4 +1,4 @@
-import React, { useState, useContext, useRef } from "react";
+import React, { useState, useContext, useRef, useEffect } from "react";
 import axios from "../axios";
 import { RiAttachment2 } from "react-icons/ri";
 import { IoIosClose } from "react-icons/io";
@@ -134,7 +134,7 @@ function Feed() {
         </div>
       )}
 
-      <div className="mt-4 sm:mt-6">
+      <div className="sm:mt-6 relative">
         <Posts {...{ newPost }} />
       </div>
     </>

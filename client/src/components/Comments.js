@@ -86,15 +86,7 @@ function Comments({ comments, setComments, post }) {
 
   const deleteAComment = async (id) => {
     try {
-      await axios.delete(
-        `/comment/${id}`,
-        { withCredentials: true },
-        {
-          data: {
-            userId: currentUser?._id,
-          },
-        }
-      );
+      await axios.delete(`/comment/${id}`, { withCredentials: true });
 
       setComments((prevComments) => prevComments.filter((c) => c._id != id));
     } catch (err) {

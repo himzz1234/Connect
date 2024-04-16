@@ -14,6 +14,7 @@ import {
 } from "react-icons/io";
 import InputContainer from "../components/InputContainer";
 import toast from "react-hot-toast";
+import Button from "../components/ButtonLoader";
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -25,9 +26,8 @@ function Register() {
   const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
-  const handleSubmit = async (e) => {
-    e.preventDefault();
 
+  const handleSubmit = async (e) => {
     if (
       !validateName(formData.username) ||
       !validateEmail(formData.email) ||
@@ -107,10 +107,7 @@ function Register() {
               </h1>
             </div>
             <div className="w-full px-5 sm:px-0 sm:max-w-[450px] sm:w-[450px] md:space-y-4 sm:space-y-3 space-y-2 self-center">
-              <form
-                onSubmit={handleSubmit}
-                className="w-full md:h-fit flex flex-col rounded-md space-y-3 lg:space-y-5"
-              >
+              <form className="w-full md:h-fit flex flex-col rounded-md space-y-3 lg:space-y-5">
                 <div className="space-y-3 flex-1">
                   <InputContainer
                     name="username"
@@ -166,11 +163,9 @@ function Register() {
                     )}
                   </InputContainer>
                 </div>
-
-                <button type="submit" className="primary-btn">
-                  <p className="text-[14px] sm:text-[15px]">Sign Up</p>
-                </button>
               </form>
+
+              <Button text="Sign Up" callbackFn={handleSubmit} />
               <p className="text-gray_dark text-sm relative text-center after:absolute after:w-1/3 after:h-0.5 after:top-1/2 after:left-10 w-full after:bg-gray-200 before:absolute before:w-1/3 before:h-0.5 before:bg-gray-200 before:top-1/2 before:right-10">
                 or
               </p>

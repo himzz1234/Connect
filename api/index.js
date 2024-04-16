@@ -14,7 +14,7 @@ const convRoutes = require("./routes/conversations");
 const notifRoutes = require("./routes/notifications");
 const messageRoutes = require("./routes/message");
 const commentRoutes = require("./routes/comment");
-const { initializeSocket } = require("./utils/socketapi");
+const { initializeSocket } = require("./lib/socket");
 const verifyJWT = require("./middleware/userAuth");
 
 dotenv.config();

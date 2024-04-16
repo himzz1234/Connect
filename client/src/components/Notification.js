@@ -7,8 +7,8 @@ function Notification({ notification }) {
       case "Like": {
         return (
           <div className="flex-1">
-            <p className="sm:text-[13.5px] text-[11.5px] font-normal">
-              <span className="text-[13px] sm:text-[13.5px] font-medium">
+            <p className="sm:text-[12px] text-[11.5px] font-normal">
+              <span className="text-[11.5px] sm:text-[12.5px] font-medium">
                 {truncate(notification.sender.username)}
               </span>{" "}
               liked your post
@@ -20,14 +20,14 @@ function Notification({ notification }) {
       case "Comment": {
         return (
           <div className="flex-1">
-            <p className="sm:text-[13.5px] text-[11.5px] font-normal">
-              <span className="text-[13px] sm:text-[13.5px] font-medium">
+            <p className="sm:text-[12px] text-[11.5px] font-normal">
+              <span className="text-[11.5px] sm:text-[12.5px] font-medium">
                 {truncate(notification.sender.username)}
               </span>{" "}
-              commented on your post:
-            </p>
-            <p className="text-[12px] font-normal">
-              {notification.comment?.text}
+              replied to your post:{" "}
+              <span className="text-[12px] sm:text-[13px] font-medium">
+                {truncate(notification.comment?.text, 20)}
+              </span>
             </p>
           </div>
         );

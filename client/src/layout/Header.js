@@ -76,11 +76,11 @@ function Header({ setOnlineUsers }) {
                     damping: 20,
                     duration: 0.3,
                   }}
-                  className="absolute w-32 right-0 top-14 bg-secondary rounded-sm p-1 shadow-lg border-2"
+                  className="absolute w-32 right-0 top-14  bg-secondary rounded-sm p-1 shadow-lg border-2"
                 >
                   <div
                     onClick={logout}
-                    className="flex items-center justify-between transition-all duration:150 p-1"
+                    className="flex items-center justify-between hover:bg-primary rounded-sm transition-all px-2 py-1 duration:150"
                   >
                     <p className="text-sm">Logout</p>
                     <CgEnter className="text-red-500" />
