@@ -1,19 +1,18 @@
-import React, { useRef, useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import Comment from "./Comment";
 import { BsSendFill } from "react-icons/bs";
 import axios from "../axios";
 import { AuthContext } from "../context/AuthContext";
 import { AnimatePresence, motion } from "framer-motion";
 
-function Comments({ comments, setComments, post }) {
-  const commentRef = useRef();
+function Comments({ comments, setComments, post }, ref) {
   const { user: currentUser } = useContext(AuthContext);
   const [showComments, setShowComments] = useState(false);
 
   const list = {
     visible: {
       opacity: 1,
-      height: "auto",
+      height: "120px",
       transition: {
         when: "beforeChildren",
         staggerChildren: 0.03,
@@ -50,10 +49,10 @@ function Comments({ comments, setComments, post }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (commentRef.current.value === "") return;
+    if (ref.current.value === "") return;
     const newComment = {
       userId: currentUser._id,
-      text: commentRef.current.value,
+      text: ref.current.value,
       postId: post._id,
     };
 
@@ -78,7 +77,7 @@ function Comments({ comments, setComments, post }) {
         );
       }
 
-      commentRef.current.value = "";
+      ref.current.value = "";
     } catch (err) {
       console.log(err);
     }
@@ -96,27 +95,34 @@ function Comments({ comments, setComments, post }) {
 
   return (
     <>
-      {comments?.length >= 1 && (
-        <p
-          onClick={() => setShowComments((prev) => !prev)}
-          className="text-xs sm:text-sm mt-3 hover:underline cursor-pointer text-gray_dark w-fit"
-        >
-          {!showComments
-            ? `View all ${comments.length} comments`
-            : "Hide all comments"}
-        </p>
-      )}
+      <AnimatePresence>
+        {comments?.length >= 1 && (
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowComments((prev) => !prev)}
+            className="text-xs sm:text-sm mt-3 hover:underline cursor-pointer text-gray_dark w-fit"
+          >
+            {!showComments
+              ? `View all ${comments.length} comments`
+              : "Hide all comments"}
+          </motion.p>
+        )}
+      </AnimatePresence>
 
       <AnimatePresence>
-        {showComments && (
+        {showComments && comments.length >= 1 && (
           <motion.ul
             exit="hidden"
             variants={list}
             initial="hidden"
             animate="visible"
+            key={`comments-${post._id}`}
+            className="overflow-y-auto scrollbar scrollbar-none"
           >
             {comments?.map((comment) => (
-              <motion.li variants={item} key={comment._id}>
+              <motion.li layout variants={item} key={comment._id}>
                 <Comment {...{ comment, deleteAComment }} />
               </motion.li>
             ))}
@@ -124,18 +130,15 @@ function Comments({ comments, setComments, post }) {
         )}
       </AnimatePresence>
 
-      <form
-        onSubmit={handleSubmit}
-        className="flex mt-3 bg-secondary items-center rounded-md px-2 py-2 space-x-2"
-      >
+      <form onSubmit={handleSubmit} className="mt-3 relative bg-secondary">
         <input
-          ref={commentRef}
+          ref={ref}
           type="text"
           placeholder="Add a comment"
-          className="w-full bg-transparent flex-1 text-[13px] sm:text-[14px] outline-none placeholder-[#A9A9A9]"
+          className="w-full outline-none bg-secondary focus:outline-[#1da1f2] rounded-sm pr-10 pl-2 py-2 bg-transparent flex-1 text-[13px] sm:text-[14px] placeholder-[#A9A9A9]"
         />
 
-        <button type="submit">
+        <button type="submit" className="absolute right-2 top-3">
           <BsSendFill color="#1da1f2" className="text-[13px] sm:text-[15px]" />
         </button>
       </form>
@@ -143,4 +146,4 @@ function Comments({ comments, setComments, post }) {
   );
 }
 
-export default Comments;
+export default React.forwardRef(Comments);

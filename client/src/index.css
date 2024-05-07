@@ -36,3 +36,20 @@ em-emoji-picker input[type="search"] {
 .primary-btn {
   @apply w-full bg-accent flex items-center justify-center py-2.5 md:py-3 rounded-sm sm:rounded-md text-white active:scale-95 transition-all duration-150;
 }
+
+.heart {
+  width: 100px;
+  height: 100px;
+  background: url("https://cssanimation.rocks/images/posts/steps/heart.png")
+    no-repeat;
+  background-position: 0 0;
+  cursor: pointer;
+  transition: background-position 1s steps(28);
+  transform: scale(0.4);
+  transition-duration: 0s;
+}
+
+.heart.is-active {
+  transition-duration: 1s;
+  background-position: -2800px 0;
+}

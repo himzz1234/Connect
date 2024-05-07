@@ -13,12 +13,11 @@ function Posts({ newPost }) {
   const { user } = useContext(AuthContext);
   const [hasMoreData, setHasMoreData] = useState(true);
   const { socket } = useContext(SocketContext);
-  const [reloadPosts, setReloadPosts] = useState(false);
-  const [loadNewPosts, setLoadNewPosts] = useState(false);
+  const [reloadButton, setReloadButton] = useState(false);
 
   useEffect(() => {
     socket.on("newposts", () => {
-      setReloadPosts(true);
+      setReloadButton(true);
     });
   }, []);
 
@@ -42,7 +41,7 @@ function Posts({ newPost }) {
         observer.disconnect();
       }
     };
-  }, [posts, loadNewPosts]);
+  }, []);
 
   useEffect(() => {
     if (newPost) {
@@ -71,7 +70,6 @@ function Posts({ newPost }) {
   const deleteAPost = async (id) => {
     try {
       await axios.delete(`/post/${id}`, { withCredentials: true });
-
       setPosts((prevPosts) => prevPosts.filter((p) => p._id !== id));
     } catch (err) {
       console.log(err);
@@ -80,17 +78,19 @@ function Posts({ newPost }) {
 
   return (
     <div className="space-y-5">
-      {/* {reloadPosts && (
+      {/* {reloadButton && (
         <div
           onClick={() => {
-            setLoadNewPosts(true), setReloadPosts(false);
+            setPosts([]);
+            setReloadButton(true);
           }}
-          className="absolute -top-2 left-1/2 -translate-x-1/2 bg-[#1da1f2] shadow-lg rounded-md px-3 py-1"
+          className="absolute cursor-pointer -top-2 left-1/2 -translate-x-1/2 bg-[#1da1f2] shadow-lg rounded-md px-3 py-1"
         >
           <p className="text-sm text-white">New posts</p>
           <div></div>
         </div>
       )} */}
+
       <AnimatePresence>
         {posts.map((post) => {
           return (
@@ -106,6 +106,7 @@ function Posts({ newPost }) {
             </motion.div>
           );
         })}
+
         {hasMoreData && (
           <div ref={elementRef} className="flex items-center justify-center">
             <ReactLoading type="spin" color="#1da1f2" height={20} width={20} />

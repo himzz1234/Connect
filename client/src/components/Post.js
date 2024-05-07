@@ -1,9 +1,8 @@
 import axios from "../axios";
-import React, { useContext, useMemo, useState, useEffect } from "react";
+import React, { useContext, useMemo, useState, useEffect, useRef } from "react";
 import { AuthContext } from "../context/AuthContext";
 import Comments from "./Comments";
 import moment from "moment";
-import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { TbMessageCircle2 } from "react-icons/tb";
 import { truncate } from "../helpers";
 
@@ -12,6 +11,7 @@ function Post({ post, deleteAPost }) {
   const [like, setLike] = useState(post?.likes.length);
   const { user: currentUser } = useContext(AuthContext);
   const [comments, setComments] = useState([]);
+  const inputRef = useRef(null);
 
   useMemo(() => {
     setIsLiked(post.likes.includes(currentUser._id));
@@ -106,13 +106,11 @@ function Post({ post, deleteAPost }) {
         <div className="flex items-center space-x-1 sm:space-x-2">
           <div
             onClick={likeAPost}
-            className="border-[2px] active:scale-95 transition-all duration-150 cursor-pointer w-6 h-6 md:w-7 md:h-7 rounded-full flex items-center justify-center"
+            className="border-[2px] relative w-6 h-6 md:w-7 md:h-7 rounded-full overflow-hidden"
           >
-            {isLiked ? (
-              <FaHeart color="#fb2f55" size={14} />
-            ) : (
-              <FaRegHeart color="#fb2f55" size={14} />
-            )}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+              <div className={`heart ${isLiked ? "is-active" : ""}`}></div>
+            </div>
           </div>
           <p className="text-[13px] sm:text-[14px]">
             {like} <span className="hidden sm:inline-block">likes</span>
@@ -120,7 +118,12 @@ function Post({ post, deleteAPost }) {
         </div>
 
         <div className="flex items-center space-x-1 sm:space-x-2">
-          <div className="border-[2px] active:scale-95 transition-all duration-150 cursor-pointer w-6 h-6 md:w-7 md:h-7 rounded-full flex items-center justify-center">
+          <div
+            onClick={() => {
+              if (inputRef.current) inputRef.current.focus();
+            }}
+            className="border-[2px] active:scale-95 transition-all duration-150 cursor-pointer w-6 h-6 md:w-7 md:h-7 rounded-full flex items-center justify-center"
+          >
             <TbMessageCircle2 color="#5089c6" size={14} />
           </div>
           <p className="text-[13px] sm:text-[14px]">
@@ -130,7 +133,7 @@ function Post({ post, deleteAPost }) {
         </div>
       </div>
 
-      <Comments {...{ comments, setComments, post }} />
+      <Comments ref={inputRef} {...{ comments, setComments, post }} />
     </div>
   );
 }
