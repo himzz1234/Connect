@@ -117,6 +117,8 @@ const fetchTimelinePosts = async (req, res) => {
   const postsPerPage = 3;
   const skipCount = (pageNumber - 1) * postsPerPage;
 
+  console.log(pageNumber, skipCount);
+
   try {
     const currentUser = await User.findById(req.params.userId);
     const allUsers = [currentUser._id.toString(), ...currentUser.following];
