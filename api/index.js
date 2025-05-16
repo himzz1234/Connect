@@ -41,6 +41,7 @@ app.use(
       "https://connectsocialmedia.onrender.com",
       "http://localhost:3000",
       "https://letsconnect3.netlify.app",
+      "https://connect-nine-coral.vercel.app/",
     ],
     credentials: true,
   })
