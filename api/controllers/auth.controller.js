@@ -100,11 +100,11 @@ const sendResetMail = async (req, res) => {
 
   const user = await User.findOne({ email: emailId });
   const url =
-    "https://letsconnect3.netlify.app/resetpassword/" +
+    "https://connect-nine-coral.vercel.app/resetpassword/" +
     generateToken(user._id, user.username, "10m");
 
   const body = `<div>
-    <h2><a href="https://letsconnect3.netlify.app">Connect</a></h2>
+    <h2><a href="https://connect-nine-coral.vercel.app">Connect</a></h2>
     <p>Hi,</p>
     <p>you have requested to reset the password of your connect account.</p>
     <p>Please click the link to reset your password.</p>
