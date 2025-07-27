@@ -37,12 +37,7 @@ app.use(passport.session());
 
 app.use(
   cors({
-    origin: [
-      "https://connectsocialmedia.onrender.com",
-      "http://localhost:3000",
-      "https://letsconnect3.netlify.app",
-      "https://connect-nine-coral.vercel.app",
-    ],
+    origin: ["http://localhost:3000", "https://connecthere.vercel.app"],
     credentials: true,
   })
 );

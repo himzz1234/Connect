@@ -21,13 +21,13 @@ router.get(
 router.get(
   "/google/callback",
   passport.authenticate("google", {
-    failureRedirect: "https://connect-nine-coral.vercel.app",
+    failureRedirect: "https://connecthere.vercel.app",
     session: false,
   }),
   (req, res) => {
     const rememberMe = false;
     generateCookie(req.user._id, req.user.username, rememberMe, res);
-    res.redirect("https://connect-nine-coral.vercel.app");
+    res.redirect("https://connecthere.vercel.app");
   }
 );
 
