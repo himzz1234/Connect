@@ -74,7 +74,7 @@ function Notifications({ user }) {
         if (!notif.isread) return notif._id;
       });
 
-      if (unread.length) {
+      if (unread && unread.length) {
         const res = await axios.put(`/notification/${user._id}`, unreadIds, {
           withCredentials: true,
         });
@@ -87,7 +87,7 @@ function Notifications({ user }) {
     <Dropdown setIsOpen={setShowNotifications}>
       <div className="relative">
         <div className="relative">
-          {unread.length > 0 && (
+          {unread && unread.length > 0 && (
             <div className="absolute text-[8px] grid place-content-center -right-1 -top-2 bg-[#fb2f55] text-white border-[3px] border-secondary w-5 h-5 rounded-full">
               <p>{unread.length}</p>
             </div>
@@ -100,7 +100,7 @@ function Notifications({ user }) {
           </div>
         </div>
         <AnimatePresence>
-          {showNotifications && notifications.length > 0 && (
+          {showNotifications && notifications && notifications.length > 0 && (
             <motion.ul
               variants={list}
               exit="hidden"
